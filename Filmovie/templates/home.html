@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block search %}
+  
+  
+  <aside>
+    <form class="form-inline mr-auto">
+      <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search a movie" aria-label="Search">
+      <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
+    </form>
+    <ul id="category-list">
+      <li><a href="#">Cryminal</a></li>
+      <li><a href="#">Sci-fi</a></li>
+      <li><a href="#">Scientific</a></li>
+      <li><a href="#">Adventure</a></li>
+      <li><a href="#">Catastrophic</a></li>
+      <li><a href="#">Comedy</a></li>
+    </ul>
+    
+  </aside>
+
+  {% endblock %}
