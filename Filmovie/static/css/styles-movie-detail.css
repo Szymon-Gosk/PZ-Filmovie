@@ -11,7 +11,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    background-image: url("../rsc/background.png");
+    background-image: url("../img/background.png");
     background-size: 100vw 100vh;
     background-attachment: fixed;
     background-repeat: no-repeat;
@@ -157,9 +157,10 @@ main {
 }
 
 #card-details #card-full-title .card-description {
-    font-size: 2.5rem;
+    font-size: 1rem;
     margin-top: -20px;
 }
+
 
 #favor-line{
     display: flex;

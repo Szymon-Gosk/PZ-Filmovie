@@ -6,3 +6,5 @@ share
 pyvenv.cfg
 include
 Filmovie/*/__pycache__
+Filmovie/*/*/__pycache__
+Filmovie/media_cdn/movies

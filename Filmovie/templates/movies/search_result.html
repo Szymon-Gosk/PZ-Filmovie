@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
 {% block search %}
 
   <aside>
@@ -38,18 +42,23 @@
       <section id="movie-container">
 
       {%for movie in movie_data.Search%}
-        
+
         <div class="one-card">
-          <a href="http://www.facebook.com">
+          <a href="{% url 'movie-details' movie.imdbID%}">
             <div class="card">
               <div class="card-image">
-                <a href="{% url 'movie-details' movie.imdbID%}"><img src="{{movie.Poster}}"></a>
+                <img src="{{movie.Poster}}">
               </div>
               <div class="card-content">
                 <span class="card-title">{{movie.Title}}</span>
                 <p>{{movie.Year}}</p>
                 <p>{{movie.Type}}</p>
               </div>
+              <a href="{% url 'movie-details' movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
             </div>
           </a>
         </div>
@@ -62,9 +71,9 @@
 
 
 
-      <button class="cta-btn" href="{%url 'pagination' query page_number%}">
+      <a class="cta-btn" href="{%url 'pagination' query page_number %}">
         load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
-      </button>
+      </a>
 
 
 
