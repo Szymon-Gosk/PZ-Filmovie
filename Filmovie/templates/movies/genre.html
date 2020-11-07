@@ -1,166 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Filmovie</title>
+{% extends 'base.html' %}
+{% load static %}
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-</head>
-<body>
-  <nav class="white" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
+{% block css %}
+<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
 
-      <ul id="nav-mobile" class="sidenav">
-        <li><a href="#">Navbar Link</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </div>
-  </nav>
+{% block search %}
 
+  <aside>
+    <form class="form-inline mr-auto">
+      <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search a movie" aria-label="Search">
+      <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
+    </form>
+    <ul id="category-list">
+      <li><a href="adventure">Adventure</a></li>
+      <li><a href="sci-fi">Sci-fi</a></li>
+      <li><a href="drama">Drama</a></li>
+      <li><a href="thriller">Thriller</a></li>
+      <li><a href="action">Action</a></li>
+      <li><a href="comedy">Comedy</a></li>
+    </ul>
+    
+  </aside>
 
-  <div id="index-banner">
-    <div class="section no-pad-bot">
-      <div class="container center-align">
-        <h3>#Drama </h3>
-      </div>
-    </div>
-  </div>
+  {% endblock %}
 
 
-  <div class="container">
-    <div class="section">
+  {% block content %}
 
 
-        <div class="row">
 
-            <div class="col s12 m4">
-              <div class="card">
-                <div class="card-image">
-                  <img src="img/interlettar.jpg">
-                </div>
-                <div class="card-content">
-                  <span class="card-title"><b>Interstellar</b></span>
-                  <p>2020</p>
-                  <p>Movie</p>
-                </div>
+
+
+
+    <section id="result-word">
+      <span>Search results for:</span>
+      <span id="for-word">{{genre}}</span>
+    </section>
+
+    <article id="content">
+      <section id="movie-container">
+
+      {%for movie in movie_data %}
+
+        <div class="one-card">
+          <a href="{% url 'movie-details' movie.imdbID%}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{movie.Poster.url}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{movie.Title}}</span>
+                <p>{{movie.Year}}</p>
+                <p>{{movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' movie.imdbID%}">
                 <div class="card-action">
-                  <a href="#">Details</a>
+                    Details
                 </div>
-              </div>
+              </a>
             </div>
-
-            <div class="col s12 m4">
-                <div class="card">
-                  <div class="card-image">
-                    <img src="img/interlettar.jpg">
-                  </div>
-                  <div class="card-content">
-                    <span class="card-title"><b>Interstellar</b></span>
-                    <p>2020</p>
-                    <p>Movie</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">Details</a>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col s12 m4">
-                <div class="card">
-                  <div class="card-image">
-                    <img src="img/interlettar.jpg">
-                  </div>
-                  <div class="card-content">
-                    <span class="card-title"><b>Interstellar</b></span>
-                    <p>2020</p>
-                    <p>Movie</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">Details</a>
-                  </div>
-                </div>
-              </div>
-
-
-              <div class="col s12 m4">
-                <div class="card">
-                  <div class="card-image">
-                    <img src="img/interlettar.jpg">
-                  </div>
-                  <div class="card-content">
-                    <span class="card-title"><b>Interstellar</b></span>
-                    <p>2020</p>
-                    <p>Movie</p>
-                  </div>
-                  <div class="card-action">
-                    <a href="#">Details</a>
-                  </div>
-                </div>
-              </div>
-
-            
-
-            <div class="col s12 m12 center-align">
-            <a class="waves-effect waves-light btn"><i class="material-icons left">add</i>load more</a>
-            </div>
-
+          </a>
         </div>
 
+        {% endfor %}
 
-    </div>
-  </div>
-
-
-  <footer class="page-footer teal">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Company Bio</h5>
-          <p class="grey-text text-lighten-4">We are a team of college students working on this project like it's our full time job. Any amount would help support and continue development on this project and is greatly appreciated.</p>
+        
+          
+      </section>
 
 
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Settings</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Connect</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
+      <div class="load-more-container">
+
+      {% if movie_data.has_previous %}
+
+        <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
+          load less<i class="fa fa-caret-up" aria-hidden="true" style="margin-left: 10px;"></i>
+        </a>
+      {% endif %}
+
+      {% if movie_data.has_next %}
+
+        <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
+          load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
+        </a>
+      {% endif %}
       </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      Made by Suczki Marnotrawne</a>
-      </div>
-    </div>
-  </footer>
 
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
 
-  </body>
-</html>
+    </article>
+
+
+
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
+
+{% endblock %}

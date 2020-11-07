@@ -1,12 +1,16 @@
-from django.shortcuts import render
+"""Movie views"""
+from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
+from django.utils.text import slugify
 from django.template import loader
 from django.http import HttpResponse
 from movies.models import Movie, Genre, Rating
 from actors.models import Actor
-from django.utils.text import slugify
 import requests
 
 def home(request):
+    """Returning the home view. Rendering search_result template if the
+    function gets the query from a user (if not rendering home template)"""
     query = request.GET.get('q')
 
     if query:
@@ -23,11 +27,11 @@ def home(request):
         template = loader.get_template('movies/search_result.html')
 
         return HttpResponse(template.render(context, request))
-    
     return render(request, 'home.html')
 
 
 def pagination(request, query, page_number):
+    """Returning the movies at the specific page from an external API"""
 
     url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
     response = requests.get(url)
@@ -44,7 +48,10 @@ def pagination(request, query, page_number):
 
     return HttpResponse(template.render(context, request))
 
-def movieDetail(request, imdb_id):
+def movie_detail_view(request, imdb_id):
+    """Returning movieDetail view which renders movie_detail template.
+    If the movie exists in database it renders it using the database.
+    If not it will render it from and external API"""
 
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
@@ -75,14 +82,13 @@ def movieDetail(request, imdb_id):
             genre_slug = slugify(genre)
             g, created = Genre.objects.get_or_create(title=genre, slug=genre_slug)
             genre_objs.append(g)
-        
 
         #Rate
 
         for rate in movie_data['Ratings']:
             r, created = Rating.objects.get_or_create(source=rate['Source'], rating=rate['Value'])
             rating_objs.append(r)
-        
+
         if movie_data['Type'] == 'movie':
             m, created = Movie.objects.get_or_create(
                 Title = movie_data['Title'],
@@ -135,7 +141,7 @@ def movieDetail(request, imdb_id):
             m.Genre.set(genre_objs)
             m.Actors.set(actors_obj)
             m.Ratings.set(rating_objs)
-        
+
         for actor in actors_obj:
             actor.movies.add(m)
             actor.save()
@@ -153,3 +159,24 @@ def movieDetail(request, imdb_id):
     return HttpResponse(template.render(context, request))
 
 
+def genres_view(request, genre_slug):
+    """Returning the genres_view which renders the genre template.
+    Using paginator for the data from database"""
+    genre = get_object_or_404(Genre, slug=genre_slug)
+
+    movies_for_pagination = Movie.objects.filter(Genre=genre)
+
+    paginator = Paginator(movies_for_pagination, 3)
+
+    page_number = request.GET.get('page')
+    movie_data = paginator.get_page(page_number)
+
+    context = {
+        'movie_data': movie_data,
+        'genre': genre,
+    }
+
+    template = loader.get_template('movies/genre.html')
+
+    return HttpResponse(template.render(context, request))
+    

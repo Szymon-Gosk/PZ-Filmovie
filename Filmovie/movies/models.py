@@ -1,21 +1,35 @@
-from django.db import models
-from actors.models import Actor
-from django.utils.text import slugify
+"""
+Movie Models Definitions
+"""
 from io import BytesIO
+from django.db import models
+from django.utils.text import slugify
 from django.core import files
+from django.urls import reverse
+from actors.models import Actor
+
 import requests
 
 
 
 class Genre(models.Model):
+    """Genre model"""
     title = models.CharField(max_length=25)
     slug = models.SlugField(null=False, unique=True)
 
 
+    def get_absolute_url(self):
+        """Returning the absolute url"""
+        return reverse('genres', args=[self.slug])
+
+
     def __str__(self):
+        """Returning only name of the object"""
         return self.title
 
+
     def save(self, *args, **kwargs):
+        """Returning slug (lower_case name of the field) used in urls"""
         if not self.slug:
             self.title.replace(" ", "")
             self.slug = slugify(self.title)
@@ -23,14 +37,18 @@ class Genre(models.Model):
 
 
 class Rating(models.Model):
+    """Rating model"""
     source = models.CharField(max_length=50)
     rating = models.CharField(max_length=10)
 
     def __str__(self):
+        """Returning the name of the source instead of whole object"""
         return self.source
 
 
+
 class Movie(models.Model):
+    """Movie model"""
     Title = models.CharField(max_length=150)
     Year = models.CharField(max_length=25, blank=True)
     Rated = models.CharField(max_length=10, blank=True)
@@ -59,15 +77,16 @@ class Movie(models.Model):
     totalSeasons = models.CharField(max_length=3, blank=True)
 
     def __str__(self):
+        """Returning the title of the object"""
         return self.Title
-    
     def save(self, *args, **kwargs):
+        """Saving the poster (if is not in database) in the database"""
         if self.Poster == '' and self.Poster_url != '':
             resp = requests.get(self.Poster_url)
-            pb = BytesIO()
-            pb.write(resp.content)
-            pb.flush()
+            poster = BytesIO()
+            poster.write(resp.content)
+            poster.flush()
             file_name = self.Poster_url.split("/")[-1]
-            self.Poster.save(file_name, files.File(pb), save=False)
+            self.Poster.save(file_name, files.File(poster), save=False)
 
         return super().save(*args, **kwargs)

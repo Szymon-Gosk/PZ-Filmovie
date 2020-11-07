@@ -9,11 +9,12 @@ Filmovie URL Configuration
 """
 
 from django.urls import path
-from movies.views import home, pagination, movieDetail
+from movies.views import home, pagination, movie_detail_view, genres_view
 
 
 urlpatterns = [
     path('', home, name='home'),
     path('search/<query>/page/<page_number>', pagination, name='pagination'),
-    path('<imdb_id>', movieDetail, name='movie-details'),
+    path('<imdb_id>', movie_detail_view, name='movie-details'),
+    path('genre/<slug:genre_slug>/', genres_view, name='genres'),
 ]
