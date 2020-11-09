@@ -1,3 +1,92 @@
+"""
+Movie Models Definitions
+"""
+from io import BytesIO
 from django.db import models
+from django.utils.text import slugify
+from django.core import files
+from django.urls import reverse
+from actors.models import Actor
 
-# Create your models here.
+import requests
+
+
+
+class Genre(models.Model):
+    """Genre model"""
+    title = models.CharField(max_length=25)
+    slug = models.SlugField(null=False, unique=True)
+
+
+    def get_absolute_url(self):
+        """Returning the absolute url"""
+        return reverse('genres', args=[self.slug])
+
+
+    def __str__(self):
+        """Returning only name of the object"""
+        return self.title
+
+
+    def save(self, *args, **kwargs):
+        """Returning slug (lower_case name of the field) used in urls"""
+        if not self.slug:
+            self.title.replace(" ", "")
+            self.slug = slugify(self.title)
+        return super().save(*args, **kwargs)
+
+
+class Rating(models.Model):
+    """Rating model"""
+    source = models.CharField(max_length=50)
+    rating = models.CharField(max_length=10)
+
+    def __str__(self):
+        """Returning the name of the source instead of whole object"""
+        return self.source
+
+
+
+class Movie(models.Model):
+    """Movie model"""
+    Title = models.CharField(max_length=150)
+    Year = models.CharField(max_length=25, blank=True)
+    Rated = models.CharField(max_length=10, blank=True)
+    Released = models.CharField(max_length=25, blank=True)
+    Runtime = models.CharField(max_length=25, blank=True)
+    Genre = models.ManyToManyField(Genre, blank=True)
+    Director = models.CharField(max_length=100, blank=True)
+    Writer = models.CharField(max_length=300, blank=True)
+    Actors = models.ManyToManyField(Actor, blank=True)
+    Plot = models.CharField(max_length=900, blank=True)
+    Language = models.CharField(max_length=300, blank=True)
+    Country = models.CharField(max_length=150, blank=True)
+    Awards = models.CharField(max_length=500, blank=True)
+    Poster = models.ImageField(upload_to='movies', blank=True)
+    Poster_url = models.URLField(blank=True)
+    Ratings = models.ManyToManyField(Rating, blank=True)
+    Metascore = models.CharField(max_length=5, blank=True)
+    imdbRating = models.CharField(max_length=5, blank=True)
+    imdbVotes = models.CharField(max_length=100, blank=True)
+    imdbID = models.CharField(max_length=100, blank=True)
+    Type = models.CharField(max_length=10, blank=True)
+    DVD = models.CharField(max_length=25, blank=True)
+    BoxOffice = models.CharField(max_length=25, blank=True)
+    Production = models.CharField(max_length=25, blank=True)
+    Website = models.CharField(max_length=150, blank=True)
+    totalSeasons = models.CharField(max_length=3, blank=True)
+
+    def __str__(self):
+        """Returning the title of the object"""
+        return self.Title
+    def save(self, *args, **kwargs):
+        """Saving the poster (if is not in database) in the database"""
+        if self.Poster == '' and self.Poster_url != '':
+            resp = requests.get(self.Poster_url)
+            poster = BytesIO()
+            poster.write(resp.content)
+            poster.flush()
+            file_name = self.Poster_url.split("/")[-1]
+            self.Poster.save(file_name, files.File(poster), save=False)
+
+        return super().save(*args, **kwargs)
