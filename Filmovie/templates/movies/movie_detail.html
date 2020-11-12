@@ -96,7 +96,7 @@
             {%if our_db is True%}
 
 
-            <span class="bold-text">{%for actor in movie_data.Actors.all%}{{actor}},{%endfor%}</span>
+            <span class="bold-text">{%for actor in movie_data.Actors.all%}<a href="{{actor.get_absolute_url}}">{{actor}}</a>,{%endfor%}</span>
 
             {%else%}
 
