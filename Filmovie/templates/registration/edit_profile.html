@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="row center-align"> 
+
+    <form method="POST" encytype="multipart/form-data" class="col-12" role="form" action="">
+    {%csrf_token%}
+
+    <h3>Edit your profile</h3>
+
+
+    <div class="row">
+        <div class="file-field input-field col s12">
+            <div class="btn">
+                <span>File</span>
+                {{form.picture}}
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s6">
+            {{form.first_name}}
+            <label for="first_name">First name</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            {{form.last_name}}
+            <label for="last_name">Last name</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            {{form.location}}
+            <label for="location">Location</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="input-field col s12">
+            {{form.bio}}
+            <label for="bio">Bio</label>
+        </div>
+    </div>
+
+    {% if form.errors %}
+    <div class="row">
+        <div class="col s12">
+            <span style="color: red; font-weight: bold;">{{form.errors}}</span>
+        </div>
+    </div>
+    {% endif %}
+    <button type="submit" name="action" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Save changes</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

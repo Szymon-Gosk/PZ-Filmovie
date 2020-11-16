@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     #own
     'movies',
     'actors',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+#Auth profile module only local DEV
+
+AUTH_PROFILE_MODULE = 'users.profile'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
