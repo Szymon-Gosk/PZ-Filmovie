@@ -2,48 +2,55 @@
 {% load static %}
 
 {% block css %}
-<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="{% static 'css/styles-login.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 {% endblock %}
 
 
 {% block content %}
 
-<div class="row center-align"> 
-
-    <form method="POST" class="col-12" role="form" action="">
-    {%csrf_token%}
-
-    <h3>Login</h3>
-
-
-    <div class="row">
-        <div class="input-field col s12">
-            {{form.username}}
-            <label for="username">Username</label>
-        </div>
+<main id="container">
+    <h1>Log in to Filmovie!</h1>
+    <h2>And fill your movie list!</h2>
+    <div class="login-field">
+        
+        <form method="POST" role="form" action="">
+            {%csrf_token%}
+        
+            <span>LOG IN now</span>
+        
+            <div class="row">
+                <div class="input-field col s12">
+                    {{form.username}}
+                    <label for="username">Username</label>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="input-field col s12">
+                    {{form.password}}
+                    <label for="password">Password</label>
+                </div>
+            </div>
+        
+            {% if form.errors %}
+            <div class="row">
+                <div class="col s12">
+                    <span class="error" style="color: red; font-weight: bold;">Username or password is not valid</span>
+                </div>
+            </div>
+            {% endif %}
+            <button type="submit" value="login" class="waves-effect waves-light cta-btn cta-btn-color">Login</button>
+        
+            </form>
+        
     </div>
-
-    <div class="row">
-        <div class="input-field col s12">
-            {{form.password}}
-            <label for="password">Password</label>
-        </div>
+    <div id="register-field">
+        <span>Have no account yet?</span>
+        <span style="font-size: 1rem;">click below and make one!</span>
+        <a class="cta-btn" href="{% url 'signup' %}">
+            REGISTER NOW
+          </a>
     </div>
-
-    {% if form.errors %}
-    <div class="row">
-        <div class="col s12">
-            <span style="color: red; font-weight: bold;">Username of password is not valid</span>
-        </div>
-    </div>
-    {% endif %}
-    <button type="submit" value="login" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Login</button>
-
-    <input type="hidden" name="next" value="{{next}}">
-    <a class="waves-effect waves-light btn"><i class="material-icons left">person_pin</i>Register</a>
-
-    </form>
-
-</div>
+</main>
 
 {% endblock %}
