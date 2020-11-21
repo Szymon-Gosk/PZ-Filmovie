@@ -159,6 +159,7 @@ main {
 .card .card-content .card-title {
   font-weight: 700;
   text-transform: uppercase;
+  height: 100px;
 }
 
 .card-action {
