@@ -1,54 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Filmovie</title>
+{% extends 'base.html' %}
+{% load static %}
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/style-profile.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  
-</head>
-<body>
-  <!-- NAVIGATION BARS -->
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
 
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo"><img src="../rsc/logo.png"></a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="#">Movies</a></li>
-        <li><a href="#">Series</a></li>
-        <li><a href="#">Profile</a></li>
-        <li><a href="#">Log in</a></li>
-      </ul>
-    </div>
-  </nav>
+{% block content %}
+
 
   <main id="container">
     <section id="photo-content">
-        <div id="profile-pic"></div>
+        <div id="profile-pic">
+
+          {% if profile.picture %}
+          <img src="{{profile.picture.url}}">
+          {% else %}
+          <img src="{% static 'img/woman.png' %}">
+          {% endif %}
+        </div>
     </section>
     <section class="text-content">
-      <span class="profile-text name s-border">Amber Goldesdnrsdesdsd</span>
+      <span class="profile-text name s-border">{{profile.user.first_name}}&nbsp{{profile.user.last_name}}</span>
       <span class="profile-text s-border">
         <i class="fa fa-map-marker" aria-hidden="true"></i>
-        Poland
-      </span>
-      <span class="profile-text s-border">
-        <i class="fa fa-globe" aria-hidden="true"></i>
-        www.mylongest-page.com
+        {{profile.location}}
       </span>
       <span class="profile-text s-border">
         <i class="fa fa-pencil" aria-hidden="true"></i>
-        Quisque velit nisi, pretium ut lacinia in, 
-        elementum id enim. Donec sollicitudin molestie 
-        malesuada. Curabitur non nulla sit amet nisl 
-        tempus convallis quis ac lectus. Vestibulum ac 
-        diam sit amet quam vehicula elementum sed sit amet dui.
+        {{profile.bio}}
       </span>
+
+      {% if user.is_authenticated and user == profile.user %}
+
+      <br><br>
+      <a href="{% url 'edit-profile' %}" class="btn">Edit Profile</a>
+
+      {% endif %}
     </section>
     <section id="grid-container">
       <div class="grid-item" >
@@ -65,12 +53,5 @@
       </div>
     </section>
   </main>
-  
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-
-  </body>
-</html>
+{%endblock%}

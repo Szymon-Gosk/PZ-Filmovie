@@ -156,7 +156,6 @@ footer {
   #profile-pic {
       width: 30vh;
       height: 30vh;
-      background-image: url("../img/woman.png");
       background-size: cover;
       background-repeat: no-repeat;
       border: 2px solid white;

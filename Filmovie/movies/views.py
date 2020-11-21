@@ -3,9 +3,12 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.utils.text import slugify
 from django.template import loader
-from django.http import HttpResponse
+from django.urls import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from movies.models import Movie, Genre, Rating
 from actors.models import Actor
+from users.models import Profile
+from django.contrib.auth.models import User
 import requests
 
 def home(request):
@@ -179,4 +182,14 @@ def genres_view(request, genre_slug):
     template = loader.get_template('movies/genre.html')
 
     return HttpResponse(template.render(context, request))
+
+
+def star_movie_view(request, imdb_id):
+    movie = Movie.objects.get(imdbID=imdb_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    profile.star.add(movie)
+
+    return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
     
