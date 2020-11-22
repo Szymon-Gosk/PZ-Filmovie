@@ -1,54 +1,66 @@
+"""
+Forms file for users App. Defining all functions and classes
+"""
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from users.models import Profile
 
 
-def ForbiddenUserName(value):
-    forbidden_user_name = ['admin', 'css', 'js', 'authenticate', 'login',
-    'logout', 'root', 'password', 'administrator', 'email', 'sql', 'insert', 'db', 'static', 'database',
-    'python', 'detele', 'table']
+def forbidden_user_name(value):
+    """Defining all the usernames the user can't use in account creator"""
+    forbidden_user_names = ['admin', 'css', 'js', 'authenticate', 'login',
+    'logout', 'root', 'password', 'administrator', 'email', 'sql',
+    'insert', 'db', 'static', 'database','python', 'detele', 'table']
 
-    if value.lower() in forbidden_user_name:
+    if value.lower() in forbidden_user_names:
         raise ValidationError('Invalid name for user!')
 
-def InvalidUser(value):
+def invalid_user(value):
+    """Defining the pattern that is invalid if user uses it in account creator"""
     if '@' in value or '+' in value or '-' in value:
         raise ValidationError('You cannot add special symbol in your username')
 
-def UniqueEmail(value):
+def unique_email(value):
+    """Returning the error if user uses an email that is already in database in account creator"""
     if User.objects.filter(email__iexact=value).exists():
         raise ValidationError('User with this email already exists')
 
-def UniqueUser(value):
+def unique_user(value):
+    """Returning the error if user uses an username that already exists
+        in database in account creator
+    """
     if User.objects.filter(username__iexact=value).exists():
         raise ValidationError('User with this username already exists')
 
 
 class SignupForm(forms.ModelForm):
+    """Defining the registration form"""
     username = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
     first_name = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
     last_name = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
     email = forms.CharField(widget=forms.EmailInput(), max_length=100, required=True)
     password = forms.CharField(widget=forms.PasswordInput())
-    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='Confirm your password')
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(), required=True, label='Confirm your password'
+        )
 
     class Meta:
         model = User
         fields=('username', 'first_name', 'last_name', 'email', 'password')
 
     def __init__(self, *args, **kwargs):
+        """Appending all validating functions to specific fields"""
         super(SignupForm, self).__init__(*args, **kwargs)
-        self.fields['username'].validators.append(ForbiddenUserName)
-        self.fields['username'].validators.append(InvalidUser)
-        self.fields['username'].validators.append(UniqueUser)
-        self.fields['email'].validators.append(UniqueEmail)
+        self.fields['username'].validators.append(forbidden_user_name)
+        self.fields['username'].validators.append(invalid_user)
+        self.fields['username'].validators.append(unique_email)
+        self.fields['email'].validators.append(unique_user)
 
     def clean(self):
         super(SignupForm, self).clean()
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
-        
         if password != confirm_password:
             self._errors['password'] = self.error_class(['Password do not match!'])
 
@@ -57,10 +69,17 @@ class SignupForm(forms.ModelForm):
 
 
 class ChangePasswordForm(forms.ModelForm):
+    """Defining the change password form"""
     id = forms.CharField(widget=forms.HiddenInput())
-    old_password = forms.CharField(widget=forms.PasswordInput(), label='Old password', required=True)
-    new_password = forms.CharField(widget=forms.PasswordInput(), label='New password', required=True)
-    confirm_new_password = forms.CharField(widget=forms.PasswordInput(), label='Confirm new password', required=True)
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(), label='Old password', required=True
+        )
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(), label='New password', required=True
+        )
+    confirm_new_password = forms.CharField(
+        widget=forms.PasswordInput(), label='Confirm new password', required=True
+        )
 
     class Meta:
         model = User
@@ -79,11 +98,12 @@ class ChangePasswordForm(forms.ModelForm):
 
         if new_password != condirm_new_password:
             self._errors['new_password'] = self.error_class(['Passwords do not match'])
-        
+
         return self.cleaned_data
 
 
 class EditProfileForm(forms.ModelForm):
+    """Defining the edit profile form"""
     picture = forms.ImageField(required=False)
     first_name = forms.CharField(widget=forms.TextInput(), max_length=50, required=False)
     last_name = forms.CharField(widget=forms.TextInput(), max_length=50, required=False)

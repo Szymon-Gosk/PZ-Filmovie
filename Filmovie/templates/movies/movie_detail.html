@@ -47,8 +47,18 @@
           </div>
 
           <div class="description-pair">
-            <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i class="fa fa-star-o" aria-hidden="true"></i></a></span>
+            <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons">star_border</i></a></span>
             <span class="title">add</span>
+          </div>
+
+          <div class="description-pair">
+            <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons">playlist_add</i></a></span>
+            <span class="title">add to watchlist</span>
+          </div>
+
+          <div class="description-pair">
+            <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></a></span>
+            <span class="title">add to watched</span>
           </div>
         </div>
 

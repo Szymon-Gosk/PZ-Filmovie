@@ -8,7 +8,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from movies.models import Movie, Genre, Rating
 from actors.models import Actor
 from users.models import Profile
-from django.contrib.auth.models import User
 import requests
 
 def home(request):
@@ -185,6 +184,8 @@ def genres_view(request, genre_slug):
 
 
 def star_movie_view(request, imdb_id):
+    """Returning the reverse template movie-details to refresh the page and save
+    the movie user had added to faveourites"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -192,4 +193,32 @@ def star_movie_view(request, imdb_id):
     profile.star.add(movie)
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
-    
+
+
+
+def add_to_watchlist_view(request, imdb_id):
+    """Returning the the reverse template movie-details to refresh the page and save
+    the movie user had added to watchlist"""
+    movie = Movie.objects.get(imdbID=imdb_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    profile.watchlist.add(movie)
+
+    return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
+
+
+def add_to_watchedlist_view(request, imdb_id):
+    """Returning the the reverse template movie-details to refresh the page and save
+    the movie user had added to watched movies"""
+    movie = Movie.objects.get(imdbID=imdb_id)
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if profile.watchlist.filter(imdbID=imdb_id).exists():
+        profile.watchlist.remove(movie)
+        profile.watchedlist.add(movie)
+    else:
+        profile.watchedlist.add(movie)
+
+    return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))

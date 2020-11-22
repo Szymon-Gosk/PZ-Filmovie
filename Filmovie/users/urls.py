@@ -1,5 +1,13 @@
+"""
+URL's definitions for users App
+"""
 from django.urls import path
-from users.views import signup_view, password_change_view, password_change_done_view, edit_profile_view
+from users.views import (
+    signup_view,
+    password_change_view,
+    password_change_done_view,
+    edit_profile_view
+)
 
 from django.contrib.auth import views as authViews
 

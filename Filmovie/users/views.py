@@ -1,3 +1,6 @@
+"""
+Defining all the views in users App
+"""
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from users.models import Profile
@@ -9,6 +12,7 @@ from users.forms import SignupForm, ChangePasswordForm, EditProfileForm
 
 
 def signup_view(request):
+    """Returning the registration view"""
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -17,7 +21,13 @@ def signup_view(request):
             last_name = form.cleaned_data.get('last_name')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password')
-            User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+            User.objects.create_user(
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password=password
+                )
             return redirect('login')
     else:
         form = SignupForm()
@@ -31,6 +41,7 @@ def signup_view(request):
 
 @login_required
 def password_change_view(request):
+    """Returning the change password view if user is authenticated"""
     user = request.user
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
@@ -42,7 +53,7 @@ def password_change_view(request):
             return redirect('change-password-done')
     else:
         form = ChangePasswordForm(instance=user)
-    
+
     context = {
         'form': form,
     }
@@ -51,12 +62,14 @@ def password_change_view(request):
 
 
 def password_change_done_view(request):
+    """Returning the password change done view"""
     return render(request, 'registration/change_password_done.html')
 
 
 
 @login_required
 def edit_profile_view(request):
+    """Returning the edit profile view if user is authenticated"""
     user = request.user.id
     profile = Profile.objects.get(user__id=user)
 
@@ -81,6 +94,7 @@ def edit_profile_view(request):
 
 
 def user_profile_view(request, username):
+    """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -91,6 +105,3 @@ def user_profile_view(request, username):
     template = loader.get_template('profiles/profile.html')
 
     return HttpResponse(template.render(context, request))
-
-
-
