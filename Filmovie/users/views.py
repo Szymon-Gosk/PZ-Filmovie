@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.template import loader
 from django.http import HttpResponse
 from users.forms import SignupForm, ChangePasswordForm, EditProfileForm
+from movies.models import Movie, MovieRating
 
 
 def signup_view(request):
@@ -74,7 +75,7 @@ def edit_profile_view(request):
     profile = Profile.objects.get(user__id=user)
 
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES)
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             profile.picture = form.cleaned_data.get('picture')
             profile.first_name = form.cleaned_data.get('first_name')
@@ -84,7 +85,7 @@ def edit_profile_view(request):
             profile.save()
             return redirect('home')
     else:
-        form = EditProfileForm()
+        form = EditProfileForm(instance=request.user.profile)
 
     context = {
         'form': form,
@@ -103,5 +104,19 @@ def user_profile_view(request, username):
     }
 
     template = loader.get_template('profiles/profile.html')
+
+    return HttpResponse(template.render(context, request))
+
+def opinion_detail_view(request, username, imdb_id):
+    user = get_object_or_404(User, username=username)
+    movie = Movie.objects.get(imdbID=imdb_id)
+    rating = MovieRating.objects.get(user=user, movie=movie)
+
+    context = {
+        'rating': rating,
+        'movie': movie,
+    }
+
+    template = loader.get_template('movies/movie_rating.html')
 
     return HttpResponse(template.render(context, request))

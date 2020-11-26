@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.core import files
 from django.urls import reverse
 from actors.models import Actor
+from django.contrib.auth.models import User
 
 import requests
 
@@ -90,3 +91,30 @@ class Movie(models.Model):
             self.Poster.save(file_name, files.File(poster), save=False)
 
         return super().save(*args, **kwargs)
+
+
+RATE = [
+    (1, '1'),
+    (2, '2'),
+    (3, '3'),
+    (4, '4'),
+    (5, '5'),
+    (6, '6'),
+    (7, '7'),
+    (8, '8'),
+    (9, '9'),
+    (10, '10'),
+]
+
+
+class MovieRating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now_add=True)
+    opinion = models.TextField(max_length=300, blank=True)
+    rate = models.PositiveSmallIntegerField(choices=RATE)
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username

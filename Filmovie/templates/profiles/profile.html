@@ -21,7 +21,7 @@
         </div>
     </section>
     <section class="text-content">
-      <span class="profile-text name s-border">{{profile.user.first_name}}&nbsp{{profile.user.last_name}}</span>
+      <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
       <span class="profile-text s-border">
         <i class="fa fa-map-marker" aria-hidden="true"></i>
         {{profile.location}}
@@ -34,7 +34,7 @@
       {% if user.is_authenticated and user == profile.user %}
 
       <br><br>
-      <a href="{% url 'edit-profile' %}" class="btn">Edit Profile</a>
+      <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
 
       {% endif %}
     </section>

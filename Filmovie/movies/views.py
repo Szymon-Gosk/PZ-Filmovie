@@ -5,9 +5,11 @@ from django.utils.text import slugify
 from django.template import loader
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from movies.models import Movie, Genre, Rating
+from movies.models import Movie, Genre, Rating, MovieRating
 from actors.models import Actor
 from users.models import Profile
+from movies.forms import MovieRateForm
+from django.db.models import Avg
 import requests
 
 def home(request):
@@ -57,6 +59,10 @@ def movie_detail_view(request, imdb_id):
 
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
+        opinions = MovieRating.objects.filter(movie=movie_data)
+
+        rating_avg = opinions.aggregate(Avg('rate'))['rate__avg']
+        rating_count = opinions.count()
         our_db = True
     else:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
@@ -154,6 +160,9 @@ def movie_detail_view(request, imdb_id):
     context = {
         'movie_data': movie_data,
         'our_db': our_db,
+        'opinions': opinions,
+        'rating_avg': rating_avg,
+        'rating_count': rating_count,
     }
 
     template = loader.get_template('movies/movie_detail.html')
@@ -222,3 +231,29 @@ def add_to_watchedlist_view(request, imdb_id):
         profile.watchedlist.add(movie)
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
+
+
+def movie_rate_view(request, imdb_id):
+    movie = Movie.objects.get(imdbID=imdb_id)
+    user = request.user
+
+    if request.method == 'POST':
+        form = MovieRateForm(request.POST)
+        if form.is_valid():
+            rate = form.save(commit=False)
+            rate.user = user
+            rate.movie = movie
+            rate.save()
+            return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
+    else:
+        form = MovieRateForm()
+
+    template = loader.get_template('movies/rate.html')
+
+    context = {
+        'form': form,
+        'movie': movie,
+    }
+
+    return HttpResponse(template.render(context, request))
+    

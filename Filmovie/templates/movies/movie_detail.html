@@ -141,7 +141,7 @@
         <a href="#"><i class="material-icons left">rate_review</i>Review</a>
       </button>
       <button class="cta-btn">
-        <a href="#"><i class="material-icons left">star</i>Rate</a>
+        <a href="{% url 'rate-movie' movie_data.imdbID%}"><i class="material-icons left">star</i>Rate</a>
       </button>
     </div>
     
@@ -158,7 +158,7 @@
             <li class="collection-item avatar">
               <img src="{% static 'img/icons/filmovie-icon.png' %}" alt="" class="circle">
               <span class="title">Filmovie Rating</span>
-              <p><b>9.4 / 10</b> rated by <b>1000</b> users</p>
+              <p><b>{{rating_avg}} / 10</b> rated by <b>{{rating_count}}</b> users</p>
             </li>
 
             {%if our_db is True%}
@@ -229,26 +229,22 @@
               <div class="card">
                 <div class="card-content">
                   <ul class="collection">
-                    <li class="collection-item avatar">
-                        <img src="{% static 'img/icons/batman-icon.png' %}" alt="" class="circle">
-                        <span class="title">Batman</span>
-                        <p>@batman69</p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i>I love this movie! 10 / 10</a>
-                    </li>
 
+                    {% for opinion in opinions %}
                     <li class="collection-item avatar">
-                        <img src="{% static 'img/icons/superman-icon.png' %}" alt="" class="circle">
-                        <span class="title">Superman</span>
-                        <p>@supermanPro</p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i>I prefer Inception 5 / 10</a>
+                        {% if opinion.user.profile.picture %}
+                        <img src="{{ opinion.user.profile.picture.url }}" alt="" class="circle">
+                        {% else %}
+                        <img src="{% static 'img/woman.png' %}" alt="" class="circle">
+                        {% endif %}
+                        <span class="title">{{opinion.user.first_name}}&nbsp{{opinion.user.last_name}}</span>
+                        <p>@{{opinion.user.username}}</p>
+                        <p>{{opinion.date}}</p>
+                        <a href="{% url 'user-rating' opinion.user.username movie_data.imdbID %}" class="secondary-content"><i class="material-icons">grade</i>{{opinion.opinion}} &nbsp&nbsp&nbsp {{opinion.rate}} / 10</a>
                     </li>
+                    {% endfor %}
 
-                    <li class="collection-item avatar">
-                        <img src="{% static 'img/icons/spiderman-icon.png' %}" alt="" class="circle">
-                        <span class="title">Spiderman</span>
-                        <p>@spidermanS</p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i>The user above is an idiot 9.5 / 10</a>
-                    </li>
+
                   </ul>
                 </div>
               </div>
