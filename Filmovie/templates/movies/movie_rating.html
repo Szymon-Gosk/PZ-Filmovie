@@ -71,8 +71,8 @@
                     </div>
 
                     <div class="card-action">
-                        <a href="#"><i class="material-icons">thumb_up</i>{{rating.likes}}</a>
-                        <a href="#"><i class="material-icons">thumb_down</i>{{rating.dislikes}}</a>
+                        <a href="{% url 'user-rating-like' rating.user.username movie.imdbID%}"><i class="material-icons">thumb_up</i>{{rating.likes}}</a>
+                        <a href="{% url 'user-rating-dislike' rating.user.username movie.imdbID%}"><i class="material-icons">thumb_down</i>{{rating.dislikes}}</a>
                     </div>
 
                   </div>

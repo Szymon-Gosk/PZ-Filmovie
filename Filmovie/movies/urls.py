@@ -29,5 +29,5 @@ urlpatterns = [
     path('<imdb_id>/watchlist', add_to_watchlist_view, name='watchlist'),
     path('<imdb_id>/watchedlist', add_to_watchedlist_view, name='watchedlist'),
     path('genre/<slug:genre_slug>/', genres_view, name='genres'),
-    path('<imdb_id>/rate', movie_rate_view, name='rate-movie'),
+    path('<imdb_id>/rate', movie_rate_view, name='rate-movie')
 ]

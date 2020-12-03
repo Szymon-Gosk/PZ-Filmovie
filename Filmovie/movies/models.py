@@ -118,3 +118,9 @@ class MovieRating(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Likes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
+    like_type = models.PositiveSmallIntegerField()
+    rating = models.ForeignKey(MovieRating, on_delete=models.CASCADE, related_name='rating_like')
