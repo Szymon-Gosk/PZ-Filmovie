@@ -88,25 +88,37 @@
                         <div class="card">
                             <div class="card-content">
                                 <ul class="collection">
+
+                                  {% for comment in comments %}
                                     <li class="collection-item avatar">
-                                        <img src="img/icons/batman-icon.png" alt="" class="circle">
-                                        <span class="title">Batman</span>
-                                        <p>@batman69</p>
-                                        <p>24 October 2020</p>
+
+                                        {% if comment.user.profile.picture %}
+                                        <img src="{{comment.user.profile.picture.url}}" alt="" class="circle">
+                                        {% else %}
+                                        <img src="{% static 'img/woman.png'%}" alt="" class="circle">
+                                        {% endif %}
+
+
+                                        <span class="title">{{comment.user.first_name}} {{comment.user.last_name}}</span>
+                                        <p>@{{comment.user.username}}</p>
+                                        <p>{{comment.date}}</p>
                                         <br>
-                                        Your review is a trash dude
+                                        <p>{{comment.text}}</p>
                                         <a class="secondary-content" href="#"><i class="material-icons red-text">delete</i></a>
                                     </li>
+                                  {% endfor %}
+
                                 </ul>
                             </div>
 
                             <div class="card-action">
-                                <form>
+                                <form method="post" action="" role="form" class="col s12">
+                                {% csrf_token %}
                                       <div class="input-field col s10">
-                                        <textarea id="textarea1" class="materialize-textarea"></textarea>
+                                      {{form.text}}
                                         <label for="textarea1">Comment</label>
                                       </div>
-                                      <a class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons right">send</i>Send</a>
+                                      <button type="submit" name="action" class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons right">send</i>Send</button>
                                   </form>
                             </div>
 

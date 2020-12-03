@@ -11,6 +11,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from users.forms import SignupForm, ChangePasswordForm, EditProfileForm
 from movies.models import Movie, MovieRating, Likes
+from comments.models import Comment
+from comments.forms import CommentForm
 
 
 def signup_view(request):
@@ -109,13 +111,31 @@ def user_profile_view(request, username):
     return HttpResponse(template.render(context, request))
 
 def opinion_detail_view(request, username, imdb_id):
+    user_comment = request.user
     user = get_object_or_404(User, username=username)
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user, movie=movie)
 
+
+    comments = Comment.objects.filter(rating=rating).order_by('date')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.rating = rating
+            comment.user = user_comment
+            comment.save()
+            return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
+    else:
+        form = CommentForm()
+
+
     context = {
         'rating': rating,
         'movie': movie,
+        'comments': comments,
+        'form': form,
     }
 
     template = loader.get_template('movies/movie_rating.html')
