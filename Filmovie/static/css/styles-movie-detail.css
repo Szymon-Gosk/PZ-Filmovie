@@ -8,11 +8,11 @@
   
   body {
     font-family: 'Raleway', sans-serif;
-    width: 100%;
+    width: 100vw;
     display: flex;
     justify-content: center;
     background-image: url("../img/background.png");
-    background-size: 100vw 100vh;
+    background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
     overflow-x: hidden;
@@ -60,26 +60,7 @@ nav {
     text-decoration: none;
   }
   
-  aside{
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 15vw;
-    min-width: 150px;
-    height: 100vh;
-    background-color: black;
-    z-index: 100;
-  }
-  .form-inline {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .mr-auto{
-    margin-right: 20px!important;
-    margin: 0 20px;
-  }
+
   .btn-outline-success {
     border-color: #45C718;
     color: #45C718;
@@ -112,129 +93,90 @@ nav {
   /* MAIN CONTENT PAGE */ 
 main {
     position: relative;
-    top: 60px;
+    top: 30px;
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-#main-container {
-    display: flex;
-    width: 100%;
-}
-#main-container section {
-    width: 50%;
+    align-items: center;
     color: white;
+    overflow-x: hidden;
 }
 
-.card-image {
-    z-index: 1000;
+#main-container, #card-details, #card-full-title, #buttons, #reviews-container {
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
-
-.card-image img{
-    height: 100vh;
-}
-
-#main-container #card-details{
-    padding: 30px;
-    width: 80%;
-    margin: 30px;
-    height: 90vh;
-}
-
-#card-full-title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#card-details #card-full-title .card-title {
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 4.5rem;
-}
-
-#card-details #card-full-title .card-description {
-    font-size: 1rem;
-    margin-top: -20px;
-}
-
-
-#favor-line{
-    display: flex;
-    justify-content: center;
-    background-color: rgba(10, 10, 10, 0.9);
-    margin-left: -50%;
-    margin-right: -50%;
-}
-#favor-line .description-pair{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 2%;
-}
-
-#favor-line .description-pair .bold-text{
-    font-weight: 700;
-    font-size: 1.25rem;
-    color: #45C718;
-}
-
-#star_icon:hover {
-    color: yellow;
-    cursor: pointer;
-    transform: scale(1.5);
-    transition: 0.2s;
-}
-
-#playlist_add_icon:hover {
-  color: yellow;
-  cursor: pointer;
-  transform: scale(1.5);
-  transition: 0.2s;
-}
-
-#playlist_add_check_icon:hover {
-  color: yellow;
-  cursor: pointer;
-  transform: scale(1.5);
-  transition: 0.2s;
-}
-
 #list-of-details {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 1.5rem;
-    text-align: left;
-    background-color: rgba(10, 10, 10, 0.9);
-    margin-left: -30%;
-    margin-right: -30%;
-    height: 65vh;
+  margin: 50px 0;
+}
+.card-image {
+  height: 100%;
+  z-index:100;
 }
 
-#list-of-details .pair-list {
-    margin-top: 30px;
-    display: flex;
-    border-bottom: 1px solid white;
-    width: 70%;
+.reviews-content {
+  width: 100vw;
 }
-#list-of-details .pair-list span {
-    margin: 0 10px;
-    width: 50%;
+
+.description-pair {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  padding: 5px;
+  font-size: 1.2em;
+  width: 100vw;
+  background-color: rgba(0,0,0,.6);
 }
-#list-of-details .pair-list .bold-text {
-    font-weight: bold;
-    text-align: right;
+
+.pair-list {
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  line-height: 7vh;
+  border-bottom: 1px solid white;
 }
-#buttons {
-    margin-top:50px;
-    align-self: center;
+#card-details {
+  width: 100vw;
 }
+.card-stacked {
+  width:100%;
+}
+.pair-list .title {
+  margin: 0 10vw;
+  text-align: left;
+}
+.pair-list .bolder {
+  margin: 0 10vw;
+  text-align: right;
+  font-size: 1.2em;
+}
+
+.bolder {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.text {
+  text-align: center;
+  margin: 0 10vw;
+}
+.greent {
+  color: #45C718;
+}
+.bolder-list {
+  display: flex;
+  flex-direction: column;
+}
+
+
 .cta-btn {
     background-color:transparent;
+    width: 50vw;
+    height: 50vw;
     border: 2px solid #45C718;
     color: white;
     padding: 10px 20px;
@@ -244,10 +186,49 @@ main {
     text-decoration: none;
     display: inline-block;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    
-  }
+}
   .cta-btn:hover {
     background-color: #45C718;
     transition: 0.2s;
+}
+
+@media (min-width:700px) and (max-width:1024px) {
+  #buttons {
+    flex-direction: row;
   }
+  .cta-btn {
+    width: 30vw;
+    height: 30vw;
+  }
+}
+
+@media (min-width:1024px) {
+  #main-container {
+   flex-direction: row;
+   height: 100vh;
+  }
+  #card-details {
+    width: 50vw;
+  }
+  .card-image img{
+    height: 100%;
+  }
+  .pair-list .bolder {
+    font-size: 1.5em;
+  }
+  .pair-list .title {
+    font-size: 1.5em;
+  }
+  #buttons {
+    flex-direction: row;
+  }
+  .cta-btn {
+    width: 10vw;
+    height: 10vw;
+  }
+}
