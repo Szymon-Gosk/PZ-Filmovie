@@ -15,6 +15,5 @@ pyvenv.cfg
 include
 Filmovie/*/__pycache__
 Filmovie/*/*/__pycache__
-Filmovie/media_cdn/movies
 >>>>>>> 28b54a9258d4aad15b1048e380b082e8a08e98b5
 venv
