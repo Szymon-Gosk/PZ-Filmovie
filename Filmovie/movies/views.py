@@ -61,7 +61,7 @@ def movie_detail_view(request, imdb_id):
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
 
-        rating_avg = opinions.aggregate(Avg('rate'))['rate__avg']
+        rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
         rating_count = opinions.count()
         our_db = True
 
