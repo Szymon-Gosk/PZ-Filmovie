@@ -61,8 +61,13 @@ def movie_detail_view(request, imdb_id):
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
 
-        rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
-        rating_count = opinions.count()
+        if not opinions:
+            rating_avg = 0
+            rating_count = 0
+        else:
+            rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+            rating_count = opinions.count()
+
         our_db = True
 
         context = {
@@ -262,5 +267,4 @@ def movie_rate_view(request, imdb_id):
         'movie': movie,
     }
 
-    return HttpResponse(template.render(context, request))
-    
+    return HttpResponse(template.render(context, request)) 

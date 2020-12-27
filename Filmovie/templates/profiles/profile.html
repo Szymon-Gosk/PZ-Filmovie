@@ -39,19 +39,125 @@
       {% endif %}
     </section>
     <section id="grid-container">
+      <a href="{%url 'user-star-movies' profile.user.username%}">
       <div class="grid-item" >
         <i class="fa fa-film" aria-hidden="true"></i>
-        <div class="amount">100</div>
+        <div class="amount">{{mStar_count}}</div>
       </div>
+      </a>
+      <a href="{%url 'user-star-series' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="fa fa-film" aria-hidden="true"></i>
+        <div class="amount">{{sStar_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-watchlist' profile.user.username%}">
       <div class="grid-item" >
         <i class="fa fa-th" aria-hidden="true"></i>
-        <div class="amount">54</div>
+        <div class="amount">{{watchlist_count}}</div>
       </div>
+      </a>
+      <a href="{%url 'user-watchedlist' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="fa fa-th" aria-hidden="true"></i>
+        <div class="amount">{{watchedlist_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-reviews' profile.user.username%}">
       <div class="grid-item" >
         <i class="fa fa-align-left" aria-hidden="true"></i>
-        <div class="amount">23</div>
+        <div class="amount">{{opinions_count}}</div>
       </div>
+      </a>
     </section>
+
+
+    {% if list_title %}
+
+    <h4>{{list_title}}: </h4>
+    <div class="divider"></div>
+
+    <article id="content">
+      <section id="movie-container">
+
+      {% if list_title == 'Reviewed' %}
+
+      {%for opinion in movie_data %}
+
+        <div class="one-card">
+          <a href="{% url 'user-rating' opinion.user.username opinion.movie.imdbID %}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{opinion.movie.Poster.url}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{opinion.movie.Title}}</span>
+                <p>{{opinion.movie.Year}}</p>
+                <p>{{opinion.movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' opinion.movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+
+        {%for movie in movie_data %}
+
+        <div class="one-card">
+          <a href="{% url 'movie-details' movie.imdbID%}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{movie.Poster.url}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{movie.Title}}</span>
+                <p>{{movie.Year}}</p>
+                <p>{{movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        </section>
+
+      <div class="load-more-container">
+
+      {% if movie_data.has_previous %}
+
+        <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
+          load less<i class="fa fa-caret-up" aria-hidden="true" style="margin-left: 10px;"></i>
+        </a>
+      {% endif %}
+
+      {% if movie_data.has_next %}
+
+        <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
+          load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
+        </a>
+      {% endif %}
+      </div>
+
+
+    </article>
+
+    {% endif %}
+
   </main>
 
 {%endblock%}
