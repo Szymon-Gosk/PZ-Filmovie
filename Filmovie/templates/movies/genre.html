@@ -13,12 +13,12 @@
       <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
     </form>
     <ul id="category-list">
-      <li><a href="adventure">Adventure</a></li>
-      <li><a href="sci-fi">Sci-fi</a></li>
-      <li><a href="drama">Drama</a></li>
-      <li><a href="thriller">Thriller</a></li>
-      <li><a href="action">Action</a></li>
-      <li><a href="comedy">Comedy</a></li>
+      <li><a href="{% url 'genres' 'adventure' %}">Adventure</a></li>
+      <li><a href="{% url 'genres' 'sci-fi' %}">Sci-fi</a></li>
+      <li><a href="{% url 'genres' 'drama' %}">Drama</a></li>
+      <li><a href="{% url 'genres' 'thriller' %}">Thriller</a></li>
+      <li><a href="{% url 'genres' 'action' %}">Action</a></li>
+      <li><a href="{% url 'genres' 'comedy' %}">Comedy</a></li>
     </ul>
     
   </aside>

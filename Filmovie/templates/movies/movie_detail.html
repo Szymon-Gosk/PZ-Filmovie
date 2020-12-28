@@ -58,13 +58,25 @@
           </div>
 
           <div class="description-pair">
+            {% if watchlist %}
+            <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></a></span>
+            <span class="title">remove from watchlist</span>
+            {% else %}
             <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons">playlist_add</i></a></span>
             <span class="title">add to watchlist</span>
+            {% endif %}
+            
           </div>
 
           <div class="description-pair">
+            {% if watchedlist %}
+            <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></a></span>
+            <span class="title">remove from watched</span>
+            {% else %}
             <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></a></span>
             <span class="title">add to watched</span>
+            {% endif %}
+            
           </div>
         </div>
 
