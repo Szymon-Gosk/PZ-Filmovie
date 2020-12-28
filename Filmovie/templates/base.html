@@ -22,13 +22,33 @@
 
   <!-- NAVIGATION BARS -->
 
+  
   <nav>
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo"><img src="{% static 'img/logo.png' %}"></a>
+      <a href="{% url 'home' %}" class="brand-logo"><img src="{% static 'img/logo.png' %}"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
         <li><a href="#">Movies</a></li>
         <li><a href="#">Series</a></li>
-        <li><a href="#">Log in</a></li>
+        {% if user.is_authenticated %}
+        
+
+        <ul id="dropdown1" class="dropdown-content">
+        <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+        <li><a href="#!">Settings</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+
+        
+        {% if user.profile.picture %}
+        <li style="margin-left: 30px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{{ user.profile.picture.url }}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
+        {% else %}
+        <li style="margin-left: 30px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{% static 'img/woman.png' %}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
+        {% endif %}
+
+        {% else %}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
       </ul>
     </div>
   </nav>

@@ -47,8 +47,14 @@
           </div>
 
           <div class="description-pair">
+            {% if star %}
+            <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons icon-yellow">star_border</i></a></span>
+            <span class="title">remove</span>
+            {% else %}
             <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons">star_border</i></a></span>
             <span class="title">add</span>
+            {% endif %}
+            
           </div>
 
           <div class="description-pair">

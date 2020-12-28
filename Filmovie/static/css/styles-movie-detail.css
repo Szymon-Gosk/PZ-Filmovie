@@ -251,3 +251,7 @@ main {
     background-color: #45C718;
     transition: 0.2s;
   }
+
+  i.icon-yellow {
+    color: yellow;
+}

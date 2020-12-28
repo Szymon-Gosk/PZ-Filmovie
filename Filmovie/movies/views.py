@@ -60,6 +60,12 @@ def movie_detail_view(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
+        user = request.user
+
+        if movie_data in user.profile.star.all():
+            star = True
+        else:
+            star = False
 
         if not opinions:
             rating_avg = 0
@@ -76,6 +82,7 @@ def movie_detail_view(request, imdb_id):
             'opinions': opinions,
             'rating_avg': rating_avg,
             'rating_count': rating_count,
+            "star": star,
         }
 
 
@@ -211,7 +218,11 @@ def star_movie_view(request, imdb_id):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    profile.star.add(movie)
+    if (movie in profile.star.all()):
+        profile.star.remove(movie)
+    else:
+        profile.star.add(movie)
+
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
 

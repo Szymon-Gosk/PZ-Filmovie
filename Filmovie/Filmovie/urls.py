@@ -17,7 +17,7 @@ from users.views import user_profile_view, opinion_detail_view, like_view, disli
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('movie/', include('movies.urls')),
+    path('', include('movies.urls')),
     path('actors/', include('actors.urls')),
     path('accounts/', include('users.urls')),
     path('user/<username>/', user_profile_view, name='profile'),

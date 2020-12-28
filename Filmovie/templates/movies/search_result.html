@@ -43,6 +43,10 @@
 
       {%for movie in movie_data.Search%}
 
+      {% if movie.Poster != "N/A" %}
+
+      {% if movie.Type != "game" %}
+
         <div class="one-card">
           <a href="{% url 'movie-details' movie.imdbID%}">
             <div class="card">
@@ -62,6 +66,9 @@
             </div>
           </a>
         </div>
+
+        {% endif %}
+        {% endif %}
 
         {% endfor %}
 
