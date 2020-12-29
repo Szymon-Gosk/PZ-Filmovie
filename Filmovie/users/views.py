@@ -366,4 +366,16 @@ def dislike_view(request, username, imdb_id):
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
 
 
+@login_required
+def user_settings_view(request):
+    """Returning the edit profile view if user is authenticated"""
+    user = request.user.id
+    profile = Profile.objects.get(user__id=user)
+
+    context = {
+        'profile': profile,
+    }
+
+    return render(request, 'profiles/settings.html', context)
+
 
