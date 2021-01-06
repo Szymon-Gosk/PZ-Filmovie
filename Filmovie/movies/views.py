@@ -1,6 +1,6 @@
 """Movie views"""
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 from django.template import loader
 from django.urls import reverse
@@ -60,33 +60,51 @@ def movie_detail_view(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
-        user = request.user
+        
+        if not request.user.is_authenticated:
+            if not opinions:
+                rating_avg = 0
+                rating_count = 0
+            else:
+                rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+                rating_count = opinions.count()
 
-        if movie_data in user.profile.watchedlist.all():
-            watchedlist = True
+            our_db = True
+
+            context = {
+                'movie_data': movie_data,
+                'our_db': our_db,
+                'opinions': opinions,
+                'rating_avg': rating_avg,
+                'rating_count': rating_count,
+            }
         else:
-            watchedlist = False
+            user = request.user
+            if movie_data in user.profile.watchedlist.all():
+                watchedlist = True
+            else:
+                watchedlist = False
 
-        if movie_data in user.profile.watchlist.all():
-            watchlist = True
-        else:
-            watchlist = False
+            if movie_data in user.profile.watchlist.all():
+                watchlist = True
+            else:
+                watchlist = False
 
-        if movie_data in user.profile.star.all():
-            star = True
-        else:
-            star = False
+            if movie_data in user.profile.star.all():
+                star = True
+            else:
+                star = False
+            
+            if not opinions:
+                rating_avg = 0
+                rating_count = 0
+            else:
+                rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+                rating_count = opinions.count()
 
-        if not opinions:
-            rating_avg = 0
-            rating_count = 0
-        else:
-            rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
-            rating_count = opinions.count()
-
-        our_db = True
-
-        context = {
+            our_db = True
+            
+            context = {
             'movie_data': movie_data,
             'our_db': our_db,
             'opinions': opinions,
@@ -95,13 +113,16 @@ def movie_detail_view(request, imdb_id):
             "star": star,
             "watchlist": watchlist,
             "watchedlist": watchedlist,
-        }
+            }
 
 
     else:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
+        print(url)
         response = requests.get(url)
+        print(response)
         movie_data = response.json()
+        print(movie_data)
 
         #inject to our db
 
@@ -204,6 +225,23 @@ def movie_detail_view(request, imdb_id):
 def genres_view(request, genre_slug):
     """Returning the genres_view which renders the genre template.
     Using paginator for the data from database"""
+    query = request.GET.get('q')
+
+    if query:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        response = requests.get(url)
+        movie_data = response.json()
+
+        context = {
+            'query': query,
+            'movie_data': movie_data,
+            'page_number': 1,
+        }
+
+        template = loader.get_template('movies/search_result.html')
+
+        return HttpResponse(template.render(context, request))
+        
     genre = get_object_or_404(Genre, slug=genre_slug)
 
     movies_for_pagination = Movie.objects.filter(Genre=genre)
@@ -225,6 +263,22 @@ def genres_view(request, genre_slug):
 def type_view(request, type):
     """Returning the genres_view which renders the genre template.
     Using paginator for the data from database"""
+    query = request.GET.get('q')
+
+    if query:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        response = requests.get(url)
+        movie_data = response.json()
+
+        context = {
+            'query': query,
+            'movie_data': movie_data,
+            'page_number': 1,
+        }
+
+        template = loader.get_template('movies/search_result.html')
+
+        return HttpResponse(template.render(context, request))
 
     movies_for_pagination = Movie.objects.filter(Type=type)
 

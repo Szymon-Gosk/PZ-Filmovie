@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+<br><br><br><br><br><br><br><br>
+<main>
+    <div class="main-wrapper container">
+        <form class="form-inline mr-auto">
+            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search users" aria-label="Search">
+            <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
+        </form>
+    </div>
+</main>
+
+{%endblock%}

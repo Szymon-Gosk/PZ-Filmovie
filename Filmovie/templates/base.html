@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,200;0,300;0,400;0,500;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="shortcut icon" href="#" />
   {% block css %}
   {% endblock %}
   
@@ -27,6 +27,9 @@
     <div class="nav-wrapper">
       <a href="{% url 'home' %}" class="brand-logo"><img src="{% static 'img/logo.png' %}"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'search-users' %}">Search users</a></li>
+        {% endif %}
         <li><a href="{% url 'type' 'movie' %}">Movies</a></li>
         <li><a href="{% url 'type' 'series' %}">Series</a></li>
         {% if user.is_authenticated %}
