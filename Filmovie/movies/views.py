@@ -60,33 +60,51 @@ def movie_detail_view(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
-        user = request.user
+        
+        if not request.user.is_authenticated:
+            if not opinions:
+                rating_avg = 0
+                rating_count = 0
+            else:
+                rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+                rating_count = opinions.count()
 
-        if movie_data in user.profile.watchedlist.all():
-            watchedlist = True
+            our_db = True
+
+            context = {
+                'movie_data': movie_data,
+                'our_db': our_db,
+                'opinions': opinions,
+                'rating_avg': rating_avg,
+                'rating_count': rating_count,
+            }
         else:
-            watchedlist = False
+            user = request.user
+            if movie_data in user.profile.watchedlist.all():
+                watchedlist = True
+            else:
+                watchedlist = False
 
-        if movie_data in user.profile.watchlist.all():
-            watchlist = True
-        else:
-            watchlist = False
+            if movie_data in user.profile.watchlist.all():
+                watchlist = True
+            else:
+                watchlist = False
 
-        if movie_data in user.profile.star.all():
-            star = True
-        else:
-            star = False
+            if movie_data in user.profile.star.all():
+                star = True
+            else:
+                star = False
+            
+            if not opinions:
+                rating_avg = 0
+                rating_count = 0
+            else:
+                rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+                rating_count = opinions.count()
 
-        if not opinions:
-            rating_avg = 0
-            rating_count = 0
-        else:
-            rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
-            rating_count = opinions.count()
-
-        our_db = True
-
-        context = {
+            our_db = True
+            
+            context = {
             'movie_data': movie_data,
             'our_db': our_db,
             'opinions': opinions,
@@ -95,7 +113,7 @@ def movie_detail_view(request, imdb_id):
             "star": star,
             "watchlist": watchlist,
             "watchedlist": watchedlist,
-        }
+            }
 
 
     else:
