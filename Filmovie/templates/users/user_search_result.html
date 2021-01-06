@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if users %}
+            <br><br><br><br><br><br>
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="card">
+                <div class="card-content">
+                  <ul class="collection">
+
+                    {% for u in users %}
+                    <li class="collection-item avatar">
+                        {% if u.profile.picture %}
+                        <img src="{{ u.profile.picture.url }}" alt="" class="circle">
+                        {% else %}
+                        <img src="{% static 'img/woman.png' %}" alt="" class="circle">
+                        {% endif %}
+                        <span class="title">{{u.first_name}}&nbsp{{u.last_name}}</span>
+                        <p class="username"><a href="{% url 'profile' u.username %}">@{{u.username}}</a></p>
+                    </li>
+                    {% endfor %}
+
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+{% endif %}
+{% endif %}
+
+{%endblock%}

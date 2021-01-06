@@ -27,6 +27,9 @@
     <div class="nav-wrapper">
       <a href="{% url 'home' %}" class="brand-logo"><img src="{% static 'img/logo.png' %}"></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'search-users' %}">Search users</a></li>
+        {% endif %}
         <li><a href="{% url 'type' 'movie' %}">Movies</a></li>
         <li><a href="{% url 'type' 'series' %}">Series</a></li>
         {% if user.is_authenticated %}

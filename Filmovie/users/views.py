@@ -388,6 +388,7 @@ def user_settings_view(request):
 
     return render(request, 'profiles/settings.html', context)
 
+
 @login_required
 def follow_profile_view(request, username):
     me = request.user
@@ -400,3 +401,21 @@ def follow_profile_view(request, username):
         profile.followers.add(me)
         
     return HttpResponseRedirect(reverse('profile', args=[username]))
+
+
+@login_required
+def search_users_view(request):
+    query = request.GET.get('q')
+
+    if query:
+        users = User.objects.filter(username__contains=query)
+
+        context = {
+            'users': users,
+        }
+
+        template = loader.get_template('users/user_search_result.html')
+
+        return HttpResponse(template.render(context, request))
+    
+    return render(request, 'users/search_users.html')
