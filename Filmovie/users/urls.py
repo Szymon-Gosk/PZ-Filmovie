@@ -6,13 +6,15 @@ from users.views import (
     signup_view,
     password_change_view,
     password_change_done_view,
-    edit_profile_view
+    edit_profile_view,
+    user_settings_view
 )
 
 from django.contrib.auth import views as authViews
 
 urlpatterns = [
     path('profile/edit', edit_profile_view, name='edit-profile'),
+    path('profile/settings', user_settings_view, name='profile-settings'),
     path('signup/', signup_view, name='signup'),
     path('login/', authViews.LoginView.as_view(template_name='registration/login.html'), name='login'),
     path('logout/', authViews.LogoutView.as_view(), {'next_page': 'login'}, name='logout'),

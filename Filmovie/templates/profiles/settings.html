@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+
+
+  <main id="container">
+    <section id="photo-content">
+        <div id="profile-pic">
+
+          {% if profile.picture %}
+          <img src="{{profile.picture.url}}">
+          {% else %}
+          <img src="{% static 'img/woman.png' %}">
+          {% endif %}
+        </div>
+    </section>
+    <section class="text-content">
+      <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
+      <span class="profile-text s-border">
+        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        {{profile.location}}
+      </span>
+      <span class="profile-text s-border">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+        {{profile.bio}}
+      </span>
+
+      {% if user.is_authenticated and user == profile.user %}
+
+      <br><br>
+      <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
+
+      {% endif %}
+    </section>
+
+    <section>
+        <a href="{%url 'change-password' %}" class="waves-effect waves-light btn">Change password</a>
+        <a href="{%url 'password_reset' %}" class="waves-effect waves-light btn">Reset password</a>
+    </section>
+
+  </main>
+
+{%endblock%}

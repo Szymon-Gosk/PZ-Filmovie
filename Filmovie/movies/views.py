@@ -60,9 +60,30 @@ def movie_detail_view(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=movie_data)
+        user = request.user
 
-        rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
-        rating_count = opinions.count()
+        if movie_data in user.profile.watchedlist.all():
+            watchedlist = True
+        else:
+            watchedlist = False
+
+        if movie_data in user.profile.watchlist.all():
+            watchlist = True
+        else:
+            watchlist = False
+
+        if movie_data in user.profile.star.all():
+            star = True
+        else:
+            star = False
+
+        if not opinions:
+            rating_avg = 0
+            rating_count = 0
+        else:
+            rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'],2)
+            rating_count = opinions.count()
+
         our_db = True
 
         context = {
@@ -71,6 +92,9 @@ def movie_detail_view(request, imdb_id):
             'opinions': opinions,
             'rating_avg': rating_avg,
             'rating_count': rating_count,
+            "star": star,
+            "watchlist": watchlist,
+            "watchedlist": watchedlist,
         }
 
 
@@ -184,7 +208,7 @@ def genres_view(request, genre_slug):
 
     movies_for_pagination = Movie.objects.filter(Genre=genre)
 
-    paginator = Paginator(movies_for_pagination, 3)
+    paginator = Paginator(movies_for_pagination, 9)
 
     page_number = request.GET.get('page')
     movie_data = paginator.get_page(page_number)
@@ -192,6 +216,26 @@ def genres_view(request, genre_slug):
     context = {
         'movie_data': movie_data,
         'genre': genre,
+    }
+
+    template = loader.get_template('movies/genre.html')
+
+    return HttpResponse(template.render(context, request))
+
+def type_view(request, type):
+    """Returning the genres_view which renders the genre template.
+    Using paginator for the data from database"""
+
+    movies_for_pagination = Movie.objects.filter(Type=type)
+
+    paginator = Paginator(movies_for_pagination, 9)
+
+    page_number = request.GET.get('page')
+    movie_data = paginator.get_page(page_number)
+
+    context = {
+        'movie_data': movie_data,
+        'genre': type,
     }
 
     template = loader.get_template('movies/genre.html')
@@ -206,7 +250,11 @@ def star_movie_view(request, imdb_id):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    profile.star.add(movie)
+    if (movie in profile.star.all()):
+        profile.star.remove(movie)
+    else:
+        profile.star.add(movie)
+
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
 
@@ -219,7 +267,10 @@ def add_to_watchlist_view(request, imdb_id):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    profile.watchlist.add(movie)
+    if (movie in profile.watchlist.all()):
+        profile.watchlist.remove(movie)
+    else:
+        profile.watchlist.add(movie)
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
 
@@ -231,11 +282,14 @@ def add_to_watchedlist_view(request, imdb_id):
     user = request.user
     profile = Profile.objects.get(user=user)
 
-    if profile.watchlist.filter(imdbID=imdb_id).exists():
-        profile.watchlist.remove(movie)
-        profile.watchedlist.add(movie)
+    if movie in profile.watchedlist.all():
+        profile.watchedlist.remove(movie)
     else:
-        profile.watchedlist.add(movie)
+        if profile.watchlist.filter(imdbID=imdb_id).exists():
+            profile.watchlist.remove(movie)
+            profile.watchedlist.add(movie)
+        else:
+            profile.watchedlist.add(movie)
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
 
@@ -262,5 +316,4 @@ def movie_rate_view(request, imdb_id):
         'movie': movie,
     }
 
-    return HttpResponse(template.render(context, request))
-    
+    return HttpResponse(template.render(context, request)) 

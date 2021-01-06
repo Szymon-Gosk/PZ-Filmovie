@@ -33,9 +33,55 @@
           <span class="title">director</span>
         </div>
 
+<<<<<<< HEAD
         <div class="description-pair ">
           <span class="bolder greent">{{movie_data.Runtime}}</span>
           <span class="title">duration</span>
+=======
+        <div id="favor-line">
+          <div class="description-pair">
+            <span class="bold-text">{{movie_data.Director}}</span>
+            <span class="title">director</span>
+          </div>
+
+          <div class="description-pair">
+            <span class="bold-text">{{movie_data.Runtime}}</span>
+            <span class="title">duration</span>
+          </div>
+
+          <div class="description-pair">
+            {% if star %}
+            <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons icon-yellow">star_border</i></a></span>
+            <span class="title">remove</span>
+            {% else %}
+            <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons">star_border</i></a></span>
+            <span class="title">add</span>
+            {% endif %}
+            
+          </div>
+
+          <div class="description-pair">
+            {% if watchlist %}
+            <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></a></span>
+            <span class="title">remove from watchlist</span>
+            {% else %}
+            <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons">playlist_add</i></a></span>
+            <span class="title">add to watchlist</span>
+            {% endif %}
+            
+          </div>
+
+          <div class="description-pair">
+            {% if watchedlist %}
+            <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></a></span>
+            <span class="title">remove from watched</span>
+            {% else %}
+            <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></a></span>
+            <span class="title">add to watched</span>
+            {% endif %}
+            
+          </div>
+>>>>>>> a8a17b8f1bc7a1fe4d62c107e05188ad3087db5f
         </div>
 
         <div class="description-pair">
