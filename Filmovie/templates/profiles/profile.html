@@ -23,12 +23,16 @@
     <section class="text-content">
       <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
       <span class="profile-text s-border">
-        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">location_on</i>
         {{profile.location}}
       </span>
       <span class="profile-text s-border">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">edit</i>
         {{profile.bio}}
+      </span>
+      <span class="profile-text s-border">
+        <i class="material-icons" aria-hidden="true">visibility</i>
+        {{profile.followers.count}}
       </span>
 
       {% if user.is_authenticated and user == profile.user %}
@@ -37,35 +41,47 @@
       <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
 
       {% endif %}
+
+
+      {% if user.is_authenticated  and user != profile.user %}
+        <br><br>
+        {% if user in profile.followers.all %}
+        <a href="{% url 'follow' profile.user.username %}" class="btn">Unfollow</a>
+        {% else %}
+        <a href="{% url 'follow' profile.user.username %}" class="btn">Follow</a>
+        {% endif %}
+      {% endif %}
+
+
     </section>
     <section id="grid-container">
       <a href="{%url 'user-star-movies' profile.user.username%}">
       <div class="grid-item" >
-        <i class="fa fa-film" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">local_movies</i>
         <div class="amount">{{mStar_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-star-series' profile.user.username%}">
       <div class="grid-item" >
-        <i class="fa fa-film" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">local_movies</i>
         <div class="amount">{{sStar_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-watchlist' profile.user.username%}">
       <div class="grid-item" >
-        <i class="fa fa-th" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">local_movies</i>
         <div class="amount">{{watchlist_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-watchedlist' profile.user.username%}">
       <div class="grid-item" >
-        <i class="fa fa-th" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">local_movies</i>
         <div class="amount">{{watchedlist_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-reviews' profile.user.username%}">
       <div class="grid-item" >
-        <i class="fa fa-align-left" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">local_movies</i>
         <div class="amount">{{opinions_count}}</div>
       </div>
       </a>
@@ -141,14 +157,14 @@
       {% if movie_data.has_previous %}
 
         <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
-          load less<i class="fa fa-caret-up" aria-hidden="true" style="margin-left: 10px;"></i>
+          load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
       {% endif %}
 
       {% if movie_data.has_next %}
 
         <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
-          load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
+          load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
         </a>
       {% endif %}
       </div>

@@ -235,3 +235,7 @@ footer {
     cursor: pointer;
 
   }
+
+.username {
+  background-color: black;
+}

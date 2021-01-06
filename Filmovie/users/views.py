@@ -98,6 +98,7 @@ def edit_profile_view(request):
     return render(request, 'registration/edit_profile.html', context)
 
 
+@login_required
 def user_profile_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -124,6 +125,7 @@ def user_profile_view(request, username):
 
 
 
+@login_required
 def user_profile_movies_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -157,6 +159,8 @@ def user_profile_movies_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+
+@login_required
 def user_profile_series_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -190,6 +194,8 @@ def user_profile_series_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+
+@login_required
 def user_profile_watchlist_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -223,6 +229,7 @@ def user_profile_watchlist_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+@login_required
 def user_profile_watchedlist_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -256,6 +263,7 @@ def user_profile_watchedlist_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+@login_required
 def user_profile_reviewed_view(request, username):
     """Returning the user profile view"""
     user = get_object_or_404(User, username=username)
@@ -289,6 +297,8 @@ def user_profile_reviewed_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+
+@login_required
 def opinion_detail_view(request, username, imdb_id):
     user_comment = request.user
     user = get_object_or_404(User, username=username)
@@ -321,7 +331,7 @@ def opinion_detail_view(request, username, imdb_id):
 
     return HttpResponse(template.render(context, request))
 
-
+@login_required
 def like_view(request, username, imdb_id):
     user_like = request.user
     user_rating = get_object_or_404(User, username=username)
@@ -343,7 +353,7 @@ def like_view(request, username, imdb_id):
 
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
 
-
+@login_required
 def dislike_view(request, username, imdb_id):
     user_dislike = request.user
     user_rating = get_object_or_404(User, username=username)
@@ -379,3 +389,33 @@ def user_settings_view(request):
     return render(request, 'profiles/settings.html', context)
 
 
+@login_required
+def follow_profile_view(request, username):
+    me = request.user
+    other_user_qs = User.objects.filter(username=username)
+    other = other_user_qs.first()
+    profile = other.profile
+    if me in profile.followers.all():
+        profile.followers.remove(me)
+    else:
+        profile.followers.add(me)
+        
+    return HttpResponseRedirect(reverse('profile', args=[username]))
+
+
+@login_required
+def search_users_view(request):
+    query = request.GET.get('q')
+
+    if query:
+        users = User.objects.filter(username__contains=query)
+
+        context = {
+            'users': users,
+        }
+
+        template = loader.get_template('users/user_search_result.html')
+
+        return HttpResponse(template.render(context, request))
+    
+    return render(request, 'users/search_users.html')

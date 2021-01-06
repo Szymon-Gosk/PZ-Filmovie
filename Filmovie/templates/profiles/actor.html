@@ -16,15 +16,15 @@
     <section class="text-content">
       <span class="profile-text name s-border">{{actor}}</span>
       <span class="profile-text s-border">
-        <i class="fa fa-map-marker" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">location_on</i>
         Poland
       </span>
       <span class="profile-text s-border">
-        <i class="fa fa-globe" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">web</i>
         www.mylongest-page.com
       </span>
       <span class="profile-text s-border">
-        <i class="fa fa-pencil" aria-hidden="true"></i>
+        <i class="material-icons" aria-hidden="true">edit</i>
         Quisque velit nisi, pretium ut lacinia in, 
         elementum id enim. Donec sollicitudin molestie 
         malesuada. Curabitur non nulla sit amet nisl 
@@ -75,14 +75,14 @@
       {% if movie_data.has_previous %}
 
         <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
-          load less<i class="fa fa-caret-up" aria-hidden="true" style="margin-left: 10px;"></i>
+          load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
       {% endif %}
 
       {% if movie_data.has_next %}
 
         <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
-          load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
+          load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
         </a>
       {% endif %}
       </div>
