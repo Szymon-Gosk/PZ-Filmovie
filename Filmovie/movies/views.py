@@ -1,6 +1,6 @@
 """Movie views"""
 from django.core.paginator import Paginator
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.text import slugify
 from django.template import loader
 from django.urls import reverse
@@ -100,8 +100,11 @@ def movie_detail_view(request, imdb_id):
 
     else:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
+        print(url)
         response = requests.get(url)
+        print(response)
         movie_data = response.json()
+        print(movie_data)
 
         #inject to our db
 
@@ -204,6 +207,23 @@ def movie_detail_view(request, imdb_id):
 def genres_view(request, genre_slug):
     """Returning the genres_view which renders the genre template.
     Using paginator for the data from database"""
+    query = request.GET.get('q')
+
+    if query:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        response = requests.get(url)
+        movie_data = response.json()
+
+        context = {
+            'query': query,
+            'movie_data': movie_data,
+            'page_number': 1,
+        }
+
+        template = loader.get_template('movies/search_result.html')
+
+        return HttpResponse(template.render(context, request))
+        
     genre = get_object_or_404(Genre, slug=genre_slug)
 
     movies_for_pagination = Movie.objects.filter(Genre=genre)
@@ -225,6 +245,22 @@ def genres_view(request, genre_slug):
 def type_view(request, type):
     """Returning the genres_view which renders the genre template.
     Using paginator for the data from database"""
+    query = request.GET.get('q')
+
+    if query:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        response = requests.get(url)
+        movie_data = response.json()
+
+        context = {
+            'query': query,
+            'movie_data': movie_data,
+            'page_number': 1,
+        }
+
+        template = loader.get_template('movies/search_result.html')
+
+        return HttpResponse(template.render(context, request))
 
     movies_for_pagination = Movie.objects.filter(Type=type)
 

@@ -20,6 +20,11 @@ def user_directory_path(instance, filename):
         os.remove(full_path)
     return profile_picture
 
+class FollowerRelation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
 class Profile(models.Model):
     """Defining the Profile model"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
@@ -32,6 +37,9 @@ class Profile(models.Model):
     watchlist = models.ManyToManyField(Movie, related_name='watchlist')
     watchedlist = models.ManyToManyField(Movie, related_name='watchedlist')
     picture = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    followers = models.ManyToManyField(User, related_name='following', blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

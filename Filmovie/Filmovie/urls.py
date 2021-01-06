@@ -12,15 +12,26 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from users.views import user_profile_view, opinion_detail_view, like_view, dislike_view, user_profile_movies_view, user_profile_series_view, user_profile_watchlist_view, user_profile_watchedlist_view, user_profile_reviewed_view
+from users.views import (
+    user_profile_view,
+    opinion_detail_view,
+    like_view, dislike_view,
+    user_profile_movies_view,
+    user_profile_series_view,
+    user_profile_watchlist_view,
+    user_profile_watchedlist_view,
+    user_profile_reviewed_view,
+    follow_profile_view
+)
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('movies.urls')),
+    path('movie/', include('movies.urls')),
     path('actors/', include('actors.urls')),
     path('accounts/', include('users.urls')),
     path('user/<username>/', user_profile_view, name='profile'),
+    path('user/<username>/follow', follow_profile_view, name='follow'),
     path('user/<username>/star-movies', user_profile_movies_view, name='user-star-movies'),
     path('user/<username>/star-series', user_profile_series_view, name='user-star-series'),
     path('user/<username>/watchlist', user_profile_watchlist_view, name='user-watchlist'),

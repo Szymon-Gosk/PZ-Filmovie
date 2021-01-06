@@ -378,4 +378,15 @@ def user_settings_view(request):
 
     return render(request, 'profiles/settings.html', context)
 
-
+@login_required
+def follow_profile_view(request, username):
+    me = request.user
+    other_user_qs = User.objects.filter(username=username)
+    other = other_user_qs.first()
+    profile = other.profile
+    if me in profile.followers.all():
+        profile.followers.remove(me)
+    else:
+        profile.followers.add(me)
+        
+    return HttpResponseRedirect(reverse('profile', args=[username]))

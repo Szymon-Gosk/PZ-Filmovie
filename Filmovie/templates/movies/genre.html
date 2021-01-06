@@ -75,14 +75,14 @@
       {% if movie_data.has_previous %}
 
         <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
-          load less<i class="fa fa-caret-up" aria-hidden="true" style="margin-left: 10px;"></i>
+          load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
       {% endif %}
 
       {% if movie_data.has_next %}
 
         <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
-          load more<i class="fa fa-caret-down" aria-hidden="true" style="margin-left: 10px;"></i>
+          load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
         </a>
       {% endif %}
       </div>
