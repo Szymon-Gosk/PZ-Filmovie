@@ -2583,11 +2583,11 @@ $jscomp.polyfill = function (e, r, p, m) {
         var idealHeight = dropdownBRect.height;
         var idealWidth = dropdownBRect.width;
         var idealXPos = triggerBRect.left - dropdownBRect.left;
-        var idealYPos = triggerBRect.top - dropdownBRect.top;
+        var idealYPos = "60px";
 
         var dropdownBounds = {
           left: idealXPos,
-          top: idealYPos,
+          top: '60px',
           height: idealHeight,
           width: idealWidth
         };

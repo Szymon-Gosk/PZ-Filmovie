@@ -27,17 +27,7 @@
         <br>
       </div>
 
-      <div id="favor-line">
-        <div class="description-pair">
-          <span class="bolder greent">{{movie_data.Director}}</span>
-          <span class="title">director</span>
-        </div>
 
-<<<<<<< HEAD
-        <div class="description-pair ">
-          <span class="bolder greent">{{movie_data.Runtime}}</span>
-          <span class="title">duration</span>
-=======
         <div id="favor-line">
           <div class="description-pair">
             <span class="bold-text">{{movie_data.Director}}</span>
@@ -91,39 +81,9 @@
             <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
             {% endif %}
           </div>
->>>>>>> a8a17b8f1bc7a1fe4d62c107e05188ad3087db5f
         </div>
 
-<<<<<<< HEAD
-        <div class="description-pair">
-          <span class="bolder"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons">star_border</i></a></span>
-          <span class="title">add</span>
-        </div>
-=======
-        <div id="list-of-details">
-          
-          <div class="pair-list">
-            <span class="title">Year</span>
-            <span class="bold-text">{{movie_data.Year}}</span>
-          </div>
-          {% if movie_data.Type == "series" %}
-          <div class="pair-list">
-            <span class="title">Seasons</span>
-            <span class="bold-text">{{movie_data.totalSeasons}}</span>
-          </div>
-          {% endif %}
->>>>>>> 38ce44cded50c1205cd1dc86092db3871051fa76
-
-        <div class="description-pair">
-          <span class="bolder"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons">playlist_add</i></a></span>
-          <span class="title">add to watchlist</span>
-        </div>
-
-        <div class="description-pair">
-          <span class="bolder"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></a></span>
-          <span class="title">add to watched</span>
-        </div>
-      </div>
+        
     </section>
   </article>
   <div id="list-of-details">
@@ -199,17 +159,6 @@
 
   <div id="buttons">
 
-<<<<<<< HEAD
-    <button class="cta-btn">
-      <a href="#"><i class="material-icons" style="font-size: 3em;">rate_review</i></a>
-      <span>Reviews</span>
-    </button>
-
-    <button class="cta-btn">
-      <a href="{% url 'rate-movie' movie_data.imdbID%}"><i class="material-icons" style="font-size: 3em;">star</i></a>
-      <span>Rate</span>
-    </button>
-=======
       </section>
       
     </article>
@@ -228,7 +177,6 @@
     </div>
     
     
->>>>>>> 38ce44cded50c1205cd1dc86092db3871051fa76
     
   </div>
   
@@ -307,30 +255,8 @@
 
 
       </div>
-<<<<<<< HEAD
-    </div>
-  </section>
-  <h3>Reviews</h3>
-  <div id="reviews-container">
-    <div class="reviews-content">
-      <ul class="collection">
-
-        {% for opinion in opinions %}
-        <li class="collection-item avatar">
-            {% if opinion.user.profile.picture %}
-            <img src="{{ opinion.user.profile.picture.url }}" alt="" class="circle">
-            {% else %}
-            <img src="{% static 'img/woman.png' %}" alt="" class="circle">
-            {% endif %}
-            <span class="title">{{opinion.user.first_name}}&nbsp{{opinion.user.last_name}}</span>
-            <p>@{{opinion.user.username}}</p>
-            <p>{{opinion.date}}</p>
-            <a href="{% url 'user-rating' opinion.user.username movie_data.imdbID %}" class="secondary-content"><i class="material-icons">grade</i>{{opinion.opinion}} &nbsp&nbsp&nbsp {{opinion.rate}} / 10</a>
-        </li>
-        {% endfor %}
-=======
     </section>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and opinions %}
     <h3>Reviews</h3>
           <div class="divider"></div>
           <div class="row">
@@ -361,7 +287,6 @@
           </div>
           {% endif %}
     <!--BREAK POINT END-->
->>>>>>> 38ce44cded50c1205cd1dc86092db3871051fa76
 
 
       </ul>
