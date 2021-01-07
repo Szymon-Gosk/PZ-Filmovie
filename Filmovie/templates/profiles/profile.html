@@ -31,8 +31,12 @@
         {{profile.bio}}
       </span>
       <span class="profile-text s-border">
-        <i class="material-icons" aria-hidden="true">visibility</i>
-        {{profile.followers.count}}
+        <a href="{% url 'followers' profile.user.username %}"><i class="material-icons" aria-hidden="true">visibility</i></a>
+        followers {{profile.followers.count}}
+      </span>
+      <span class="profile-text s-border">
+        <a href="{% url 'following' profile.user.username %}"><i class="material-icons" aria-hidden="true">visibility</i></a>
+        following {{following}}
       </span>
 
       {% if user.is_authenticated and user == profile.user %}
@@ -121,6 +125,33 @@
         </div>
 
         {% endfor %}
+
+        {% elif list_title == 'Followers' or list_title == 'Following' %}
+
+        {% if movie_data %}
+          <div class="main-result" style="position: relative; top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="card" style="width: 80%;">
+                  <div class="card-content">
+                    <ul class="collection">
+
+                      {% for u in movie_data %}
+                      <li class="collection-item avatar" style="margin: 50px 0;">
+                          {% if u.profile.picture %}
+                          <img src="{{ u.profile.picture.url }}" alt="" class="circle">
+                          {% else %}
+                          <img src="{% static 'img/woman.png' %}" alt="" class="circle">
+                          {% endif %}
+                          <span class="title" style="color: rgba(255,255,255,.6);">{{u.first_name}}&nbsp{{u.last_name}}</span>
+                          <p class="username"><a href="{% url 'profile' u.username %}" style="color: #45C718;">@{{u.username}}</a></p>
+                      </li>
+                      {% endfor %}
+
+
+                    </ul>
+                  </div>
+            </div>
+          </div>
+        {% endif %}
 
         {% else %}
 

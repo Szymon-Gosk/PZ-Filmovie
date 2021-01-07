@@ -22,7 +22,9 @@ from users.views import (
     user_profile_watchedlist_view,
     user_profile_reviewed_view,
     follow_profile_view,
-    search_users_view
+    search_users_view,
+    user_profile_followers_view,
+    user_profile_following_view,
 )
 
 
@@ -34,6 +36,8 @@ urlpatterns = [
     path('user/search', search_users_view, name='search-users'),
     path('user/<username>/', user_profile_view, name='profile'),
     path('user/<username>/follow', follow_profile_view, name='follow'),
+    path('user/<username>/followers', user_profile_followers_view, name='followers'),
+    path('user/<username>/following', user_profile_following_view, name='following'),
     path('user/<username>/star-movies', user_profile_movies_view, name='user-star-movies'),
     path('user/<username>/star-series', user_profile_series_view, name='user-star-series'),
     path('user/<username>/watchlist', user_profile_watchlist_view, name='user-watchlist'),
