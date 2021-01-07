@@ -7,33 +7,26 @@
  
 
 {% block content %}
+<article id="main-container">
 
-
-    <article id="main-container">
-      <section class="card-image">
+    <section class="card-image">
 
       {%if our_db is True%}
-
-
       <img src="{{movie_data.Poster.url}}">
-
       {%else%}
-
       <img src="{{movie_data.Poster}}">
-
       {%endif%}
+    </section>
 
-        
-      </section>
+    <section id="card-details">
 
-      <section id="card-details">
+      <div id="card-full-title">
+        <h1 class="text bolder card-title">{{movie_data.Title}}</h1>
+        <br>
+        <span class="text card-description">{{movie_data.Plot}}</span>
+        <br>
+      </div>
 
-        <div id="card-full-title">
-          <span class="card-title">{{movie_data.Title}}</span>
-          <br>
-          <span class="card-description">{{movie_data.Plot}}</span>
-          <br>
-        </div>
 
         <div id="favor-line">
           <div class="description-pair">
@@ -90,81 +83,81 @@
           </div>
         </div>
 
-        <div id="list-of-details">
-          
-          <div class="pair-list">
-            <span class="title">Year</span>
-            <span class="bold-text">{{movie_data.Year}}</span>
-          </div>
-          {% if movie_data.Type == "series" %}
-          <div class="pair-list">
-            <span class="title">Seasons</span>
-            <span class="bold-text">{{movie_data.totalSeasons}}</span>
-          </div>
-          {% endif %}
+        
+    </section>
+  </article>
+  <div id="list-of-details">
+        
+    <div class="pair-list">
 
-          <div class="pair-list">
-            <span class="title">Rated</span>
-            <span class="bold-text">{{movie_data.Rated}}</span>
-          </div>
+      <span class="title">Year</span>
+      <span class="bolder">{{movie_data.Year}}</span>
+    </div>
 
-          <div class="pair-list">
-            <span class="title">Released</span>
-            <span class="bold-text">{{movie_data.Released}}</span>
-          </div>
+    <div class="pair-list">
 
-          <div class="pair-list">
-            <span class="title">Genre</span>
+      <span class="title">Rated</span>
+      <span class="bolder">{{movie_data.Rated}}</span>
+    </div>
 
-            {%if our_db is True%}
+    <div class="pair-list">
 
+      <span class="title">Released</span>
+      <span class="bolder">{{movie_data.Released}}</span>
+    </div>
 
-            <span class="bold-text">{%for genre in movie_data.Genre.all%}<a href="{{genre.get_absolute_url}}">{{genre}}</a>,{%endfor%}</span>
+    <div class="pair-list">
 
-            {%else%}
+      <span class="title">Genre</span>
+      {%if our_db is True%}
+      <span class="bolder bolder-list">
+        {%for genre in movie_data.Genre.all%}
+        <a href="{{genre.get_absolute_url}}">{{genre}}</a>
+        {%endfor%}</span>
+        {%else%}
+      <span class="bolder">{{movie_data.Genre}}</span>
+      {%endif%}
+    </div>
 
-            <span class="bold-text">{{movie_data.Genre}}</span>
-            
-            {%endif%}
+    <div class="pair-list">
 
-          </div>
+      <span class="title">Writer</span>
+      <span class="bolder">{{movie_data.Writer}}</span>
+    </div>
 
-          <div class="pair-list">
-            <span class="title">Writer</span>
-            <span class="bold-text">{{movie_data.Writer}}</span>
-          </div>
+    <div class="pair-list">
 
-          <div class="pair-list">
-            <span class="title">Actors</span>
+      <span class="title">Actors</span>
+      {%if our_db is True%}
+      <span class="bolder bolder-list">{%for actor in movie_data.Actors.all%}
+        <a href="{{actor.get_absolute_url}}">{{actor}}</a>
+        {%endfor%}</span>
+      {%else%}
+      <span class="bolder">{{movie_data.Actors}}</span>
+      {%endif%}
 
-            {%if our_db is True%}
+    </div>
 
+    <div class="pair-list">
 
-            <span class="bold-text">{%for actor in movie_data.Actors.all%}<a href="{{actor.get_absolute_url}}">{{actor}}</a>,{%endfor%}</span>
+      <span class="title">Language</span>
+      <span class="bolder">{{movie_data.Language}}</span>
+    </div>
 
-            {%else%}
+    <div class="pair-list">
 
-            <span class="bold-text">{{movie_data.Actors}}</span>
+      <span class="title">Country</span>
+      <span class="bolder">{{movie_data.Country}}</span>
+    </div>
 
-            {%endif%}
+    <div class="pair-list">
 
-          </div>
+      <span class="title">Awards</span>
+      <span class="bolder">{{movie_data.Awards}}</span>
+    </div>
+  </div>
 
-          <div class="pair-list">
-            <span class="title">Language</span>
-            <span class="bold-text">{{movie_data.Language}}</span>
-          </div>
-
-          <div class="pair-list">
-            <span class="title">Country</span>
-            <span class="bold-text">{{movie_data.Country}}</span>
-          </div>
-
-          <div class="pair-list">
-            <span class="title">Awards</span>
-            <span class="bold-text">{{movie_data.Awards}}</span>
-          </div>
-        </div>
+  <div id="buttons">
 
       </section>
       
@@ -185,82 +178,85 @@
     
     
     
+  </div>
+  
+  
+  
 
 
 
-    <!--BREAK POINT -->
+  <!--BREAK POINT -->
 
-    <section id="card-details">
-      <div class="card-stacked">
-          <ul class="collection">
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/filmovie-icon.png' %}" alt="" class="circle">
-              <span class="title">Filmovie Rating</span>
-              <p><b>{{rating_avg}} / 10</b> rated by <b>{{rating_count}}</b> users</p>
-            </li>
+  <section id="card-details">
+    <div class="card-stacked">
+        <ul class="collection">
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/filmovie-icon.png' %}" alt="" class="circle">
+            <span class="title">Filmovie Rating</span>
+            <p><b>{{rating_avg}} / 10</b> rated by <b>{{rating_count}}</b> users</p>
+          </li>
 
-            {%if our_db is True%}
+          {%if our_db is True%}
 
-            {%for movie in movie_data.Ratings.all%}
+          {%for movie in movie_data.Ratings.all%}
 
-            {%if movie.source == 'Internet Movie Database'%}
+          {%if movie.source == 'Internet Movie Database'%}
 
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie.source}}</span>
-              <p><b>{{movie.rating}}</b></p>
-            </li>
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie.source}}</span>
+            <p><b>{{movie.rating}}</b></p>
+          </li>
 
-            {%elif movie.source == 'Rotten Tomatoes'%}
+          {%elif movie.source == 'Rotten Tomatoes'%}
 
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie.source}}</span>
-              <p><b>{{movie.rating}}</b></p>
-            </li>
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie.source}}</span>
+            <p><b>{{movie.rating}}</b></p>
+          </li>
 
-            {%else%}
+          {%else%}
 
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie.source}}</span>
-              <p><b>{{movie.rating}}</b></p>
-            </li>
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie.source}}</span>
+            <p><b>{{movie.rating}}</b></p>
+          </li>
 
-            {%endif%}
-
-
-            {%endfor%}
-
-            {%else%}
-
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie_data.Ratings.0.Source}}</span>
-              <p><b>{{movie_data.Ratings.0.Value}}</b></p>
-            </li>
-
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie_data.Ratings.1.Source}}</span>
-              <p><b>{{movie_data.Ratings.1.Value}}</b></p>
-            </li>
-
-            <li class="collection-item avatar">
-              <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
-              <span class="title">{{movie_data.Ratings.2.Source}}</span>
-              <p><b>{{movie_data.Ratings.2.Value}}</b></p>
-            </li>
-
-            {%endif%}
-
-          </ul>
+          {%endif%}
 
 
-        </div>
+          {%endfor%}
+
+          {%else%}
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie_data.Ratings.0.Source}}</span>
+            <p><b>{{movie_data.Ratings.0.Value}}</b></p>
+          </li>
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie_data.Ratings.1.Source}}</span>
+            <p><b>{{movie_data.Ratings.1.Value}}</b></p>
+          </li>
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
+            <span class="title">{{movie_data.Ratings.2.Source}}</span>
+            <p><b>{{movie_data.Ratings.2.Value}}</b></p>
+          </li>
+
+          {%endif%}
+
+        </ul>
+
+
       </div>
     </section>
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and opinions %}
     <h3>Reviews</h3>
           <div class="divider"></div>
           <div class="row">
@@ -292,5 +288,13 @@
           {% endif %}
     <!--BREAK POINT END-->
 
+
+      </ul>
+    </div>
+  </div>
+  <!--BREAK POINT END-->
+
+
+    
 
 {% endblock %}
