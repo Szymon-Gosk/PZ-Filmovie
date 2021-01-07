@@ -12,6 +12,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from movies.views import user_activities_view
 from users.views import (
     user_profile_view,
     opinion_detail_view,
@@ -35,6 +36,7 @@ urlpatterns = [
     path('actors/', include('actors.urls')),
     path('accounts/', include('users.urls')),
     path('user/search', search_users_view, name='search-users'),
+    path('user/activities', user_activities_view, name='user-activities'),
     path('user/<username>/', user_profile_view, name='profile'),
     path('user/<username>/follow', follow_profile_view, name='follow'),
     path('user/<username>/followers', user_profile_followers_view, name='followers'),

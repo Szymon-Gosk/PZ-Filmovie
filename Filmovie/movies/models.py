@@ -76,6 +76,7 @@ class Movie(models.Model):
     Production = models.CharField(max_length=25, blank=True)
     Website = models.CharField(max_length=150, blank=True)
     totalSeasons = models.CharField(max_length=3, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """Returning the title of the object"""
@@ -115,6 +116,7 @@ class MovieRating(models.Model):
     rate = models.PositiveSmallIntegerField(choices=RATE)
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username
@@ -124,3 +126,4 @@ class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
     like_type = models.PositiveSmallIntegerField()
     rating = models.ForeignKey(MovieRating, on_delete=models.CASCADE, related_name='rating_like')
+    timestamp = models.DateTimeField(auto_now_add=True)
