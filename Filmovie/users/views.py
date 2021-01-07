@@ -451,6 +451,17 @@ def opinion_detail_view(request, username, imdb_id):
 
     return HttpResponse(template.render(context, request))
 
+
+@login_required
+def comment_delete_view(request, username, imdb_id, comment_id):
+
+    Comment.objects.filter(id=comment_id).delete()
+
+    
+    return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
+
+
+
 @login_required
 def like_view(request, username, imdb_id):
     user_like = request.user

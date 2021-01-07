@@ -104,7 +104,9 @@
                                         <p>{{comment.date}}</p>
                                         <br>
                                         <p>{{comment.text}}</p>
-                                        <a class="secondary-content" href="#"><i class="material-icons red-text">delete</i></a>
+                                        {% if user.is_authenticated and user.username == comment.user.username %}
+                                        <a class="secondary-content" href="{% url 'comment-delete' user.username movie.imdbID comment.id %}"><i class="material-icons red-text">delete</i></a>
+                                        {% endif %}
                                     </li>
                                   {% endfor %}
 

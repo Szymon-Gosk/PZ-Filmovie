@@ -25,6 +25,7 @@ from users.views import (
     search_users_view,
     user_profile_followers_view,
     user_profile_following_view,
+    comment_delete_view,
 )
 
 
@@ -44,6 +45,7 @@ urlpatterns = [
     path('user/<username>/watchedlist', user_profile_watchedlist_view, name='user-watchedlist'),
     path('user/<username>/reviewed', user_profile_reviewed_view, name='user-reviews'),
     path('<username>/rating/<imdb_id>/', opinion_detail_view, name='user-rating'),
+    path('<username>/rating/<imdb_id>/delete/<comment_id>', comment_delete_view, name='comment-delete'),
     path('<username>/rating/<imdb_id>/like', like_view, name='user-rating-like'),
     path('<username>/rating/<imdb_id>/dislike', dislike_view, name='user-rating-dislike'),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
