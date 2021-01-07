@@ -36,6 +36,7 @@
             <ul class="collection">
 
               {% if has_rated %}
+              <h3>Last ratings</h3>
               {% for rated in has_rated %}
               <li class="collection-item avatar" style="margin: 50px 0;">
                   {% if rated.user.profile.picture %}
@@ -51,6 +52,7 @@
               {% endfor %}
               {% endif %}
               {% if has_liked %}
+              <h3>Last likes</h3>
               {% for liked in has_liked %}
               <li class="collection-item avatar" style="margin: 50px 0;">
                   {% if liked.user.profile.picture %}
