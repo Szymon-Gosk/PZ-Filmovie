@@ -259,7 +259,6 @@ footer {
     transition: 0.2s;
 
     
-<<<<<<< HEAD
 }
 
 @media (min-width:700px) and (max-width:1024px) {
@@ -294,11 +293,8 @@ footer {
     width: 10vw;
     height: 10vw;
   }
-=======
-  }
-
   i.icon-yellow {
     color: yellow;
->>>>>>> a8a17b8f1bc7a1fe4d62c107e05188ad3087db5f
+}
 }
 
