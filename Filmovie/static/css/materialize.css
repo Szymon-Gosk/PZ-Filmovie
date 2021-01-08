@@ -5248,7 +5248,8 @@ small {
 .btn, .btn-large, .btn-small {
   text-decoration: none;
   color: #fff;
-  background-color: #45C718;
+  background-color: transparent;
+  border: 1px solid #45C718!important;
   text-align: center;
   letter-spacing: .5px;
   -webkit-transition: background-color .2s ease-out;
@@ -5257,7 +5258,7 @@ small {
 }
 
 .btn:hover, .btn-large:hover, .btn-small:hover {
-  background-color: #2bbbad;
+  background-color: #45C718;
 }
 
 .btn-floating {
@@ -5559,7 +5560,7 @@ button.btn-floating {
 
 .dropdown-content li {
   display: inline-block;
-  width: 8vw;
+  width: 100%;
   clear: both;
   color: rgba(0, 0, 0, 0.87);
   cursor: pointer;

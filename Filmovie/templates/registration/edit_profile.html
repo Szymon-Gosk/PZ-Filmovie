@@ -2,21 +2,18 @@
 {% load static %}
 
 {% block css %}
-<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="{% static 'css/styles-edit-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 {% endblock %}
 
 
 {% block content %}
 
-<div class="row center-align"> 
+<div class="edit-profile-content"> 
 
-    
-
-    <form method="POST" enctype="multipart/form-data" class="col-12" role="form" action="">
+    <form method="POST" enctype="multipart/form-data" class="" role="form" action="" style="width: 80%">
     {%csrf_token%}
 
     <h3>Edit your profile</h3>
-
 
     <div class="row">
         <div class="file-field input-field col s12">
@@ -65,9 +62,11 @@
         </div>
     </div>
     {% endif %}
-    <button type="submit" name="action" class="waves-effect waves-light btn"><i class="material-icons left">send</i>Save changes</button>
+    <button type="submit" name="action" class="waves-effect waves-light cta-btn">Save changes</button>
 
     </form>
+
+ 
 
 </div>
 

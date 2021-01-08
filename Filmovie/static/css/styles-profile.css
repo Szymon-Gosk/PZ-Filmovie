@@ -24,6 +24,9 @@
   h1, h2, h3, h4, h5, h6, h1, h2, h3, h4, h5, h6 {
     color: #fff;
   }
+  h4 {
+    text-align: center;
+  }
 
 
   /* NAVIGATION AND CATEGORIES (SEARCH)*/ 
@@ -66,6 +69,7 @@
     
 }
 
+
 #movie-container {
   display: flex;
   flex-direction: row;
@@ -73,13 +77,18 @@
   justify-content: space-evenly;
 }
 #movie-container .one-card {
-  width: 25%;
+  width: 300px;
   margin: 20px 30px;
   transition: 0.3s;
 }
 
 #movie-container .one-card:hover {
   transform: scale(1.1);
+}
+
+.container-actor {
+  position: relative;
+  top: 100px;
 }
 
 .card { 
@@ -100,7 +109,16 @@
   transition: 0.4s;
 }
 
-/* LOAD MORE BUTON */
+#buttons {
+  width: 100vw;
+  display:flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 100px 0;
+}
+
+/* LOAD MORE BUTTON */
 
 .cta-btn {
   background-color:transparent;
@@ -112,6 +130,10 @@
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
 }
 .cta-btn:hover {
@@ -159,12 +181,17 @@ footer {
       background-repeat: no-repeat;
       border: 2px solid white;
       margin: 5vh;
+      overflow: hidden;
+  }
+  #profile-pic img {
+    width: 100%;
+    height: auto;
   }
 
   .profile-text {
     width: 70%;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     text-align: right;
     padding: 15px 0;
     padding-right: 15px;
@@ -172,12 +199,12 @@ footer {
 
 .profile-text i {
     float: left;
-    font-size: 45px;
+    font-size: 35px;
     color: white;
     margin: 0 30px;
 }
 .name {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     padding-top: 0;
     text-transform: uppercase;    
     font-weight: 800;
@@ -203,6 +230,7 @@ footer {
       display: flex;
       flex-direction: row;
       justify-content: center;
+      flex-wrap:wrap;
       align-items:center;
   }
   @media only screen and (max-width: 1024px) {
@@ -212,7 +240,7 @@ footer {
   }
   #grid-container .grid-item { 
     border: 2px solid #45C718;
-    font-size: 30px;
+    font-size: 20px;
     color: white;
     width: 200px;
     height: 200px;
@@ -234,7 +262,3 @@ footer {
     cursor: pointer;
 
   }
-
-.username {
-  background-color: black;
-}

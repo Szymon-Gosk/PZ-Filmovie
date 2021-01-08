@@ -31,19 +31,22 @@
         {{profile.bio}}
       </span>
 
+      
+    </section>
+
+    <section id="buttons">
       {% if user.is_authenticated and user == profile.user %}
 
-      <br><br>
-      <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
+      <a href="{% url 'edit-profile'%}" class="cta-btn">Edit Profile</a>
 
       {% endif %}
+        <a href="{%url 'change-password' %}" class="waves-effect waves-light cta-btn">Change password</a>
+        <a href="{%url 'password_reset' %}" class="waves-effect waves-light cta-btn">Reset password</a>
     </section>
 
-    <section>
-        <a href="{%url 'change-password' %}" class="waves-effect waves-light btn">Change password</a>
-        <a href="{%url 'password_reset' %}" class="waves-effect waves-light btn">Reset password</a>
-    </section>
-
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
   </main>
 
 {%endblock%}

@@ -61,31 +61,31 @@
     <section id="grid-container">
       <a href="{%url 'user-star-movies' profile.user.username%}">
       <div class="grid-item" >
-        <i class="material-icons" aria-hidden="true">local_movies</i>
+        <i class="material-icons" aria-hidden="true">local_movies</i> Movies
         <div class="amount">{{mStar_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-star-series' profile.user.username%}">
       <div class="grid-item" >
-        <i class="material-icons" aria-hidden="true">local_movies</i>
+        <i class="material-icons" aria-hidden="true">ondemand_video</i> Series
         <div class="amount">{{sStar_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-watchlist' profile.user.username%}">
       <div class="grid-item" >
-        <i class="material-icons" aria-hidden="true">local_movies</i>
+        <i class="material-icons" aria-hidden="true">playlist_add</i> Watchlist
         <div class="amount">{{watchlist_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-watchedlist' profile.user.username%}">
       <div class="grid-item" >
-        <i class="material-icons" aria-hidden="true">local_movies</i>
+        <i class="material-icons" aria-hidden="true">playlist_add_check</i> Watched
         <div class="amount">{{watchedlist_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-reviews' profile.user.username%}">
       <div class="grid-item" >
-        <i class="material-icons" aria-hidden="true">local_movies</i>
+        <i class="material-icons" aria-hidden="true">rate_review</i> Reviews
         <div class="amount">{{opinions_count}}</div>
       </div>
       </a>
@@ -129,7 +129,7 @@
         {% elif list_title == 'Followers' or list_title == 'Following' %}
 
         {% if movie_data %}
-          <div class="main-result" style="position: relative; top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div class="main-result" style="top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <div class="card" style="width: 80%;">
                   <div class="card-content">
                     <ul class="collection">
@@ -204,7 +204,9 @@
     </article>
 
     {% endif %}
-
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
   </main>
 
 {%endblock%}
