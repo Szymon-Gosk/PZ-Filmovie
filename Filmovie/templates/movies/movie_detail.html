@@ -94,6 +94,14 @@
       <span class="bolder">{{movie_data.Year}}</span>
     </div>
 
+    {% if movie_data.Type == 'series' %}
+    <div class="pair-list">
+
+      <span class="title">Seasons</span>
+      <span class="bolder">{{movie_data.totalSeasons}}</span>
+    </div>
+    {% endif %}
+
     <div class="pair-list">
 
       <span class="title">Rated</span>

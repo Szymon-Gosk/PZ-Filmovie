@@ -1,11 +1,12 @@
 """Movie views"""
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.utils.text import slugify
 from django.template import loader
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from movies.models import Movie, Genre, Rating, MovieRating
+from movies.models import Movie, Genre, Rating, MovieRating, Likes
 from actors.models import Actor
 from users.models import Profile
 from movies.forms import MovieRateForm
@@ -31,7 +32,58 @@ def home(request):
         template = loader.get_template('movies/search_result.html')
 
         return HttpResponse(template.render(context, request))
-    return render(request, 'home.html')
+    
+    movies = Movie.objects.all().order_by("-timestamp")
+    movies = movies[:9]
+    
+    context = {
+        "movie_data": movies,
+    }
+    
+    
+    return render(request, 'home.html', context)
+
+
+@login_required
+def user_activities_view(request):
+    """Returning the user last activities view. Rendering search_result template if the
+    function gets the query from a user (if not rendering home template)"""
+    query = request.GET.get('q')
+
+    if query:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        response = requests.get(url)
+        movie_data = response.json()
+
+        context = {
+            'query': query,
+            'movie_data': movie_data,
+            'page_number': 1,
+        }
+
+        template = loader.get_template('movies/search_result.html')
+
+        return HttpResponse(template.render(context, request))
+    
+    user = request.user
+    profiles = user.following.all()
+    followed_users_id = []
+    for x in profiles:
+        followed_users_id.append(x.user.id)
+        
+    has_rated = MovieRating.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    has_rated = has_rated[:10]
+    has_liked = Likes.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    has_liked = has_liked[:10]
+    print(has_liked)
+    
+    context = {
+        "has_rated": has_rated,
+        "has_liked": has_liked,
+    }
+    
+    
+    return render(request, 'users/user_activities.html', context)
 
 
 def pagination(request, query, page_number):
@@ -351,8 +403,13 @@ def add_to_watchedlist_view(request, imdb_id):
 def movie_rate_view(request, imdb_id):
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
+    
 
     if request.method == 'POST':
+        user_rated_this_movie = MovieRating.objects.filter(user=user, movie=movie)
+        if user_rated_this_movie.count()>=1:
+            for u in user_rated_this_movie:
+                u.delete()
         form = MovieRateForm(request.POST)
         if form.is_valid():
             rate = form.save(commit=False)

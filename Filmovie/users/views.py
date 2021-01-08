@@ -109,6 +109,13 @@ def user_profile_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
     context = {
         'profile': profile,
@@ -117,6 +124,84 @@ def user_profile_view(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
+        'following': follow,
+    }
+
+    template = loader.get_template('profiles/profile.html')
+
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def user_profile_followers_view(request, username):
+    """Returning the user profile view"""
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
+
+    mStar_count = profile.star.filter(Type='movie').count()
+    sStar_count = profile.star.filter(Type='series').count()
+    watchlist_count = profile.watchlist.all().count()
+    watchedlist_count = profile.watchedlist.all().count()
+    opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(profile.user)
+            
+    follow = len(following)
+
+
+    followers = []
+    for u in profile.followers.all():
+        followers.append(u)
+            
+
+    context = {
+        'profile': profile,
+        'mStar_count': mStar_count,
+        'sStar_count': sStar_count,
+        'watchlist_count': watchlist_count,
+        'watchedlist_count': watchedlist_count,
+        'opinions_count': opinions_count,
+        'movie_data': followers,
+        'following': follow,
+        'list_title': 'Followers',
+    }
+
+    template = loader.get_template('profiles/profile.html')
+
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def user_profile_following_view(request, username):
+    """Returning the user profile view"""
+    user = get_object_or_404(User, username=username)
+    profile = Profile.objects.get(user=user)
+
+    mStar_count = profile.star.filter(Type='movie').count()
+    sStar_count = profile.star.filter(Type='series').count()
+    watchlist_count = profile.watchlist.all().count()
+    watchedlist_count = profile.watchedlist.all().count()
+    opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
+
+
+    context = {
+        'profile': profile,
+        'mStar_count': mStar_count,
+        'sStar_count': sStar_count,
+        'watchlist_count': watchlist_count,
+        'watchedlist_count': watchedlist_count,
+        'opinions_count': opinions_count,
+        'following': follow,
+        'movie_data': following,
+        'list_title': 'Following',
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -136,6 +221,12 @@ def user_profile_movies_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
 
     movies = profile.star.filter(Type='movie')
@@ -153,6 +244,7 @@ def user_profile_movies_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': movie_data,
         'list_title': 'Favourite movies',
+        'following': follow,
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -171,6 +263,12 @@ def user_profile_series_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
 
     series = profile.star.filter(Type='series')
@@ -188,6 +286,7 @@ def user_profile_series_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': movie_data,
         'list_title': 'Favourite series',
+        'following': follow,
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -206,6 +305,12 @@ def user_profile_watchlist_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
 
     watchlist = profile.watchlist.all()
@@ -223,6 +328,7 @@ def user_profile_watchlist_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': movie_data,
         'list_title': 'Watchlist',
+        'following': follow,
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -240,6 +346,12 @@ def user_profile_watchedlist_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
 
     watchedlist = profile.watchedlist.all()
@@ -257,6 +369,7 @@ def user_profile_watchedlist_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': movie_data,
         'list_title': 'Watchedlist',
+        'following': follow,
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -274,6 +387,12 @@ def user_profile_reviewed_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
+    following = []
+    for p in Profile.objects.all():
+        if user in p.followers.all():
+            following.append(p.user)
+            
+    follow = len(following)
 
 
     opinions = MovieRating.objects.filter(user=user)
@@ -291,6 +410,7 @@ def user_profile_reviewed_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': movie_data,
         'list_title': 'Reviewed',
+        'following': follow,
     }
 
     template = loader.get_template('profiles/profile.html')
@@ -331,6 +451,17 @@ def opinion_detail_view(request, username, imdb_id):
 
     return HttpResponse(template.render(context, request))
 
+
+@login_required
+def comment_delete_view(request, username, imdb_id, comment_id):
+
+    Comment.objects.filter(id=comment_id).delete()
+
+    
+    return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
+
+
+
 @login_required
 def like_view(request, username, imdb_id):
     user_like = request.user
@@ -338,17 +469,26 @@ def like_view(request, username, imdb_id):
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user_rating, movie=movie)
     current_likes = rating.likes
+    current_dislikes = rating.dislikes
 
     liked = Likes.objects.filter(user = user_like, rating=rating, like_type=2).count()
+    disliked = Likes.objects.filter(user = user_like, rating=rating, like_type=1).count()
 
     if not liked:
-        Likes.objects.create(user=user_like, rating=rating, like_type=2)
-        current_likes = current_likes + 1
+        if disliked:
+            Likes.objects.create(user=user_like, rating=rating, like_type=2)
+            current_likes = current_likes + 1
+            Likes.objects.filter(user=user_like, rating=rating, like_type=1).delete()
+            current_dislikes = current_dislikes - 1
+        else:
+            Likes.objects.create(user=user_like, rating=rating, like_type=2)
+            current_likes = current_likes + 1
     else:
         Likes.objects.filter(user=user_like, rating=rating, like_type=2).delete()
         current_likes = current_likes - 1
 
     rating.likes = current_likes
+    rating.dislikes = current_dislikes
     rating.save()
 
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
@@ -359,17 +499,26 @@ def dislike_view(request, username, imdb_id):
     user_rating = get_object_or_404(User, username=username)
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user_rating, movie=movie)
+    current_likes = rating.likes
     current_dislikes = rating.dislikes
 
+    liked = Likes.objects.filter(user = user_dislike, rating=rating, like_type=2).count()
     disliked = Likes.objects.filter(user = user_dislike, rating=rating, like_type=1).count()
 
     if not disliked:
-        Likes.objects.create(user=user_dislike, rating=rating, like_type=1)
-        current_dislikes = current_dislikes + 1
+        if liked:
+            Likes.objects.filter(user=user_dislike, rating=rating, like_type=2).delete()
+            current_likes = current_likes - 1
+            Likes.objects.create(user=user_dislike, rating=rating, like_type=1)
+            current_dislikes = current_dislikes + 1
+        else:
+            Likes.objects.create(user=user_dislike, rating=rating, like_type=1)
+            current_dislikes = current_dislikes + 1
     else:
         Likes.objects.filter(user=user_dislike, rating=rating, like_type=1).delete()
         current_dislikes = current_dislikes - 1
 
+    rating.likes = current_likes
     rating.dislikes = current_dislikes
     rating.save()
 
