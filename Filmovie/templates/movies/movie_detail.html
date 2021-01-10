@@ -40,46 +40,52 @@
           </div>
 
           <div class="description-pair">
+            <a href="{%url 'star' movie_data.imdbID%}">
             {% if user.is_authenticated %}
               {% if star %}
-              <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons icon-yellow">star_border</i></a></span>
+              <span class="bold-text"><i id="star_icon" class="material-icons icon-yellow">star_border</i></span>
               <span class="title">remove</span>
               {% else %}
-              <span class="bold-text"><a href="{%url 'star' movie_data.imdbID%}"><i id="star_icon" class="material-icons">star_border</i></a></span>
+              <span class="bold-text"><i id="star_icon" class="material-icons">star_border</i></span>
               <span class="title">add</span>
               {% endif %}
             {% else %}
             <span class="bold-text"><i id="star_icon" class="material-icons">star_border</i></span>
             {% endif %}
+          </a>
             
           </div>
 
           <div class="description-pair">
+            <a href="{%url 'watchlist' movie_data.imdbID%}">
             {% if user.is_authenticated %}
               {% if watchlist %}
-              <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></a></span>
+              <span class="bold-text"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></span>
               <span class="title">remove from watchlist</span>
               {% else %}
-              <span class="bold-text"><a href="{%url 'watchlist' movie_data.imdbID%}"><i id="playlist_add_icon" class="material-icons">playlist_add</i></a></span>
+              <span class="bold-text"><i id="playlist_add_icon" class="material-icons">playlist_add</i></span>
               <span class="title">add to watchlist</span>
               {% endif %}
             {% else %}
             <span class="bold-text"><i id="playlist_add_icon" class="material-icons">playlist_add</i></span>
             {% endif %}
+          </a>  
           </div>
 
           <div class="description-pair">
+            <a href="{%url 'watchedlist' movie_data.imdbID%}">
             {% if user.is_authenticated %}
               {% if watchedlist %}
-              <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></a></span>
+              <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></span>
               <span class="title">remove from watched</span>
               {% else %}
-              <span class="bold-text"><a href="{%url 'watchedlist' movie_data.imdbID%}"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></a></span>
+              <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
               <span class="title">add to watched</span>
               {% endif %}
             {% else %}
             <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
             {% endif %}
+          </a>
           </div>
         </div>
 
@@ -265,6 +271,7 @@
 
                     {% for opinion in opinions %}
                     <li class="collection-item avatar">
+                      <a href="{% url 'user-rating' opinion.user.username movie_data.imdbID %}">
                         {% if opinion.user.profile.picture %}
                         <img src="{{ opinion.user.profile.picture.url }}" alt="" class="circle">
                         {% else %}
@@ -273,8 +280,9 @@
                         <h4>{{opinion.user.first_name}} {{opinion.user.last_name}} @{{opinion.user.username}}</h4>
                         <span style="color: rgba(255,255,255,0.6);">{{opinion.date}}</span>
                         <p>{{opinion.opinion}}</p>
-                        <a href="{% url 'user-rating' opinion.user.username movie_data.imdbID %}" class="secondary-content"><i class="material-icons">grade</i>{{opinion.rate}} / 10</a>
-                    </li>
+                        <p class="secondary-content"><i class="material-icons">grade</i>{{opinion.rate}} / 10</p>
+                      </a>
+                      </li>
                     {% endfor %}
 
                   </ul>

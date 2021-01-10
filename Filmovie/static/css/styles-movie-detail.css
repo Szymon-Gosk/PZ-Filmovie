@@ -131,6 +131,12 @@ main {
   width: 100vw;
   background-color: rgba(0,0,0,1);
 }
+.description-pair a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 .description-pair .title {
   color: #45C718;
