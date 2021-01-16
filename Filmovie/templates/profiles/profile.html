@@ -93,12 +93,26 @@
 
 
     {% if list_title %}
-
+    {% if movie_data %}
     <h4>{{list_title}}: </h4>
     <div class="divider"></div>
 
     <article id="content">
       <section id="movie-container">
+    {% else %}
+    {% if list_title == 'Watchlist' or list_title == 'Watchedlist' %}
+    <h4>There is no movies or series in your {{list_title.lower}}</h4>
+    {% elif list_title == 'Reviewed' %}
+    <h4>You have not {{list_title.lower}} any movie or series!</h4>
+    {% elif list_title == 'Favourite movies' or list_title == 'Favourite series' %}
+    <h4>You have no {{list_title.lower}} </h4>
+    {% endif %}
+
+    <article id="content">
+      <section id="movie-container">
+    {% endif %}
+
+    
 
       {% if list_title == 'Reviewed' %}
 
@@ -151,6 +165,12 @@
                   </div>
             </div>
           </div>
+        {% else %}
+          {% if list_title == 'Followers' %}
+          <h4>You have no {{list_title.lower}} :(</h4>
+          {% else %}
+          <h4>You are not {{list_title.lower}} anybody! Search for our users <a href="{% url 'search-users' %}" style="color: blue">here</a></h4>
+          {% endif %}
         {% endif %}
 
         {% else %}

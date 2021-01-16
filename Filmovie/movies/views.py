@@ -13,6 +13,9 @@ from movies.forms import MovieRateForm
 from django.db.models import Avg
 import requests
 
+def redirect_to_home(request, *args, **kwargs):
+    return redirect('/movie')
+
 def home(request):
     """Returning the home view. Rendering search_result template if the
     function gets the query from a user (if not rendering home template)"""
