@@ -26,9 +26,8 @@
 
   
   {% if has_rated or has_liked %}
-  <article id="content">
+  <main>
     <section id="movie-container">
-
 
       <div class="main-result" style="position: relative; top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
         <div class="card" style="width: 80%;">
@@ -79,14 +78,14 @@
 
 
     </section>
-  </article>
+  </main>
   {% else %}
   {% endif %}
-  <article id="content">
-    <section id="movie-container">
+  <main>
+    <section id="movie-container" style="height: 100%; width: 80vw; justify-content: center; align-items: center;">
 
-      <span class="title" style="color: rgba(255,255,255,.6); text-align: center; margin-top:200px; margin-left:60%">You are probably not following any user, or your followed users have no activiteis</span>
+      <span class="title" style="color: rgba(255,255,255,.9); text-align: center; font-family: Poppins; font-size: 28px; font-weight: 600; margin: 0 30px;">You are probably not following any user, or your followed users have no activiteis</span>
 
     </section>
-  </article>
+  </main>
   {% endblock %}

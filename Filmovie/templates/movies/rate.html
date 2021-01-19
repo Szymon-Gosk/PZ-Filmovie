@@ -24,7 +24,7 @@
 <form method="POST" action="" role="form" class="">
   <span class="bolder text question"> How do you like the movie? </span>
   {% csrf_token %}
-  <div class="input-field col s12">
+  <div class="input-field col s12 dropdown-rate">
     {{form.rate}}
   </div>
 

@@ -14,7 +14,7 @@ from django.db.models import Avg
 import requests
 
 def redirect_to_home(request, *args, **kwargs):
-    return redirect('/movie')
+    return render(request, 'index.html')
 
 def home(request):
     """Returning the home view. Rendering search_result template if the

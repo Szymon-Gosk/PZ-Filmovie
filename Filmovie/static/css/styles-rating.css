@@ -133,9 +133,14 @@ form {
     flex-direction: column;
     align-items: center;
     font-size: 1.5em;
+    padding: 0 100px;
 }
 form label {
     font-size: 2em;
+}
+
+.dropdown-rate .select-wrapper .dropdown-content li {
+  width: 10%;
 }
 
 .cta-btn {

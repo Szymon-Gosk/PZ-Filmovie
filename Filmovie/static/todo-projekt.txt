@@ -1,19 +1,6 @@
 BACKEND:
-- Users last activities - if no content - set the text : you follow no one or something
-- z³e przekierowywanie podczas usuniêcia w³asnego komentarza
-- linki do profili po wejœciu w konkretne review
-- po klikniêciu ikon na profilu wyœwietliæ komunikat "you have no fav" czy coœ
+- zï¿½e przekierowywanie podczas usuniï¿½cia wï¿½asnego komentarza
+- linki do profili po wejï¿½ciu w konkretne review
+- po klikniï¿½ciu ikon na profilu wyï¿½wietliï¿½ komunikat "you have no fav" czy coï¿½
 
-
-
-
-
-FRONTEND:
-- linie przy 1 i Option - krótsze, bardziej na œrodku
-- poprawiæ Users last activities
-- usun¹æ guzik review - ustawiæ rate na œrodku
-- Wywaliæ opis aktora - zostawiæ tylko known for
-- zmieniæ obrazek base.html > navbar z woman.png na jak¹œ inn¹ (src/img), w settingsach, w profilach
-- profilowe na profile zmieniæ na 250px 250px
-- tlo na profilu zmieniæ na no-repeat
 
