@@ -40,8 +40,8 @@
           </div>
 
           <div class="description-pair">
-            <a href="{%url 'star' movie_data.imdbID%}">
             {% if user.is_authenticated %}
+              <a href="{%url 'star' movie_data.imdbID%}">
               {% if star %}
               <span class="bold-text"><i id="star_icon" class="material-icons icon-yellow">star_border</i></span>
               <span class="title">remove</span>
@@ -49,16 +49,18 @@
               <span class="bold-text"><i id="star_icon" class="material-icons">star_border</i></span>
               <span class="title">add</span>
               {% endif %}
+              </a>
             {% else %}
+            <a href="{%url 'login' %}">
             <span class="bold-text"><i id="star_icon" class="material-icons">star_border</i></span>
-            {% endif %}
-          </a>
-            
+            <span class="title">add</span>
+            </a>
+            {% endif %} 
           </div>
 
           <div class="description-pair">
-            <a href="{%url 'watchlist' movie_data.imdbID%}">
             {% if user.is_authenticated %}
+              <a href="{%url 'watchlist' movie_data.imdbID%}">
               {% if watchlist %}
               <span class="bold-text"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></span>
               <span class="title">remove from watchlist</span>
@@ -66,15 +68,18 @@
               <span class="bold-text"><i id="playlist_add_icon" class="material-icons">playlist_add</i></span>
               <span class="title">add to watchlist</span>
               {% endif %}
+              </a>
             {% else %}
+            <a href="{%url 'login' %}">
             <span class="bold-text"><i id="playlist_add_icon" class="material-icons">playlist_add</i></span>
+            <span class="title">add to watchlist</span>
+            </a>
             {% endif %}
-          </a>  
           </div>
 
           <div class="description-pair">
-            <a href="{%url 'watchedlist' movie_data.imdbID%}">
             {% if user.is_authenticated %}
+              <a href="{%url 'watchedlist' movie_data.imdbID%}">
               {% if watchedlist %}
               <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></span>
               <span class="title">remove from watched</span>
@@ -82,10 +87,13 @@
               <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
               <span class="title">add to watched</span>
               {% endif %}
+              </a>
             {% else %}
+            <a href="{%url 'login' %}">
             <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
+            <span class="title">add to watched</span>
+            </a>
             {% endif %}
-          </a>
           </div>
         </div>
 
@@ -178,13 +186,10 @@
 
     <div id="buttons">
       <button class="cta-btn">
-        <a href="#"><i class="material-icons">rate_review</i>Review</a>
-      </button>
-      <button class="cta-btn">
         {% if user.is_authenticated %}
           <a href="{% url 'rate-movie' movie_data.imdbID%}"><i class="material-icons ">star</i>Rate</a>
         {% else %}
-          <a href=""><i class="material-icons">star</i>Rate</a>
+        <a href="{%url 'login' %}"><i class="material-icons">star</i>Rate</a>
         {% endif %}
       </button>
     </div>

@@ -561,6 +561,7 @@ def search_users_view(request):
 
         context = {
             'users': users,
+            'query': query,
         }
 
         template = loader.get_template('users/user_search_result.html')

@@ -24,7 +24,7 @@
       <div class="one-review">
         <div class="card">
           <div class="card-content">
-              <span class="card-title"><b>@{{rating.user.username}}</b><span class="right" style="color: #45C817">{{rating.rate}} / 10<i class="material-icons right">star</i></span></span>
+              <span class="card-title"><b><a href="{% url 'profile' rating.user.username %}">@{{rating.user.username}}</a></b><span class="right" style="color: #45C817">{{rating.rate}} / 10<i class="material-icons right">star</i></span></span>
               <p>{{rating.user.first_name}}&nbsp{{rating.user.last_name}}</p>
               <p>{{rating.date}}</p>
               <br>
@@ -52,13 +52,13 @@
                             {% endif %}
 
 
-                            <span class="title">@{{comment.user.username}}</span>
+                            <span class="title"><a href="{% url 'profile' comment.user.username %}">@{{comment.user.username}}</a></span>
                             <p>{{comment.user.first_name}} {{comment.user.last_name}}</p>
                             <p>{{comment.date}}</p>
                             <br>
                             <span>{{comment.text}}</span>
                             {% if user.is_authenticated and user.username == comment.user.username %}
-                            <a class="secondary-content" href="{% url 'comment-delete' user.username movie.imdbID comment.id %}"><i class="material-icons red-text">delete</i></a>
+                            <a class="secondary-content" href="{% url 'comment-delete' rating.user.username movie.imdbID comment.id %}"><i class="material-icons red-text">delete</i></a>
                             {% endif %}
                         </li>
                       {% endfor %}

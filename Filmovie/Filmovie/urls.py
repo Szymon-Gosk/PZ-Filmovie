@@ -12,7 +12,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from movies.views import user_activities_view
+from movies.views import user_activities_view, redirect_to_home
 from users.views import (
     user_profile_view,
     opinion_detail_view,
@@ -31,6 +31,7 @@ from users.views import (
 
 
 urlpatterns = [
+    path('', redirect_to_home, name='home-page'),
     path('admin/', admin.site.urls),
     path('movie/', include('movies.urls')),
     path('actors/', include('actors.urls')),

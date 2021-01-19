@@ -8,45 +8,39 @@
 
 {% block content %}
 
+{% if user.is_authenticated and user == profile.user %}
+    <main id="container">
+      <div class="user-informations" style="margin-top: 200px">
+          <h4>User informations:</h4>
+          <div class="details">
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your username: &nbsp&nbsp&nbsp{{user.username}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your Name: &nbsp&nbsp&nbsp{{user.first_name}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your Last name: &nbsp&nbsp&nbsp{{user.last_name}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your E-mail: &nbsp&nbsp&nbsp{{user.email}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your password: &nbsp&nbsp&nbsp*********</span><br>
+            <a href="{%url 'change-password' %}" class="waves-effect waves-light cta-btn">Change password</a>
+            <a href="{%url 'password_reset' %}" class="waves-effect waves-light cta-btn">Reset password</a>
 
-  <main id="container">
-    <section id="photo-content">
-        <div id="profile-pic">
+          </div>
+      </div>
 
-          {% if profile.picture %}
-          <img src="{{profile.picture.url}}">
-          {% else %}
-          <img src="{% static 'img/woman.png' %}">
-          {% endif %}
+      <div class="profile-informations" style="margin-top: 200px">
+        <h4>User informations:</h4>
+        <div class="details">
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Name: &nbsp&nbsp&nbsp{{profile.first_name}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Last name: &nbsp&nbsp&nbsp{{profile.last_name}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile location: &nbsp&nbsp&nbsp{{profile.location}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile bio: &nbsp&nbsp&nbsp{{profile.bio}}</span><br>
+          <a href="{% url 'edit-profile'%}" class="cta-btn">Edit Profile</a>
+
         </div>
-    </section>
-    <section class="text-content">
-      <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
-      <span class="profile-text s-border">
-        <i class="material-icons" aria-hidden="true">location_on</i>
-        {{profile.location}}
-      </span>
-      <span class="profile-text s-border">
-        <i class="material-icons" aria-hidden="true">edit</i>
-        {{profile.bio}}
-      </span>
+    </div>
 
       
-    </section>
-
-    <section id="buttons">
-      {% if user.is_authenticated and user == profile.user %}
-
-      <a href="{% url 'edit-profile'%}" class="cta-btn">Edit Profile</a>
-
-      {% endif %}
-        <a href="{%url 'change-password' %}" class="waves-effect waves-light cta-btn">Change password</a>
-        <a href="{%url 'password_reset' %}" class="waves-effect waves-light cta-btn">Reset password</a>
-    </section>
-
+    </main>
     <footer>
       Proudly made by Suczki Marnotrawne 2020
     </footer>
-  </main>
 
+{% endif %}
 {%endblock%}
