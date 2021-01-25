@@ -12,16 +12,14 @@ def actor_view(request, actor_slug):
     actor = get_object_or_404(Actor, slug=actor_slug)
     movie = Movie.objects.filter(Actors=actor)
 
-    paginator = Paginator(movie, 3)
+    paginator = Paginator(movie, 6)
 
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    page = request.GET.get('page')
+    data = paginator.get_page(page)
 
     context = {
-        'movie_data': movie_data,
+        'movie_data': data,
         'actor': actor,
     }
 
-    template = loader.get_template('profiles/actor.html')
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(loader.get_template('profiles/actor.html').render(context, request))

@@ -62,13 +62,13 @@
       <a href="{%url 'user-star-movies' profile.user.username%}">
       <div class="grid-item" >
         <i class="material-icons" aria-hidden="true">local_movies</i> Movies
-        <div class="amount">{{mStar_count}}</div>
+        <div class="amount">{{movies_star_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-star-series' profile.user.username%}">
       <div class="grid-item" >
         <i class="material-icons" aria-hidden="true">ondemand_video</i> Series
-        <div class="amount">{{sStar_count}}</div>
+        <div class="amount">{{series_star_count}}</div>
       </div>
       </a>
       <a href="{%url 'user-watchlist' profile.user.username%}">
