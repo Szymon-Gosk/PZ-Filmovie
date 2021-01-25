@@ -24,28 +24,19 @@ def home(request):
     if query:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
         response = requests.get(url)
-        movie_data = response.json()
+        data = response.json()
 
         context = {
             'query': query,
-            'movie_data': movie_data,
+            'movie_data': data,
             'page_number': 1,
         }
 
-        template = loader.get_template('movies/search_result.html')
-
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
     
-    movies = Movie.objects.all().order_by("-timestamp")
-    movies = movies[:9]
+    movies = Movie.objects.all().order_by("-timestamp")[:9]
     
-    context = {
-        "movie_data": movies,
-    }
-    
-    
-    return render(request, 'home.html', context)
-
+    return render(request, 'home.html', {"movie_data": movies})
 
 @login_required
 def user_activities_view(request):
@@ -56,17 +47,15 @@ def user_activities_view(request):
     if query:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
         response = requests.get(url)
-        movie_data = response.json()
+        data = response.json()
 
         context = {
             'query': query,
-            'movie_data': movie_data,
+            'movie_data': data,
             'page_number': 1,
         }
 
-        template = loader.get_template('movies/search_result.html')
-
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
     
     user = request.user
     profiles = user.following.all()
@@ -74,38 +63,26 @@ def user_activities_view(request):
     for x in profiles:
         followed_users_id.append(x.user.id)
         
-    has_rated = MovieRating.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
-    has_rated = has_rated[:10]
-    has_liked = Likes.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
-    has_liked = has_liked[:10]
-    print(has_liked)
-    
-    context = {
-        "has_rated": has_rated,
-        "has_liked": has_liked,
-    }
-    
-    
-    return render(request, 'users/user_activities.html', context)
+    has_rated = MovieRating.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")[:10]
+    has_liked = Likes.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")[:10]
 
+    return render(request, 'users/user_activities.html', {"has_rated": has_rated,"has_liked": has_liked})
 
 def pagination(request, query, page_number):
     """Returning the movies at the specific page from an external API"""
 
     url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
     response = requests.get(url)
-    movie_data = response.json()
+    data = response.json()
     page_number = int(page_number)+1
 
     context = {
         'query': query,
-        'movie_data': movie_data,
+        'movie_data': data,
         'page_number': page_number,
     }
 
-    template = loader.get_template('movies/search_result.html')
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
 def movie_detail_view(request, imdb_id):
     """Returning movieDetail view which renders movie_detail template.
@@ -113,8 +90,8 @@ def movie_detail_view(request, imdb_id):
     If not it will render it from and external API"""
 
     if Movie.objects.filter(imdbID=imdb_id).exists():
-        movie_data = Movie.objects.get(imdbID=imdb_id)
-        opinions = MovieRating.objects.filter(movie=movie_data)
+        data = Movie.objects.get(imdbID=imdb_id)
+        opinions = MovieRating.objects.filter(movie=data)
         
         if not request.user.is_authenticated:
             if not opinions:
@@ -127,25 +104,26 @@ def movie_detail_view(request, imdb_id):
             our_db = True
 
             context = {
-                'movie_data': movie_data,
+                'movie_data': data,
                 'our_db': our_db,
                 'opinions': opinions,
                 'rating_avg': rating_avg,
                 'rating_count': rating_count,
             }
+            
         else:
             user = request.user
-            if movie_data in user.profile.watchedlist.all():
+            if data in user.profile.watchedlist.all():
                 watchedlist = True
             else:
                 watchedlist = False
 
-            if movie_data in user.profile.watchlist.all():
+            if data in user.profile.watchlist.all():
                 watchlist = True
             else:
                 watchlist = False
 
-            if movie_data in user.profile.star.all():
+            if data in user.profile.star.all():
                 star = True
             else:
                 star = False
@@ -160,7 +138,7 @@ def movie_detail_view(request, imdb_id):
             our_db = True
             
             context = {
-            'movie_data': movie_data,
+            'movie_data': data,
             'our_db': our_db,
             'opinions': opinions,
             'rating_avg': rating_avg,
@@ -170,66 +148,55 @@ def movie_detail_view(request, imdb_id):
             "watchedlist": watchedlist,
             }
 
-
     else:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
-        print(url)
         response = requests.get(url)
-        print(response)
-        movie_data = response.json()
-        print(movie_data)
-
-        #inject to our db
+        data = response.json()
 
         rating_objs = []
         genre_objs = []
         actors_obj = []
 
-        #Actors
-        actor_list = [x.strip() for x in movie_data['Actors'].split(',')]
+        actor_list = [x.strip() for x in data['Actors'].split(',')]
 
         for actor in actor_list:
             a, created = Actor.objects.get_or_create(name=actor)
             actors_obj.append(a)
-
-        #Ganre
-        genre_list = list(movie_data['Genre'].replace(" ", "").split(','))
-
+            
+        genre_list = list(data['Genre'].replace(" ", "").split(','))
 
         for genre in genre_list:
             genre_slug = slugify(genre)
             g, created = Genre.objects.get_or_create(title=genre, slug=genre_slug)
             genre_objs.append(g)
 
-        #Rate
-
-        for rate in movie_data['Ratings']:
+        for rate in data['Ratings']:
             r, created = Rating.objects.get_or_create(source=rate['Source'], rating=rate['Value'])
             rating_objs.append(r)
 
-        if movie_data['Type'] == 'movie':
+        if data['Type'] == 'movie':
             m, created = Movie.objects.get_or_create(
-                Title = movie_data['Title'],
-                Year = movie_data['Year'],
-                Rated = movie_data['Rated'],
-                Released = movie_data['Released'],
-                Runtime = movie_data['Runtime'],
-                Director = movie_data['Director'],
-                Writer = movie_data['Writer'],
-                Plot = movie_data['Plot'],
-                Language = movie_data['Language'],
-                Country = movie_data['Country'],
-                Awards = movie_data['Awards'],
-                Poster_url = movie_data['Poster'],
-                Metascore = movie_data['Metascore'],
-                imdbRating = movie_data['imdbRating'],
-                imdbVotes = movie_data['imdbVotes'],
-                imdbID = movie_data['imdbID'],
-                Type = movie_data['Type'],
-                DVD = movie_data['DVD'],
-                BoxOffice = movie_data['BoxOffice'],
-                Production = movie_data['Production'],
-                Website = movie_data['Website'],
+                Title = data['Title'],
+                Year = data['Year'],
+                Rated = data['Rated'],
+                Released = data['Released'],
+                Runtime = data['Runtime'],
+                Director = data['Director'],
+                Writer = data['Writer'],
+                Plot = data['Plot'],
+                Language = data['Language'],
+                Country = data['Country'],
+                Awards = data['Awards'],
+                Poster_url = data['Poster'],
+                Metascore = data['Metascore'],
+                imdbRating = data['imdbRating'],
+                imdbVotes = data['imdbVotes'],
+                imdbID = data['imdbID'],
+                Type = data['Type'],
+                DVD = data['DVD'],
+                BoxOffice = data['BoxOffice'],
+                Production = data['Production'],
+                Website = data['Website'],
             )
             m.Genre.set(genre_objs)
             m.Actors.set(actors_obj)
@@ -237,24 +204,24 @@ def movie_detail_view(request, imdb_id):
 
         else:
             m, created = Movie.objects.get_or_create(
-                Title = movie_data['Title'],
-                Year = movie_data['Year'],
-                Rated = movie_data['Rated'],
-                Released = movie_data['Released'],
-                Runtime = movie_data['Runtime'],
-                Director = movie_data['Director'],
-                Writer = movie_data['Writer'],
-                Plot = movie_data['Plot'],
-                Language = movie_data['Language'],
-                Country = movie_data['Country'],
-                Awards = movie_data['Awards'],
-                Poster_url = movie_data['Poster'],
-                Metascore = movie_data['Metascore'],
-                imdbRating = movie_data['imdbRating'],
-                imdbVotes = movie_data['imdbVotes'],
-                imdbID = movie_data['imdbID'],
-                Type = movie_data['Type'],
-                totalSeasons = movie_data['totalSeasons'],
+                Title = data['Title'],
+                Year = data['Year'],
+                Rated = data['Rated'],
+                Released = data['Released'],
+                Runtime = data['Runtime'],
+                Director = data['Director'],
+                Writer = data['Writer'],
+                Plot = data['Plot'],
+                Language = data['Language'],
+                Country = data['Country'],
+                Awards = data['Awards'],
+                Poster_url = data['Poster'],
+                Metascore = data['Metascore'],
+                imdbRating = data['imdbRating'],
+                imdbVotes = data['imdbVotes'],
+                imdbID = data['imdbID'],
+                Type = data['Type'],
+                totalSeasons = data['totalSeasons'],
             )
             m.Genre.set(genre_objs)
             m.Actors.set(actors_obj)
@@ -267,15 +234,7 @@ def movie_detail_view(request, imdb_id):
         m.save()
         our_db = False
 
-        context = {
-            'movie_data': movie_data,
-            'our_db': our_db,
-        }
-
-    template = loader.get_template('movies/movie_detail.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('movies/movie_detail.html').render({'movie_data': data,'our_db': our_db}, request))
 
 def genres_view(request, genre_slug):
     """Returning the genres_view which renders the genre template.
@@ -285,35 +244,21 @@ def genres_view(request, genre_slug):
     if query:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
         response = requests.get(url)
-        movie_data = response.json()
+        data = response.json()
 
         context = {
             'query': query,
-            'movie_data': movie_data,
+            'movie_data': data,
             'page_number': 1,
         }
 
-        template = loader.get_template('movies/search_result.html')
-
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
         
     genre = get_object_or_404(Genre, slug=genre_slug)
-
     movies_for_pagination = Movie.objects.filter(Genre=genre)
+    movie_data = Paginator(movies_for_pagination, 9).get_page(request.GET.get('page'))
 
-    paginator = Paginator(movies_for_pagination, 9)
-
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
-
-    context = {
-        'movie_data': movie_data,
-        'genre': genre,
-    }
-
-    template = loader.get_template('movies/genre.html')
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(loader.get_template('movies/genre.html').render({'movie_data': movie_data,'genre': genre}, request))
 
 def type_view(request, type):
     """Returning the genres_view which renders the genre template.
@@ -323,58 +268,39 @@ def type_view(request, type):
     if query:
         url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
         response = requests.get(url)
-        movie_data = response.json()
+        data = response.json()
 
         context = {
             'query': query,
-            'movie_data': movie_data,
+            'movie_data': data,
             'page_number': 1,
         }
 
-        template = loader.get_template('movies/search_result.html')
-
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
     movies_for_pagination = Movie.objects.filter(Type=type)
+    data = Paginator(movies_for_pagination, 9).get_page(request.GET.get('page'))
 
-    paginator = Paginator(movies_for_pagination, 9)
-
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
-
-    context = {
-        'movie_data': movie_data,
-        'genre': type,
-    }
-
-    template = loader.get_template('movies/genre.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('movies/genre.html').render({'movie_data': data,'genre': type}, request))
 
 def star_movie_view(request, imdb_id):
     """Returning the reverse template movie-details to refresh the page and save
     the movie user had added to faveourites"""
     movie = Movie.objects.get(imdbID=imdb_id)
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user)
 
     if (movie in profile.star.all()):
         profile.star.remove(movie)
     else:
         profile.star.add(movie)
 
-
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
-
-
 
 def add_to_watchlist_view(request, imdb_id):
     """Returning the the reverse template movie-details to refresh the page and save
     the movie user had added to watchlist"""
     movie = Movie.objects.get(imdbID=imdb_id)
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user)
 
     if (movie in profile.watchlist.all()):
         profile.watchlist.remove(movie)
@@ -383,13 +309,11 @@ def add_to_watchlist_view(request, imdb_id):
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
 
-
 def add_to_watchedlist_view(request, imdb_id):
     """Returning the the reverse template movie-details to refresh the page and save
     the movie user had added to watched movies"""
     movie = Movie.objects.get(imdbID=imdb_id)
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    profile = Profile.objects.get(user=request.user)
 
     if movie in profile.watchedlist.all():
         profile.watchedlist.remove(movie)
@@ -406,7 +330,6 @@ def add_to_watchedlist_view(request, imdb_id):
 def movie_rate_view(request, imdb_id):
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
-    
 
     if request.method == 'POST':
         user_rated_this_movie = MovieRating.objects.filter(user=user, movie=movie)
@@ -423,11 +346,4 @@ def movie_rate_view(request, imdb_id):
     else:
         form = MovieRateForm()
 
-    template = loader.get_template('movies/rate.html')
-
-    context = {
-        'form': form,
-        'movie': movie,
-    }
-
-    return HttpResponse(template.render(context, request)) 
+    return HttpResponse(loader.get_template('movies/rate.html').render({'form': form,'movie': movie}, request)) 

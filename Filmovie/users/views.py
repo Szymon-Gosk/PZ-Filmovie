@@ -37,12 +37,8 @@ def signup_view(request):
     else:
         form = SignupForm()
 
-    context = {
-        'form': form,
-    }
 
-    return render(request, 'registration/register.html', context)
-
+    return render(request, 'registration/register.html', {'form': form})
 
 @login_required
 def password_change_view(request):
@@ -51,32 +47,24 @@ def password_change_view(request):
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
         if form.is_valid():
-            new_password = form.cleaned_data.get('new_password')
-            user.set_password(new_password)
+            user.set_password(form.cleaned_data.get('new_password'))
             user.save()
             update_session_auth_hash(request, user)
             return redirect('change-password-done')
     else:
         form = ChangePasswordForm(instance=user)
 
-    context = {
-        'form': form,
-    }
-
-    return render(request, 'registration/change_password.html', context)
+    return render(request, 'registration/change_password.html', {'form': form})
 
 
 def password_change_done_view(request):
     """Returning the password change done view"""
     return render(request, 'registration/change_password_done.html')
 
-
-
 @login_required
 def edit_profile_view(request):
     """Returning the edit profile view if user is authenticated"""
-    user = request.user.id
-    profile = Profile.objects.get(user__id=user)
+    profile = Profile.objects.get(user__id=request.user.id)
 
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
@@ -87,16 +75,11 @@ def edit_profile_view(request):
             profile.location = form.cleaned_data.get('location')
             profile.bio = form.cleaned_data.get('bio')
             profile.save()
-            return redirect('home')
+            return redirect('profile', username=request.user.username)
     else:
         form = EditProfileForm(instance=request.user.profile)
 
-    context = {
-        'form': form,
-    }
-
-    return render(request, 'registration/edit_profile.html', context)
-
+    return render(request, 'registration/edit_profile.html', {'form': form})
 
 @login_required
 def user_profile_view(request, username):
@@ -104,8 +87,8 @@ def user_profile_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -119,18 +102,15 @@ def user_profile_view(request, username):
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movie_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_followers_view(request, username):
@@ -138,8 +118,8 @@ def user_profile_followers_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -150,16 +130,14 @@ def user_profile_followers_view(request, username):
             
     follow = len(following)
 
-
     followers = []
     for u in profile.followers.all():
         followers.append(u)
             
-
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
@@ -168,10 +146,7 @@ def user_profile_followers_view(request, username):
         'list_title': 'Followers',
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_following_view(request, username):
@@ -179,8 +154,8 @@ def user_profile_following_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -191,11 +166,10 @@ def user_profile_following_view(request, username):
             
     follow = len(following)
 
-
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
@@ -204,11 +178,7 @@ def user_profile_following_view(request, username):
         'list_title': 'Following',
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_movies_view(request, username):
@@ -216,8 +186,8 @@ def user_profile_movies_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -228,29 +198,23 @@ def user_profile_movies_view(request, username):
             
     follow = len(following)
 
-
     movies = profile.star.filter(Type='movie')
 
-    paginator = Paginator(movies, 9)
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    data = Paginator(movies, 9).get_page(request.GET.get('page'))
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': movie_data,
+        'movie_data': data,
         'list_title': 'Favourite movies',
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_series_view(request, username):
@@ -258,8 +222,8 @@ def user_profile_series_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -270,29 +234,23 @@ def user_profile_series_view(request, username):
             
     follow = len(following)
 
-
     series = profile.star.filter(Type='series')
 
-    paginator = Paginator(series, 9)
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    data = Paginator(series, 9).get_page(request.GET.get('page'))
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': movie_data,
+        'movie_data': data,
         'list_title': 'Favourite series',
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_watchlist_view(request, username):
@@ -300,8 +258,8 @@ def user_profile_watchlist_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -312,28 +270,23 @@ def user_profile_watchlist_view(request, username):
             
     follow = len(following)
 
-
     watchlist = profile.watchlist.all()
 
-    paginator = Paginator(watchlist, 9)
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    data = Paginator(watchlist, 9).get_page(request.GET.get('page'))
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': movie_data,
+        'movie_data': data,
         'list_title': 'Watchlist',
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_watchedlist_view(request, username):
@@ -341,8 +294,8 @@ def user_profile_watchedlist_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -353,28 +306,23 @@ def user_profile_watchedlist_view(request, username):
             
     follow = len(following)
 
-
     watchedlist = profile.watchedlist.all()
 
-    paginator = Paginator(watchedlist, 9)
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    data = Paginator(watchedlist, 9).get_page(request.GET.get('page'))
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': movie_data,
+        'movie_data': data,
         'list_title': 'Watchedlist',
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def user_profile_reviewed_view(request, username):
@@ -382,8 +330,8 @@ def user_profile_reviewed_view(request, username):
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
-    mStar_count = profile.star.filter(Type='movie').count()
-    sStar_count = profile.star.filter(Type='series').count()
+    movies_star_count = profile.star.filter(Type='movie').count()
+    series_star_count = profile.star.filter(Type='series').count()
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
@@ -394,29 +342,23 @@ def user_profile_reviewed_view(request, username):
             
     follow = len(following)
 
-
     opinions = MovieRating.objects.filter(user=user)
 
-    paginator = Paginator(opinions, 9)
-    page_number = request.GET.get('page')
-    movie_data = paginator.get_page(page_number)
+    data = Paginator(opinions, 9).get_page(request.GET.get('page'))
 
     context = {
         'profile': profile,
-        'mStar_count': mStar_count,
-        'sStar_count': sStar_count,
+        'movies_star_count': movies_star_count,
+        'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': movie_data,
+        'movie_data': data,
         'list_title': 'Reviewed',
         'following': follow,
     }
 
-    template = loader.get_template('profiles/profile.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
 @login_required
 def opinion_detail_view(request, username, imdb_id):
@@ -424,7 +366,6 @@ def opinion_detail_view(request, username, imdb_id):
     user = get_object_or_404(User, username=username)
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user, movie=movie)
-
 
     comments = Comment.objects.filter(rating=rating).order_by('date')
 
@@ -439,7 +380,6 @@ def opinion_detail_view(request, username, imdb_id):
     else:
         form = CommentForm()
 
-
     context = {
         'rating': rating,
         'movie': movie,
@@ -447,10 +387,7 @@ def opinion_detail_view(request, username, imdb_id):
         'form': form,
     }
 
-    template = loader.get_template('movies/movie_rating.html')
-
-    return HttpResponse(template.render(context, request))
-
+    return HttpResponse(loader.get_template('movies/movie_rating.html').render(context, request))
 
 @login_required
 def comment_delete_view(request, username, imdb_id, comment_id):
@@ -459,8 +396,6 @@ def comment_delete_view(request, username, imdb_id, comment_id):
 
     
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
-
-
 
 @login_required
 def like_view(request, username, imdb_id):
@@ -524,19 +459,13 @@ def dislike_view(request, username, imdb_id):
 
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
 
-
 @login_required
 def user_settings_view(request):
     """Returning the edit profile view if user is authenticated"""
-    user = request.user.id
-    profile = Profile.objects.get(user__id=user)
+    user_id = request.user.id
+    profile = Profile.objects.get(user__id=user_id)
 
-    context = {
-        'profile': profile,
-    }
-
-    return render(request, 'profiles/settings.html', context)
-
+    return render(request, 'profiles/settings.html', {'profile': profile})
 
 @login_required
 def follow_profile_view(request, username):
@@ -551,7 +480,6 @@ def follow_profile_view(request, username):
         
     return HttpResponseRedirect(reverse('profile', args=[username]))
 
-
 @login_required
 def search_users_view(request):
     query = request.GET.get('q')
@@ -559,13 +487,6 @@ def search_users_view(request):
     if query:
         users = User.objects.filter(username__contains=query)
 
-        context = {
-            'users': users,
-            'query': query,
-        }
-
-        template = loader.get_template('users/user_search_result.html')
-
-        return HttpResponse(template.render(context, request))
+        return HttpResponse(loader.get_template('users/user_search_result.html').render({'users': users,'query': query}, request))
     
     return render(request, 'users/search_users.html')

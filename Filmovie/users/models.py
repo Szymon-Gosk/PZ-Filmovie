@@ -13,7 +13,7 @@ from PIL import Image
 
 def user_directory_path(instance, filename):
     """Specifieing the path for profile picture and returning it"""
-    profile_picture = 'user_{0}/profile.jpg'.format(instance.user.id)
+    profile_picture = 'users/userid_{0}/profile_image.jpg'.format(instance.user.id)
     full_path = os.path.join(settings.MEDIA_ROOT, profile_picture)
 
     if os.path.exists(full_path):
@@ -28,9 +28,9 @@ class FollowerRelation(models.Model):
 class Profile(models.Model):
     """Defining the Profile model"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    first_name = models.CharField(max_length=50, null=True, blank=True)
-    last_name = models.CharField(max_length=50, null=True, blank=True)
-    location = models.CharField(max_length=20, null=True, blank=True)
+    first_name = models.CharField(max_length=25, null=True, blank=True)
+    last_name = models.CharField(max_length=25, null=True, blank=True)
+    location = models.CharField(max_length=25, null=True, blank=True)
     bio = models.TextField(max_length=200, null=True, blank=True)
     created = models.DateField(auto_now_add=True)
     star = models.ManyToManyField(Movie, related_name='star')
