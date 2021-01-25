@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-rating.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+{% block content %}
+
+<article id="main-container">
+  <section class="card-image">
+    <img src="{{movie.Poster.url}}">
+  </section>
+
+  <section id="card-details">
+
+    <div id="card-full-title">
+      <h1 class="text bolder card-title">{{movie.Title}}</h1>
+      <span class="text card-description">{{movie.Plot}}</span>
+    </div>
+  </section>
+</article>
+
+<form method="POST" action="" role="form" class="">
+  <span class="bolder text question"> How do you like the movie? </span>
+  {% csrf_token %}
+  <div class="input-field col s12 dropdown-rate">
+    {{form.rate}}
+  </div>
+
+  <div class="input-field col s12">
+    {{form.opinion}}
+    <label for="textarea1">Opnion</label>
+  </div>
+  
+  <button type="submit" name="action" class="waves-effect waves-light cta-btn">
+    <i class="material-icons">rate_review</i>Send</button>
+  </form>
+
+  
+<footer >
+  Proudly made by Suczki Marnotrawne 2020
+</footer>
+
+{%endblock%}

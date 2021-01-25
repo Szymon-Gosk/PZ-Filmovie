@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-reviews.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="photo-container">
+      <section class="card-image">
+        <img src="{{movie.Poster.url}}">
+      </section>
+    
+      <section class="card-details">
+        <div id="card-full-title">
+          <a href="{% url 'movie-details' movie.imdbID%}"><h1 class="text bolder card-title">{{movie.Title}}</h1></a>
+          <span class="text card-description">{{movie.Plot}}</span>
+        </div>
+      </section>
+    </div>
+
+    <div class="review-container">
+      <div class="one-review">
+        <div class="card">
+          <div class="card-content">
+              <span class="card-title"><b><a href="{% url 'profile' rating.user.username %}">@{{rating.user.username}}</a></b><span class="right" style="color: #45C817">{{rating.rate}} / 10<i class="material-icons right">star</i></span></span>
+              <p>{{rating.user.first_name}}&nbsp{{rating.user.last_name}}</p>
+              <p>{{rating.date}}</p>
+              <br>
+              <span>{{rating.opinion}}</span>
+          </div>
+          <div class="card-action">
+              <a href="{% url 'user-rating-like' rating.user.username movie.imdbID%}"><i class="material-icons">thumb_up</i>{{rating.likes}}</a>
+              <a href="{% url 'user-rating-dislike' rating.user.username movie.imdbID%}"><i class="material-icons">thumb_down</i>{{rating.dislikes}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="one-comment">
+            <div class="card">
+                <div class="card-content">
+                    <ul class="collection">
+                      {% for comment in comments %}
+                        <li class="collection-item avatar">
+                            {% if comment.user.profile.picture %}
+                            <img src="{{comment.user.profile.picture.url}}" alt="" class="circle">
+                            {% else %}
+                            <img src="{% static 'img/woman.png'%}" alt="" class="circle">
+                            {% endif %}
+
+
+                            <span class="title"><a href="{% url 'profile' comment.user.username %}">@{{comment.user.username}}</a></span>
+                            <p>{{comment.user.first_name}} {{comment.user.last_name}}</p>
+                            <p>{{comment.date}}</p>
+                            <br>
+                            <span>{{comment.text}}</span>
+                            {% if user.is_authenticated and user.username == comment.user.username %}
+                            <a class="secondary-content" href="{% url 'comment-delete' rating.user.username movie.imdbID comment.id %}"><i class="material-icons red-text">delete</i></a>
+                            {% endif %}
+                        </li>
+                      {% endfor %}
+
+                    </ul>
+                </div>
+
+                <div class="card-action">
+                  <form method="post" action="" role="form" class="col s12">
+                  {% csrf_token %}
+                      <div class="input-field col s10">
+                      {{form.text}}
+                        <label for="textarea1">Comment</label>
+                      </div>
+                      <button type="submit" name="action" class="btn waves-effect waves-light" type="submit" name="action"><i class="material-icons right">send</i>Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <footer>
+        Proudly made by Suczki Marnotrawne 2020
+      </footer>
+</div>
+
+{% endblock %}

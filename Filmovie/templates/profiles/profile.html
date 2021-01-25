@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+
+
+  <main id="container">
+    <section id="photo-content">
+        <div id="profile-pic">
+
+          {% if profile.picture %}
+          <img src="{{profile.picture.url}}">
+          {% else %}
+          <img src="{% static 'img/woman.png' %}">
+          {% endif %}
+        </div>
+    </section>
+    <section class="text-content">
+      <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
+      <span class="profile-text s-border">
+        <i class="material-icons" aria-hidden="true">location_on</i>
+        {{profile.location}}
+      </span>
+      <span class="profile-text s-border">
+        <i class="material-icons" aria-hidden="true">edit</i>
+        {{profile.bio}}
+      </span>
+      <span class="profile-text s-border">
+        <a href="{% url 'followers' profile.user.username %}"><i class="material-icons" aria-hidden="true">visibility</i></a>
+        followers {{profile.followers.count}}
+      </span>
+      <span class="profile-text s-border">
+        <a href="{% url 'following' profile.user.username %}"><i class="material-icons" aria-hidden="true">visibility</i></a>
+        following {{following}}
+      </span>
+
+      {% if user.is_authenticated and user == profile.user %}
+
+      <br><br>
+      <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
+
+      {% endif %}
+
+
+      {% if user.is_authenticated  and user != profile.user %}
+        <br><br>
+        {% if user in profile.followers.all %}
+        <a href="{% url 'follow' profile.user.username %}" class="btn">Unfollow</a>
+        {% else %}
+        <a href="{% url 'follow' profile.user.username %}" class="btn">Follow</a>
+        {% endif %}
+      {% endif %}
+
+
+    </section>
+    <section id="grid-container">
+      <a href="{%url 'user-star-movies' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="material-icons" aria-hidden="true">local_movies</i> Movies
+        <div class="amount">{{mStar_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-star-series' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="material-icons" aria-hidden="true">ondemand_video</i> Series
+        <div class="amount">{{sStar_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-watchlist' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="material-icons" aria-hidden="true">playlist_add</i> Watchlist
+        <div class="amount">{{watchlist_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-watchedlist' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="material-icons" aria-hidden="true">playlist_add_check</i> Watched
+        <div class="amount">{{watchedlist_count}}</div>
+      </div>
+      </a>
+      <a href="{%url 'user-reviews' profile.user.username%}">
+      <div class="grid-item" >
+        <i class="material-icons" aria-hidden="true">rate_review</i> Reviews
+        <div class="amount">{{opinions_count}}</div>
+      </div>
+      </a>
+    </section>
+
+
+    {% if list_title %}
+    {% if movie_data %}
+    <h4>{{list_title}}: </h4>
+    <div class="divider"></div>
+
+    <article id="content">
+      <section id="movie-container">
+    {% else %}
+    {% if list_title == 'Watchlist' or list_title == 'Watchedlist' %}
+    <h4>There is no movies or series in your {{list_title.lower}}</h4>
+    {% elif list_title == 'Reviewed' %}
+    <h4>You have not {{list_title.lower}} any movie or series!</h4>
+    {% elif list_title == 'Favourite movies' or list_title == 'Favourite series' %}
+    <h4>You have no {{list_title.lower}} </h4>
+    {% endif %}
+
+    <article id="content">
+      <section id="movie-container">
+    {% endif %}
+
+    
+
+      {% if list_title == 'Reviewed' %}
+
+      {%for opinion in movie_data %}
+
+        <div class="one-card">
+          <a href="{% url 'user-rating' opinion.user.username opinion.movie.imdbID %}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{opinion.movie.Poster.url}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{opinion.movie.Title}}</span>
+                <p>{{opinion.movie.Year}}</p>
+                <p>{{opinion.movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' opinion.movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+
+        {% elif list_title == 'Followers' or list_title == 'Following' %}
+
+        {% if movie_data %}
+          <div class="main-result" style="top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="card" style="width: 80%;">
+                  <div class="card-content">
+                    <ul class="collection">
+
+                      {% for u in movie_data %}
+                      <li class="collection-item avatar" style="margin: 50px 0;">
+                          {% if u.profile.picture %}
+                          <img src="{{ u.profile.picture.url }}" alt="" class="circle">
+                          {% else %}
+                          <img src="{% static 'img/woman.png' %}" alt="" class="circle">
+                          {% endif %}
+                          <span class="title" style="color: rgba(255,255,255,.6);">{{u.first_name}}&nbsp{{u.last_name}}</span>
+                          <p class="username"><a href="{% url 'profile' u.username %}" style="color: #45C718;">@{{u.username}}</a></p>
+                      </li>
+                      {% endfor %}
+
+
+                    </ul>
+                  </div>
+            </div>
+          </div>
+        {% else %}
+          {% if list_title == 'Followers' %}
+          <h4>You have no {{list_title.lower}} :(</h4>
+          {% else %}
+          <h4>You are not {{list_title.lower}} anybody! Search for our users <a href="{% url 'search-users' %}" style="color: blue">here</a></h4>
+          {% endif %}
+        {% endif %}
+
+        {% else %}
+
+        {%for movie in movie_data %}
+
+        <div class="one-card">
+          <a href="{% url 'movie-details' movie.imdbID%}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{movie.Poster.url}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{movie.Title}}</span>
+                <p>{{movie.Year}}</p>
+                <p>{{movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
+            </div>
+          </a>
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        </section>
+
+      <div class="load-more-container">
+
+      {% if movie_data.has_previous %}
+
+        <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
+          load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
+        </a>
+      {% endif %}
+
+      {% if movie_data.has_next %}
+
+        <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
+          load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
+        </a>
+      {% endif %}
+      </div>
+
+
+    </article>
+
+    {% endif %}
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
+  </main>
+
+{%endblock%}

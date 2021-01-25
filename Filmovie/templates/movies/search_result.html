@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+{% block search %}
+
+  <aside>
+    <form class="form-inline mr-auto">
+      <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search a movie" aria-label="Search">
+      <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
+    </form>
+    <ul id="category-list">
+      <li><a href="{% url 'genres' 'adventure' %}">Adventure</a></li>
+      <li><a href="{% url 'genres' 'sci-fi' %}">Sci-fi</a></li>
+      <li><a href="{% url 'genres' 'drama' %}">Drama</a></li>
+      <li><a href="{% url 'genres' 'thriller' %}">Thriller</a></li>
+      <li><a href="{% url 'genres' 'action' %}">Action</a></li>
+      <li><a href="{% url 'genres' 'comedy' %}">Comedy</a></li>
+    </ul>
+    
+  </aside>
+
+  {% endblock %}
+
+
+  {% block content %}
+
+
+
+
+
+
+    <section id="result-word">
+      <span>Search results for:</span>
+      <span id="for-word"> {{query}} </span>
+    </section>
+
+    <article id="content">
+      <section id="movie-container">
+
+      {%for movie in movie_data.Search%}
+
+      {% if movie.Poster != "N/A" %}
+
+      {% if movie.Type != "game" %}
+
+        <div class="one-card">
+          <a href="{% url 'movie-details' movie.imdbID%}">
+            <div class="card">
+              <div class="card-image">
+                <img src="{{movie.Poster}}">
+              </div>
+              <div class="card-content">
+                <span class="card-title">{{movie.Title}}</span>
+                <p>{{movie.Year}}</p>
+                <p>{{movie.Type}}</p>
+              </div>
+              <a href="{% url 'movie-details' movie.imdbID%}">
+                <div class="card-action">
+                    Details
+                </div>
+              </a>
+            </div>
+          </a>
+        </div>
+
+        {% endif %}
+        {% endif %}
+
+        {% endfor %}
+
+        
+          
+      </section>
+
+
+
+      <a class="cta-btn" href="{%url 'pagination' query page_number %}">
+        load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
+      </a>
+
+
+
+    </article>
+
+
+
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
+
+{% endblock %}

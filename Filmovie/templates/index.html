@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+    <link rel="stylesheet" type="text/css" href="css/styles-intro.css">
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <style>
+        *
+{
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #333;
+
+}
+section h2 {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    line-height: 100vh;
+    color: white;
+    font-size: 10vw;
+    
+}
+
+.banner .blocks {
+    position: relative;
+    display: block;
+    width: 5vw;
+    height: 5vh;
+    animation: animate 0.3s ease-in-out forwards;
+}
+
+.banner .blocks:nth-child(even)
+{
+    animation: animate 0.5s ease-in-out forwards;
+}
+.banner .blocks:nth-child(7n+3)
+{
+    animation: animate .75s ease-in-out forwards;
+}
+.banner .blocks:nth-child(7n+7)
+{
+    animation: animate 1s ease-in-out forwards;
+}
+
+.bigbuttoncontainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: btn-animate 12s ease-in-out;
+}
+
+.bigbutton {
+    width: 500px;
+    height: 100px;
+    background-color: #333;
+    display: flex;
+}
+.bigbutton a {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 30px;
+    color: white;
+}
+    
+
+@keyframes animate {
+    0%{
+        opacity: 0;
+        transform: scale(0) translateY(1000px);
+    }
+    50%{
+        opacity: 1;
+        background: url(https://images4.alphacoders.com/936/thumb-1920-936378.jpg);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    
+    }
+    100%{
+        opacity: 1;
+        background: url(https://images4.alphacoders.com/936/thumb-1920-936378.jpg);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+}
+@keyframes btn-animate {
+    0%{
+        opacity: 0;
+    }
+    90%{
+        opacity: 0;    
+    }
+    100%{
+        opacity: 1;
+    }
+}
+    </style>
+</head>
+<body>
+    <section>
+        <h2>Filmovie</h2>
+        <div class="banner">
+            <div class="blocks"></div>
+        </div>
+        <div class="bigbuttoncontainer">
+            <div class='bigbutton'><a href="{% url 'home' %}">Let's start!</a></div>
+        </div>
+    </section>
+    <script>
+        const banner = document.getElementsByClassName('banner')[0];
+        const blocks = document.getElementsByClassName('blocks');
+
+        for (var i = 1; i < 400; i++){
+            banner.innerHTML += "<div class='blocks'></div>";
+
+            $('.banner').css({"position": "absolute", "top": "0",
+            "left": "0", "width": "100%", "height": 
+            "100%", "display": "flex",  "overflow":"hidden", "flex-wrap": "wrap"});
+
+            blocks[i].style.animationDelay = `${i * 0.025}s`;
+        }
+
+        $( ".bigbutton" ).click(function() {
+          $(".bigbutton").css({"transform": "translateY(-1000px)", "transition": "0.2s ease-in"});
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+
+{% if user.is_authenticated and user == profile.user %}
+    <main id="container">
+      <div class="user-informations" style="margin-top: 200px">
+          <h4>User informations:</h4>
+          <div class="details">
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your username: &nbsp&nbsp&nbsp{{user.username}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your Name: &nbsp&nbsp&nbsp{{user.first_name}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your Last name: &nbsp&nbsp&nbsp{{user.last_name}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your E-mail: &nbsp&nbsp&nbsp{{user.email}}</span><br>
+            <span style="color: white; font-size:20px; margin-left: 5%;">Your password: &nbsp&nbsp&nbsp*********</span><br>
+            <a href="{%url 'change-password' %}" class="waves-effect waves-light cta-btn">Change password</a>
+            <a href="{%url 'password_reset' %}" class="waves-effect waves-light cta-btn">Reset password</a>
+
+          </div>
+      </div>
+
+      <div class="profile-informations" style="margin-top: 200px">
+        <h4>User informations:</h4>
+        <div class="details">
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Name: &nbsp&nbsp&nbsp{{profile.first_name}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Last name: &nbsp&nbsp&nbsp{{profile.last_name}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile location: &nbsp&nbsp&nbsp{{profile.location}}</span><br>
+          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile bio: &nbsp&nbsp&nbsp{{profile.bio}}</span><br>
+          <a href="{% url 'edit-profile'%}" class="cta-btn">Edit Profile</a>
+
+        </div>
+    </div>
+
+      
+    </main>
+    <footer>
+      Proudly made by Suczki Marnotrawne 2020
+    </footer>
+
+{% endif %}
+{%endblock%}

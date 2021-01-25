@@ -1,0 +1,6 @@
+BACKEND:
+- z�e przekierowywanie podczas usuni�cia w�asnego komentarza
+- linki do profili po wej�ciu w konkretne review
+- po klikni�ciu ikon na profilu wy�wietli� komunikat "you have no fav" czy co�
+
+

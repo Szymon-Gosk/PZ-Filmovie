@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-login.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+ 
+
+{% block content %}
+<main id="container">
+    <form class="form-inline mr-auto" style="display: flex; flex-direction:column; justify-content: center; align-items: center; row-gap: 50px;">
+        <h3>Find the user by his name</h3>
+        <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search users" aria-label="Search">
+        <button type="submit" name="action" class="waves-effect waves-light btn">Find</button>
+    </form>
+</main>
+
+{%endblock%}
