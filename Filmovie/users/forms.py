@@ -10,21 +10,24 @@ from users.models import Profile
 def forbidden_user_name(value):
     """Defining all the usernames the user can't use in account creator"""
     forbidden_user_names = ['admin', 'css', 'js', 'authenticate', 'login',
-    'logout', 'root', 'password', 'administrator', 'email', 'sql',
-    'insert', 'db', 'static', 'database','python', 'detele', 'table']
+                            'logout', 'root', 'password', 'administrator', 'email', 'sql',
+                            'insert', 'db', 'static', 'database', 'python', 'detele', 'table']
 
     if value.lower() in forbidden_user_names:
         raise ValidationError('Invalid name for user!')
+
 
 def invalid_user(value):
     """Defining the pattern that is invalid if user uses it in account creator"""
     if '@' in value or '+' in value or '-' in value:
         raise ValidationError('You cannot add special symbol in your username')
 
+
 def unique_email(value):
     """Returning the error if user uses an email that is already in database in account creator"""
     if User.objects.filter(email__iexact=value).exists():
         raise ValidationError('User with this email already exists')
+
 
 def unique_user(value):
     """Returning the error if user uses an username that already exists
@@ -43,11 +46,11 @@ class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     confirm_password = forms.CharField(
         widget=forms.PasswordInput(), required=True, label='Confirm your password'
-        )
+    )
 
     class Meta:
         model = User
-        fields=('username', 'first_name', 'last_name', 'email', 'password')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password')
 
     def __init__(self, *args, **kwargs):
         """Appending all validating functions to specific fields"""
@@ -67,19 +70,18 @@ class SignupForm(forms.ModelForm):
         return self.cleaned_data
 
 
-
 class ChangePasswordForm(forms.ModelForm):
     """Defining the change password form"""
     id = forms.CharField(widget=forms.HiddenInput())
     old_password = forms.CharField(
         widget=forms.PasswordInput(), label='Old password', required=True
-        )
+    )
     new_password = forms.CharField(
         widget=forms.PasswordInput(), label='New password', required=True
-        )
+    )
     confirm_new_password = forms.CharField(
         widget=forms.PasswordInput(), label='Confirm new password', required=True
-        )
+    )
 
     class Meta:
         model = User

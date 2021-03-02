@@ -1,6 +1,3 @@
-"""
-URL's definitions for users App
-"""
 from django.urls import path
 from users.views import (
     signup_view,

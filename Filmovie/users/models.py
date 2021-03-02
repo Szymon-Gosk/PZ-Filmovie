@@ -10,7 +10,6 @@ from django.conf import settings
 from PIL import Image
 
 
-
 def user_directory_path(instance, filename):
     """Specifieing the path for profile picture and returning it"""
     profile_picture = 'user_{0}/profile.jpg'.format(instance.user.id)
@@ -20,10 +19,12 @@ def user_directory_path(instance, filename):
         os.remove(full_path)
     return profile_picture
 
+
 class FollowerRelation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
 
 class Profile(models.Model):
     """Defining the Profile model"""
@@ -54,14 +55,17 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 def create_user_profile(sender, instance, created, **kwargs):
     """Signal for creating a profile picture"""
     if created:
         Profile.objects.create(user=instance)
 
+
 def save_user_profile(sender, instance, **kwargs):
     """Signal for saving user profile"""
     instance.profile.save()
+
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)

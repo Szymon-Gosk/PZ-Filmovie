@@ -32,7 +32,7 @@ def signup_view(request):
                 last_name=last_name,
                 email=email,
                 password=password
-                )
+            )
             return redirect('login')
     else:
         form = SignupForm()
@@ -69,7 +69,6 @@ def password_change_view(request):
 def password_change_done_view(request):
     """Returning the password change done view"""
     return render(request, 'registration/change_password_done.html')
-
 
 
 @login_required
@@ -109,12 +108,12 @@ def user_profile_view(request, username):
     watchlist_count = profile.watchlist.all().count()
     watchedlist_count = profile.watchedlist.all().count()
     opinions_count = MovieRating.objects.filter(user=user).count()
-    
+
     following = []
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
+
     follow = len(following)
 
     context = {
@@ -147,14 +146,12 @@ def user_profile_followers_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(profile.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     followers = []
     for u in profile.followers.all():
         followers.append(u)
-            
 
     context = {
         'profile': profile,
@@ -188,9 +185,8 @@ def user_profile_following_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     context = {
         'profile': profile,
@@ -209,7 +205,6 @@ def user_profile_following_view(request, username):
     return HttpResponse(template.render(context, request))
 
 
-
 @login_required
 def user_profile_movies_view(request, username):
     """Returning the user profile view"""
@@ -225,9 +220,8 @@ def user_profile_movies_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     movies = profile.star.filter(Type='movie')
 
@@ -267,9 +261,8 @@ def user_profile_series_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     series = profile.star.filter(Type='series')
 
@@ -309,9 +302,8 @@ def user_profile_watchlist_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     watchlist = profile.watchlist.all()
 
@@ -335,6 +327,7 @@ def user_profile_watchlist_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+
 @login_required
 def user_profile_watchedlist_view(request, username):
     """Returning the user profile view"""
@@ -350,9 +343,8 @@ def user_profile_watchedlist_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     watchedlist = profile.watchedlist.all()
 
@@ -376,6 +368,7 @@ def user_profile_watchedlist_view(request, username):
 
     return HttpResponse(template.render(context, request))
 
+
 @login_required
 def user_profile_reviewed_view(request, username):
     """Returning the user profile view"""
@@ -391,9 +384,8 @@ def user_profile_reviewed_view(request, username):
     for p in Profile.objects.all():
         if user in p.followers.all():
             following.append(p.user)
-            
-    follow = len(following)
 
+    follow = len(following)
 
     opinions = MovieRating.objects.filter(user=user)
 
@@ -425,7 +417,6 @@ def opinion_detail_view(request, username, imdb_id):
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user, movie=movie)
 
-
     comments = Comment.objects.filter(rating=rating).order_by('date')
 
     if request.method == 'POST':
@@ -438,7 +429,6 @@ def opinion_detail_view(request, username, imdb_id):
             return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
     else:
         form = CommentForm()
-
 
     context = {
         'rating': rating,
@@ -454,12 +444,9 @@ def opinion_detail_view(request, username, imdb_id):
 
 @login_required
 def comment_delete_view(request, username, imdb_id, comment_id):
-
     Comment.objects.filter(id=comment_id).delete()
 
-    
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
-
 
 
 @login_required
@@ -471,8 +458,8 @@ def like_view(request, username, imdb_id):
     current_likes = rating.likes
     current_dislikes = rating.dislikes
 
-    liked = Likes.objects.filter(user = user_like, rating=rating, like_type=2).count()
-    disliked = Likes.objects.filter(user = user_like, rating=rating, like_type=1).count()
+    liked = Likes.objects.filter(user=user_like, rating=rating, like_type=2).count()
+    disliked = Likes.objects.filter(user=user_like, rating=rating, like_type=1).count()
 
     if not liked:
         if disliked:
@@ -493,6 +480,7 @@ def like_view(request, username, imdb_id):
 
     return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
 
+
 @login_required
 def dislike_view(request, username, imdb_id):
     user_dislike = request.user
@@ -502,8 +490,8 @@ def dislike_view(request, username, imdb_id):
     current_likes = rating.likes
     current_dislikes = rating.dislikes
 
-    liked = Likes.objects.filter(user = user_dislike, rating=rating, like_type=2).count()
-    disliked = Likes.objects.filter(user = user_dislike, rating=rating, like_type=1).count()
+    liked = Likes.objects.filter(user=user_dislike, rating=rating, like_type=2).count()
+    disliked = Likes.objects.filter(user=user_dislike, rating=rating, like_type=1).count()
 
     if not disliked:
         if liked:
@@ -548,7 +536,7 @@ def follow_profile_view(request, username):
         profile.followers.remove(me)
     else:
         profile.followers.add(me)
-        
+
     return HttpResponseRedirect(reverse('profile', args=[username]))
 
 
@@ -567,5 +555,5 @@ def search_users_view(request):
         template = loader.get_template('users/user_search_result.html')
 
         return HttpResponse(template.render(context, request))
-    
+
     return render(request, 'users/search_users.html')

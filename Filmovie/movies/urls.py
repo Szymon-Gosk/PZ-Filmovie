@@ -1,13 +1,3 @@
-#
-# Copyright 2020 Szuczki Marnotrawne. All rights reserved.
-#
-# Owner: Suczki Marnotrawne
-#
-
-"""
-Filmovie URL Configuration
-"""
-
 from django.urls import path
 from movies.views import (
     home,

@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 
-
 class Actor(models.Model):
     name = models.CharField(max_length=80, unique=True)
     image = models.ImageField(blank=True, null=True)
@@ -13,7 +12,6 @@ class Actor(models.Model):
 
     def get_absolute_url(self):
         return reverse("actors", args=[self.slug])
-    
 
     def __str__(self):
         return self.name

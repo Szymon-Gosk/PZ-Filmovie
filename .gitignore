@@ -3,17 +3,13 @@ bin
 include
 =======
 .vscode
-bin
 >>>>>>> 28b54a9258d4aad15b1048e380b082e8a08e98b5
 lib
 lib64
 share
 pyvenv.cfg
-<<<<<<< HEAD
-.vscode
-=======
-include
 Filmovie/*/__pycache__
 Filmovie/*/*/__pycache__
->>>>>>> 28b54a9258d4aad15b1048e380b082e8a08e98b5
 venv
+.idea
+*.iml

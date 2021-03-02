@@ -12,22 +12,18 @@ from django.contrib.auth.models import User
 import requests
 
 
-
 class Genre(models.Model):
     """Genre model"""
     title = models.CharField(max_length=25)
     slug = models.SlugField(null=False, unique=True)
 
-
     def get_absolute_url(self):
         """Returning the absolute url"""
         return reverse('genres', args=[self.slug])
 
-
     def __str__(self):
         """Returning only name of the object"""
         return self.title
-
 
     def save(self, *args, **kwargs):
         """Returning slug (lower_case name of the field) used in urls"""
@@ -45,7 +41,6 @@ class Rating(models.Model):
     def __str__(self):
         """Returning the name of the source instead of whole object"""
         return self.source
-
 
 
 class Movie(models.Model):
@@ -81,6 +76,7 @@ class Movie(models.Model):
     def __str__(self):
         """Returning the title of the object"""
         return self.Title
+
     def save(self, *args, **kwargs):
         """Saving the poster (if is not in database) in the database"""
         if self.Poster == '' and self.Poster_url != '':
