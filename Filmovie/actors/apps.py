@@ -1,3 +1,4 @@
+"""Apps definitions for actors app"""
 from django.apps import AppConfig
 
 

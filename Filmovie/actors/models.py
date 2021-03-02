@@ -1,3 +1,4 @@
+"""Models definitions for actors app"""
 from django.db import models
 from django.urls import reverse
 
@@ -5,6 +6,7 @@ from django.utils.text import slugify
 
 
 class Actor(models.Model):
+    """Model for actors"""
     name = models.CharField(max_length=80, unique=True)
     image = models.ImageField(blank=True, null=True)
     slug = models.SlugField(null=True, blank=True, unique=True)

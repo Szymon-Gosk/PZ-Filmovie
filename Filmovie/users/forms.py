@@ -1,6 +1,4 @@
-"""
-Forms file for users App. Defining all functions and classes
-"""
+"""Forms definitions for user app"""
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -8,7 +6,7 @@ from users.models import Profile
 
 
 def forbidden_user_name(value):
-    """Defining all the usernames the user can't use in account creator"""
+    """Defines all the usernames the user can't use in account creator"""
     forbidden_user_names = ['admin', 'css', 'js', 'authenticate', 'login',
                             'logout', 'root', 'password', 'administrator', 'email', 'sql',
                             'insert', 'db', 'static', 'database', 'python', 'detele', 'table']
@@ -18,7 +16,7 @@ def forbidden_user_name(value):
 
 
 def invalid_user(value):
-    """Defining the pattern that is invalid if user uses it in account creator"""
+    """Defines the pattern that is invalid if user uses it in account creator"""
     if '@' in value or '+' in value or '-' in value:
         raise ValidationError('You cannot add special symbol in your username')
 
@@ -38,7 +36,7 @@ def unique_user(value):
 
 
 class SignupForm(forms.ModelForm):
-    """Defining the registration form"""
+    """Defines the registration form"""
     username = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
     first_name = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
     last_name = forms.CharField(widget=forms.TextInput(), max_length=30, required=True)
@@ -71,7 +69,7 @@ class SignupForm(forms.ModelForm):
 
 
 class ChangePasswordForm(forms.ModelForm):
-    """Defining the change password form"""
+    """Defines the change password form"""
     id = forms.CharField(widget=forms.HiddenInput())
     old_password = forms.CharField(
         widget=forms.PasswordInput(), label='Old password', required=True
@@ -105,7 +103,7 @@ class ChangePasswordForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
-    """Defining the edit profile form"""
+    """Defines the edit profile form"""
     picture = forms.ImageField(required=False)
     first_name = forms.CharField(widget=forms.TextInput(), max_length=50, required=False)
     last_name = forms.CharField(widget=forms.TextInput(), max_length=50, required=False)

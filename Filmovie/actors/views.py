@@ -1,3 +1,4 @@
+"""Views definitions for actors app"""
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.core.paginator import Paginator
@@ -7,6 +8,7 @@ from actors.models import Actor
 
 
 def actor_view(request, actor_slug):
+    """View for a specified actor"""
     actor = get_object_or_404(Actor, slug=actor_slug)
     movie = Movie.objects.filter(Actors=actor)
 

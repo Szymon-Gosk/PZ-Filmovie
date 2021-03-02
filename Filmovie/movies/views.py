@@ -1,3 +1,4 @@
+"""Views definitions for movies app"""
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -14,12 +15,13 @@ import requests
 
 
 def redirect_to_home(request, *args, **kwargs):
+    """Redirects to 'index' template (home)"""
     return render(request, 'index.html')
 
 
 def home(request):
-    """Returning the home view. Rendering search_result template if the
-    function gets the query from a user (if not rendering home template)"""
+    """Returns the 'home' view. Renders 'search_result' template if the
+    function gets the query from a user (if home template has not been rendered)"""
     query = request.GET.get('q')
 
     if query:
@@ -49,8 +51,8 @@ def home(request):
 
 @login_required
 def user_activities_view(request):
-    """Returning the user last activities view. Rendering search_result template if the
-    function gets the query from a user (if not rendering home template)"""
+    """Returns the 'user last activities' view. Renders 'search_result' template if the
+    function gets the query from a user (if home template has not been rendered)"""
     query = request.GET.get('q')
 
     if query:
@@ -89,7 +91,7 @@ def user_activities_view(request):
 
 
 def pagination(request, query, page_number):
-    """Returning the movies at the specific page from an external API"""
+    """Returns movies at the specified page from the API"""
 
     url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
     response = requests.get(url)
@@ -108,9 +110,9 @@ def pagination(request, query, page_number):
 
 
 def movie_detail_view(request, imdb_id):
-    """Returning movieDetail view which renders movie_detail template.
-    If the movie exists in database it renders it using the database.
-    If not it will render it from and external API"""
+    """Returns 'movieDetail' view which renders 'movie_detail' template.
+    If a movie exists in the database it renders it using the database.
+    Otherwise it is rendered from the API"""
 
     if Movie.objects.filter(imdbID=imdb_id).exists():
         movie_data = Movie.objects.get(imdbID=imdb_id)
@@ -276,8 +278,8 @@ def movie_detail_view(request, imdb_id):
 
 
 def genres_view(request, genre_slug):
-    """Returning the genres_view which renders the genre template.
-    Using paginator for the data from database"""
+    """Returns the 'genres_view' which renders the 'genre' template.
+    Uses paginator for data from the database"""
     query = request.GET.get('q')
 
     if query:
@@ -315,8 +317,8 @@ def genres_view(request, genre_slug):
 
 
 def type_view(request, type):
-    """Returning the genres_view which renders the genre template.
-    Using paginator for the data from database"""
+    """Returns the 'genres_view' which renders the 'genre' template.
+    Uses paginator for data from the database"""
     query = request.GET.get('q')
 
     if query:
@@ -352,8 +354,8 @@ def type_view(request, type):
 
 
 def star_movie_view(request, imdb_id):
-    """Returning the reverse template movie-details to refresh the page and save
-    the movie user had added to faveourites"""
+    """Returns the reverse template 'movie-details' to refresh the page and save
+    a movie user has added to favourites"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -367,8 +369,8 @@ def star_movie_view(request, imdb_id):
 
 
 def add_to_watchlist_view(request, imdb_id):
-    """Returning the the reverse template movie-details to refresh the page and save
-    the movie user had added to watchlist"""
+    """Returns the reverse template 'movie-details' to refresh the page and save
+    a movie user has added to watchlist"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -382,8 +384,8 @@ def add_to_watchlist_view(request, imdb_id):
 
 
 def add_to_watchedlist_view(request, imdb_id):
-    """Returning the the reverse template movie-details to refresh the page and save
-    the movie user had added to watched movies"""
+    """Returns the reverse template 'movie-details' to refresh the page and save
+    a movie user has added to watched movies"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -401,6 +403,7 @@ def add_to_watchedlist_view(request, imdb_id):
 
 
 def movie_rate_view(request, imdb_id):
+    """Returns the the 'rate' view"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
 

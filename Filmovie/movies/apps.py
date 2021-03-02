@@ -1,11 +1,6 @@
-"""
-App name definition file for movies App
-"""
+"""Apps definitions for movies app"""
 from django.apps import AppConfig
 
 
 class MoviesConfig(AppConfig):
-    """
-    Defining the name for the app
-    """
     name = 'movies'

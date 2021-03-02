@@ -1,3 +1,4 @@
+"""Url patterns for actors app"""
 from django.urls import path
 from users.views import (
     signup_view,

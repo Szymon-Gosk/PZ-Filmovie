@@ -1,6 +1,4 @@
-"""
-Movie Models Definitions
-"""
+"""Models definitions for movies app"""
 from io import BytesIO
 from django.db import models
 from django.utils.text import slugify
@@ -13,16 +11,14 @@ import requests
 
 
 class Genre(models.Model):
-    """Genre model"""
+    """Model for genre"""
     title = models.CharField(max_length=25)
     slug = models.SlugField(null=False, unique=True)
 
     def get_absolute_url(self):
-        """Returning the absolute url"""
         return reverse('genres', args=[self.slug])
 
     def __str__(self):
-        """Returning only name of the object"""
         return self.title
 
     def save(self, *args, **kwargs):
@@ -34,7 +30,7 @@ class Genre(models.Model):
 
 
 class Rating(models.Model):
-    """Rating model"""
+    """Model for rating"""
     source = models.CharField(max_length=50)
     rating = models.CharField(max_length=10)
 
@@ -44,7 +40,7 @@ class Rating(models.Model):
 
 
 class Movie(models.Model):
-    """Movie model"""
+    """Model for movie"""
     Title = models.CharField(max_length=150)
     Year = models.CharField(max_length=25, blank=True)
     Rated = models.CharField(max_length=10, blank=True)
@@ -74,11 +70,10 @@ class Movie(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        """Returning the title of the object"""
         return self.Title
 
     def save(self, *args, **kwargs):
-        """Saving the poster (if is not in database) in the database"""
+        """Saving the poster in the database (if not already present)"""
         if self.Poster == '' and self.Poster_url != '':
             resp = requests.get(self.Poster_url)
             poster = BytesIO()
@@ -90,6 +85,7 @@ class Movie(models.Model):
         return super().save(*args, **kwargs)
 
 
+"""Rating definitions"""
 RATE = [
     (1, '1'),
     (2, '2'),
@@ -105,6 +101,7 @@ RATE = [
 
 
 class MovieRating(models.Model):
+    """Model for movie rating"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -119,6 +116,7 @@ class MovieRating(models.Model):
 
 
 class Likes(models.Model):
+    """Model for likes"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
     like_type = models.PositiveSmallIntegerField()
     rating = models.ForeignKey(MovieRating, on_delete=models.CASCADE, related_name='rating_like')

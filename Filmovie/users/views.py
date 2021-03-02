@@ -1,6 +1,4 @@
-"""
-Defining all the views in users App
-"""
+"""Views definitions for users app"""
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from users.models import Profile
@@ -17,7 +15,7 @@ from comments.forms import CommentForm
 
 
 def signup_view(request):
-    """Returning the registration view"""
+    """Returns the 'registration' view"""
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -46,7 +44,7 @@ def signup_view(request):
 
 @login_required
 def password_change_view(request):
-    """Returning the change password view if user is authenticated"""
+    """Returns the 'change password' view if the user is authenticated"""
     user = request.user
     if request.method == 'POST':
         form = ChangePasswordForm(request.POST)
@@ -67,13 +65,13 @@ def password_change_view(request):
 
 
 def password_change_done_view(request):
-    """Returning the password change done view"""
+    """Returns the 'password change done' view"""
     return render(request, 'registration/change_password_done.html')
 
 
 @login_required
 def edit_profile_view(request):
-    """Returning the edit profile view if user is authenticated"""
+    """Returns the 'edit profile view' if the user is authenticated"""
     user = request.user.id
     profile = Profile.objects.get(user__id=user)
 
@@ -99,7 +97,7 @@ def edit_profile_view(request):
 
 @login_required
 def user_profile_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -133,7 +131,7 @@ def user_profile_view(request, username):
 
 @login_required
 def user_profile_followers_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -172,7 +170,7 @@ def user_profile_followers_view(request, username):
 
 @login_required
 def user_profile_following_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -207,7 +205,7 @@ def user_profile_following_view(request, username):
 
 @login_required
 def user_profile_movies_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -248,7 +246,7 @@ def user_profile_movies_view(request, username):
 
 @login_required
 def user_profile_series_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -289,7 +287,7 @@ def user_profile_series_view(request, username):
 
 @login_required
 def user_profile_watchlist_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -330,7 +328,7 @@ def user_profile_watchlist_view(request, username):
 
 @login_required
 def user_profile_watchedlist_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -371,7 +369,7 @@ def user_profile_watchedlist_view(request, username):
 
 @login_required
 def user_profile_reviewed_view(request, username):
-    """Returning the user profile view"""
+    """Returns the 'user profile' view"""
     user = get_object_or_404(User, username=username)
     profile = Profile.objects.get(user=user)
 
@@ -515,7 +513,7 @@ def dislike_view(request, username, imdb_id):
 
 @login_required
 def user_settings_view(request):
-    """Returning the edit profile view if user is authenticated"""
+    """Returns the 'edit profile' view if the user is authenticated"""
     user = request.user.id
     profile = Profile.objects.get(user__id=user)
 

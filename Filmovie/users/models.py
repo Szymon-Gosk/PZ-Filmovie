@@ -1,6 +1,4 @@
-"""
-Defining the models in users App
-"""
+"""Models definitions for users app"""
 import os
 from django.db import models
 from movies.models import Movie
@@ -11,7 +9,7 @@ from PIL import Image
 
 
 def user_directory_path(instance, filename):
-    """Specifieing the path for profile picture and returning it"""
+    """Specifies the path for profile picture and returns it"""
     profile_picture = 'user_{0}/profile.jpg'.format(instance.user.id)
     full_path = os.path.join(settings.MEDIA_ROOT, profile_picture)
 
@@ -21,13 +19,14 @@ def user_directory_path(instance, filename):
 
 
 class FollowerRelation(models.Model):
+    """Model for follower relation"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Profile(models.Model):
-    """Defining the Profile model"""
+    """Model for profile"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
