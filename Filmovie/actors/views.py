@@ -11,15 +11,6 @@ def actor_view(request, actor_slug):
     """View for a specified actor"""
     actor = get_object_or_404(Actor, slug=actor_slug)
     movie = Movie.objects.filter(Actors=actor)
+    data = Paginator(movie, 6).get_page(request.GET.get('page'))
 
-    paginator = Paginator(movie, 6)
-
-    page = request.GET.get('page')
-    data = paginator.get_page(page)
-
-    context = {
-        'movie_data': data,
-        'actor': actor,
-    }
-
-    return HttpResponse(loader.get_template('profiles/actor.html').render(context, request))
+    return HttpResponse(loader.get_template('profiles/actor.html').render({'movie_data': data,'actor': actor}, request))

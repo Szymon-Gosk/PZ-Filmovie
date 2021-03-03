@@ -96,16 +96,14 @@ def user_profile_view(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    follow = len(following)
-
     context = {
         'profile': profile,
-        'movie_star_count': movies_star_count,
+        'movies_star_count': movies_star_count,
         'series_star_count': series_star_count,
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
@@ -138,7 +136,7 @@ def user_profile_followers_view(request, username):
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
         'movie_data': followers,
-        'following': follow,
+        'following': len(following),
         'list_title': 'Followers',
     }
 
@@ -167,7 +165,7 @@ def user_profile_following_view(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'following': follow,
+        'following': len(following),
         'movie_data': following,
         'list_title': 'Following',
     }
@@ -203,7 +201,7 @@ def user_profile_movies_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': data,
         'list_title': 'Favourite movies',
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
@@ -237,7 +235,7 @@ def user_profile_series_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': data,
         'list_title': 'Favourite series',
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
@@ -271,7 +269,7 @@ def user_profile_watchlist_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': data,
         'list_title': 'Watchlist',
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
@@ -306,7 +304,7 @@ def user_profile_watchedlist_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': data,
         'list_title': 'Watchedlist',
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
@@ -341,7 +339,7 @@ def user_profile_reviewed_view(request, username):
         'opinions_count': opinions_count,
         'movie_data': data,
         'list_title': 'Reviewed',
-        'following': follow,
+        'following': len(following),
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
