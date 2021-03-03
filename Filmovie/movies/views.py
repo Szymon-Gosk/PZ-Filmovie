@@ -18,7 +18,6 @@ def redirect_to_home(request, *args, **kwargs):
     """Redirects to 'index' template (home)"""
     return render(request, 'index.html')
 
-
 def home(request):
     """Returns the 'home' view. Renders 'search_result' template if the
     function gets the query from a user (if home template has not been rendered)"""
@@ -86,7 +85,6 @@ def pagination(request, query, page_number):
     }
 
     return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
-
 
 def movie_detail_view(request, imdb_id):
     """Returns 'movieDetail' view which renders 'movie_detail' template.
@@ -264,7 +262,6 @@ def genres_view(request, genre_slug):
 
     return HttpResponse(loader.get_template('movies/genre.html').render({'movie_data': movie_data,'genre': genre}, request))
 
-
 def type_view(request, type):
     """Returns the 'genres_view' which renders the 'genre' template.
     Uses paginator for data from the database"""
@@ -330,7 +327,6 @@ def add_to_watchedlist_view(request, imdb_id):
             profile.watchedlist.add(movie)
 
     return HttpResponseRedirect(reverse('movie-details', args=[imdb_id]))
-
 
 def movie_rate_view(request, imdb_id):
     """Returns the the 'rate' view"""
