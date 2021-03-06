@@ -29,9 +29,8 @@
         <div class="details">
           <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Name: &nbsp&nbsp&nbsp{{profile.first_name}}</span><br>
           <span style="color: white; font-size:20px; margin-left: 5%;">Your profile Last name: &nbsp&nbsp&nbsp{{profile.last_name}}</span><br>
-          <span style="color: white; font-size:20px; margin-left: 5%;">Your profile location: &nbsp&nbsp&nbsp{{profile.location}}</span><br>
           <span style="color: white; font-size:20px; margin-left: 5%;">Your profile bio: &nbsp&nbsp&nbsp{{profile.bio}}</span><br>
-          <a href="{% url 'edit-profile'%}" class="cta-btn">Edit Profile</a>
+          <a href="{% url 'profile-edit'%}" class="cta-btn">Edit Profile</a>
 
         </div>
     </div>

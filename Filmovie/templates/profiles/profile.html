@@ -23,10 +23,6 @@
     <section class="text-content">
       <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
       <span class="profile-text s-border">
-        <i class="material-icons" aria-hidden="true">location_on</i>
-        {{profile.location}}
-      </span>
-      <span class="profile-text s-border">
         <i class="material-icons" aria-hidden="true">edit</i>
         {{profile.bio}}
       </span>
@@ -42,7 +38,7 @@
       {% if user.is_authenticated and user == profile.user %}
 
       <br><br>
-      <a href="{% url 'edit-profile'%}" class="btn">Edit Profile</a>
+      <a href="{% url 'profile-edit'%}" class="btn">Edit Profile</a>
 
       {% endif %}
 

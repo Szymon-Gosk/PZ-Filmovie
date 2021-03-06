@@ -5,8 +5,9 @@ from django.core.exceptions import ValidationError
 from users.models import Profile
 
 
-def forbidden_user_name(name):
+def valid_user_name(name):
     """Defining all the usernames the user can't use in account creator"""
+    special_characters =['~', ':', "'", '+', '[', '\\', '@', '^', '{', '%', '(', '-', '"', '*', '|', ',', '&', '<', '`', '}', '.', '_', '=', ']', '!', '>', ';', '?', '#', '$', ')', '/']
     forbidden_user_names = ['about', 'access', 'account', 'accounts', 'add', 'address', 'adm', 'admin', 'administration', 'adult',
       'advertising', 'affiliate', 'affiliates', 'ajax', 'analytics', 'android', 'anon', 'anonymous', 'api',
       'app', 'apps', 'archive', 'atom', 'auth', 'authentication', 'avatar',
@@ -39,25 +40,17 @@ def forbidden_user_name(name):
 
     if name.lower() in forbidden_user_names:
         raise ValidationError('Invalid username!')
-
-def invalid_user(name):
-    """Defining the pattern that is invalid if user uses it in account creator"""
-    special_characters =['~', ':', "'", '+', '[', '\\', '@', '^', '{', '%', '(', '-', '"', '*', '|', ',', '&', '<', '`', '}', '.', '_', '=', ']', '!', '>', ';', '?', '#', '$', ')', '/']
+    
     if any(x in special_characters for x in name):
         raise ValidationError('You cannot add special symbol in your username')
+    
+    if User.objects.filter(username__iexact=name).exists():
+        raise ValidationError('This username is already taken')
 
 def unique_email(mail):
     """Returning the error if user uses an email that is already in database in account creator"""
     if User.objects.filter(email__iexact=mail).exists():
         raise ValidationError('User with this email already exists')
-
-def unique_user(name):
-    """Returning the error if user uses an username that already exists
-        in database in account creator
-    """
-    if User.objects.filter(username__iexact=name).exists():
-        raise ValidationError('This username is already taken')
-
 
 class SignupForm(forms.ModelForm):
     """Defining the registration form"""
@@ -77,9 +70,7 @@ class SignupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         """Appending all validating functions to specific fields"""
         super(SignupForm, self).__init__(*args, **kwargs)
-        self.fields['username'].validators.append(forbidden_user_name)
-        self.fields['username'].validators.append(invalid_user)
-        self.fields['username'].validators.append(unique_user)
+        self.fields['username'].validators.append(valid_user_name)
         self.fields['email'].validators.append(unique_email)
 
     def clean(self):
@@ -90,7 +81,6 @@ class SignupForm(forms.ModelForm):
             self._errors['password'] = self.error_class(['Passwords do not match!'])
 
         return self.cleaned_data
-
 
 class ChangePasswordForm(forms.ModelForm):
     """Defines the change password form"""
@@ -129,11 +119,11 @@ class ChangePasswordForm(forms.ModelForm):
 class EditProfileForm(forms.ModelForm):
     """Defines the edit profile form"""
     picture = forms.ImageField(required=False)
+    background = forms.ImageField(required=False)
     first_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=False)
     last_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=False)
-    location = forms.CharField(widget=forms.TextInput(), max_length=25, required=False)
     bio = forms.CharField(widget=forms.TextInput(), max_length=200, required=False)
 
     class Meta:
         model = Profile
-        fields = ('picture', 'first_name', 'last_name', 'location', 'bio')
+        fields = ('picture', 'background', 'first_name', 'last_name', 'bio')

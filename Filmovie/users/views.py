@@ -17,13 +17,13 @@ from comments.forms import CommentForm
 def signup_view(request):
     """Returns the 'registration' view"""
     if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-            password = form.cleaned_data.get('password')
+        sign_up_form = SignupForm(request.POST)
+        if sign_up_form.is_valid():
+            username = sign_up_form.cleaned_data.get('username')
+            first_name = sign_up_form.cleaned_data.get('first_name')
+            last_name = sign_up_form.cleaned_data.get('last_name')
+            email = sign_up_form.cleaned_data.get('email')
+            password = sign_up_form.cleaned_data.get('password')
             User.objects.create_user(
                 username=username,
                 first_name=first_name,
@@ -33,31 +33,29 @@ def signup_view(request):
             )
             return redirect('login')
     else:
-        form = SignupForm()
+        sign_up_form = SignupForm()
 
-
-    return render(request, 'registration/register.html', {'form': form})
+    return render(request, 'auth/register.html', {'form': sign_up_form})
 
 @login_required
 def password_change_view(request):
     """Returns the 'change password' view if the user is authenticated"""
     user = request.user
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            user.set_password(form.cleaned_data.get('new_password'))
+        password_change_form = ChangePasswordForm(request.POST)
+        if password_change_form.is_valid():
+            user.set_password(password_change_form.cleaned_data.get('new_password'))
             user.save()
             update_session_auth_hash(request, user)
             return redirect('change-password-done')
     else:
-        form = ChangePasswordForm(instance=user)
+        password_change_form = ChangePasswordForm(instance=user)
 
-    return render(request, 'registration/change_password.html', {'form': form})
-
+    return render(request, 'registration/change_password.html', {'form': password_change_form})
 
 def password_change_done_view(request):
     """Returns the 'password change done' view"""
-    return render(request, 'registration/change_password_done.html')
+    return render(request, 'auth/change_password_done.html')
 
 @login_required
 def edit_profile_view(request):
@@ -65,19 +63,19 @@ def edit_profile_view(request):
     profile = Profile.objects.get(user__id=request.user.id)
 
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
-        if form.is_valid():
-            profile.picture = form.cleaned_data.get('picture')
-            profile.first_name = form.cleaned_data.get('first_name')
-            profile.last_name = form.cleaned_data.get('last_name')
-            profile.location = form.cleaned_data.get('location')
-            profile.bio = form.cleaned_data.get('bio')
+        edit_profile_form = EditProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if edit_profile_form.is_valid():
+            profile.picture = edit_profile_form.cleaned_data.get('picture')
+            profile.background = edit_profile_form.cleaned_data.get('background')
+            profile.first_name = edit_profile_form.cleaned_data.get('first_name')
+            profile.last_name = edit_profile_form.cleaned_data.get('last_name')
+            profile.bio = edit_profile_form.cleaned_data.get('bio')
             profile.save()
             return redirect('profile', username=request.user.username)
     else:
-        form = EditProfileForm(instance=request.user.profile)
+        edit_profile_form = EditProfileForm(instance=request.user.profile)
 
-    return render(request, 'registration/edit_profile.html', {'form': form})
+    return render(request, 'profiles/edit_profile.html', {'form': edit_profile_form})
 
 @login_required
 def user_profile_view(request, username):
@@ -274,7 +272,6 @@ def user_profile_watchlist_view(request, username):
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
 
-
 @login_required
 def user_profile_watchedlist_view(request, username):
     """Returns the 'user profile' view"""
@@ -308,7 +305,6 @@ def user_profile_watchedlist_view(request, username):
     }
 
     return HttpResponse(loader.get_template('profiles/profile.html').render(context, request))
-
 
 @login_required
 def user_profile_reviewed_view(request, username):

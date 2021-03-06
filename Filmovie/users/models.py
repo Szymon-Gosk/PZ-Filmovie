@@ -10,12 +10,21 @@ from PIL import Image
 
 def user_directory_path(instance, filename):
     """Specifieing the path for profile picture and returning it"""
-    profile_picture = 'users/userid_{0}/profile_image.jpg'.format(instance.user.id)
-    full_path = os.path.join(settings.MEDIA_ROOT, profile_picture)
+    profile_pictures = 'users/userid_{0}/profile_image/profile_image.jpg'.format(instance.user.id)
+    path = os.path.join(settings.MEDIA_ROOT, profile_pictures)
 
-    if os.path.exists(full_path):
-        os.remove(full_path)
-    return profile_picture
+    if os.path.exists(path):
+        os.remove(path)
+    return profile_pictures
+
+def user_directory_path_background(instance, filename):
+    """Specifieing the path for profile picture and returning it"""
+    background_pictures = 'users/userid_{0}/background_image/profile_image.jpg'.format(instance.user.id)
+    path = os.path.join(settings.MEDIA_ROOT, background_pictures)
+
+    if os.path.exists(path):
+        os.remove(path)
+    return background_pictures
 
 
 class FollowerRelation(models.Model):
@@ -30,26 +39,33 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(max_length=25, null=True, blank=True)
     last_name = models.CharField(max_length=25, null=True, blank=True)
-    location = models.CharField(max_length=25, null=True, blank=True)
     bio = models.TextField(max_length=200, null=True, blank=True)
     created = models.DateField(auto_now_add=True)
     star = models.ManyToManyField(Movie, related_name='star')
     watchlist = models.ManyToManyField(Movie, related_name='watchlist')
     watchedlist = models.ManyToManyField(Movie, related_name='watchedlist')
     picture = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    background = models.ImageField(upload_to=user_directory_path_background, blank=True, null=True)
     followers = models.ManyToManyField(User, related_name='following', blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        SIZE = 250, 250
+        PICTURE_SIZE = 250, 250
+        BACKGROUND_SIZE = 250, 250
 
         if self.picture:
             pic = Image.open(self.picture.path)
             if pic.mode in ("RGBA", "P"):
                 pic = pic.convert("RGB")
-            pic.thumbnail(SIZE, Image.LANCZOS)
+            pic.thumbnail(PICTURE_SIZE, Image.LANCZOS)
             pic.save(self.picture.path)
+        if self.background:
+            background = Image.open(self.background.path)
+            if background.mode in ("RGBA", "P"):
+                background = background.convert("RGB")
+            background.thumbnail(BACKGROUND_SIZE, Image.LANCZOS)
+            background.save(self.background.path)
 
     def __str__(self):
         return self.user.username

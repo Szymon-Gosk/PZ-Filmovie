@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from movies.models import Movie, Genre, Rating, MovieRating, Likes
 from actors.models import Actor
-from users.models import Profile
+from users.models import Profile, FollowerRelation
 from movies.forms import MovieRateForm
 from django.db.models import Avg
 import requests
@@ -64,11 +64,22 @@ def user_activities_view(request):
     followed_users_id = []
     for x in profiles:
         followed_users_id.append(x.user.id)
+    
+    has_rated = MovieRating.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    has_liked = Likes.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    
+    last_activities = []
+    for x in has_rated:
+        last_activities.append(x)
         
-    has_rated = MovieRating.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")[:10]
-    has_liked = Likes.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")[:10]
+    for x in has_liked:
+        last_activities.append(x)
+        
+    last_activities = sorted(last_activities, key=lambda x: x.timestamp, reverse=True)
+    
+    print(last_activities)
 
-    return render(request, 'users/user_activities.html', {"has_rated": has_rated,"has_liked": has_liked})
+    return render(request, 'users/user_activities.html', {"has_rated": has_rated,"has_liked": has_liked, "last_activities": last_activities})
 
 def pagination(request, query, page_number):
     """Returns movies at the specified page from the API"""
@@ -235,8 +246,13 @@ def movie_detail_view(request, imdb_id):
 
         m.save()
         our_db = False
+        
+        context = {
+            'movie_data': data,
+            'our_db': our_db
+        }
 
-    return HttpResponse(loader.get_template('movies/movie_detail.html').render({'movie_data': data,'our_db': our_db}, request))
+    return HttpResponse(loader.get_template('movies/movie_detail.html').render(context, request))
 
 def genres_view(request, genre_slug):
     """Returns the 'genres_view' which renders the 'genre' template.

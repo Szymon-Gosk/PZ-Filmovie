@@ -18,8 +18,20 @@
     <div class="row">
         <div class="file-field input-field col s12">
             <div class="btn">
-                <span>File</span>
+                <span>Profile picture</span>
                 {{form.picture}}
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="file-field input-field col s12">
+            <div class="btn">
+                <span>Background</span>
+                {{form.background}}
             </div>
             <div class="file-path-wrapper">
                 <input class="file-path validate" type="text">
@@ -38,13 +50,6 @@
         <div class="input-field col s12">
             {{form.last_name}}
             <label for="last_name">Last name</label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="input-field col s12">
-            {{form.location}}
-            <label for="location">Location</label>
         </div>
     </div>
 
