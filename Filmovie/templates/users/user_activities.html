@@ -34,40 +34,39 @@
           <div class="card-content">
             <ul class="collection">
 
-              {% if has_rated %}
-              <h3>Last ratings</h3>
-              {% for rated in has_rated %}
+
+              {% if activities %}
+              <h3>Last activities</h3>
+              {% for l in activities %}
+              {% if l in has_rated %}
               <li class="collection-item avatar" style="margin: 50px 0;">
-                  {% if rated.user.profile.picture %}
-                  <img src="{{ rated.user.profile.picture.url }}" alt="" class="circle">
+                  {% if l.user.profile.picture %}
+                  <img src="{{ l.user.profile.picture.url }}" alt="" class="circle">
                   {% else %}
                   <img src="{% static 'img/woman.png' %}" alt="" class="circle">
                   {% endif %}
-                  <span class="title" style="color: rgba(255,255,255,.6);">{{rated.user.first_name}}&nbsp{{rated.user.last_name}}</span>
-                  <p class="username"><a href="{% url 'profile' rated.user.username %}" style="color: #45C718;">@{{rated.user.username}}</a>&nbsp{{rated.timestamp}}</p>
-                  <p>Has rated <a href="{% url 'movie-details' rated.movie.imdbID %}">{{rated.movie.Title}}</a>&nbsp&nbsp&nbsp{{rated.rate}}<i class="material-icons">star</i></p>
-                  <p>{{rated.opinion}}</p>
+                  <span class="title" style="color: rgba(255,255,255,.6);">{{l.user.first_name}}&nbsp{{l.user.last_name}}</span>
+                  <p class="username"><a href="{% url 'profile' l.user.username %}" style="color: #45C718;">@{{l.user.username}}</a>&nbsp{{l.timestamp}}</p>
+                  <p>Has rated <a href="{% url 'movie-details' l.movie.imdbID %}">{{l.movie.Title}}</a>&nbsp&nbsp&nbsp{{l.rate}}<i class="material-icons">star</i></p>
+                  <p>{{l.opinion}}</p>
               </li>
-              {% endfor %}
+              {% else %}
+              <li class="collection-item avatar" style="margin: 50px 0;">
+                {% if l.user.profile.picture %}
+                <img src="{{ l.user.profile.picture.url }}" alt="" class="circle">
+                {% else %}
+                <img src="{% static 'img/woman.png' %}" alt="" class="circle">
+                {% endif %}
+                <span class="title" style="color: rgba(255,255,255,.6);">{{l.user.first_name}}&nbsp{{l.user.last_name}}</span>
+                <p class="username"><a href="{% url 'profile' l.user.username %}" style="color: #45C718;">@{{l.user.username}}</a>&nbsp{{l.timestamp}}</p>
+                {% if l.like_type == 2 %}
+                <p>Has <i class="material-icons">thumb_up</i> a review "<a href="{% url 'user-rating' l.rating.user.username l.rating.movie.imdbID %}">{{l.rating.opinion}}</a>"under&nbsp{{l.rating.movie.Title}}&nbsp{{l.rating.movie.Type}}&nbsp&nbsp{{l.rating.rate}}<i class="material-icons">star</i></p>
+                {% else %}
+                <p>Has <i class="material-icons">thumb_down</i> a review "<a href="{% url 'user-rating' l.rating.user.username l.rating.movie.imdbID %}">{{l.rating.opinion}}</a>"under&nbsp{{l.rating.movie.Title}}&nbsp{{l.rating.movie.Type}}&nbsp&nbsp{{l.rating.rate}}<i class="material-icons">star</i></p>
+                {% endif %}
+                <p>{{l.opinion}}</p>
+            </li>
               {% endif %}
-              {% if has_liked %}
-              <h3>Last likes</h3>
-              {% for liked in has_liked %}
-              <li class="collection-item avatar" style="margin: 50px 0;">
-                  {% if liked.user.profile.picture %}
-                  <img src="{{ liked.user.profile.picture.url }}" alt="" class="circle">
-                  {% else %}
-                  <img src="{% static 'img/woman.png' %}" alt="" class="circle">
-                  {% endif %}
-                  <span class="title" style="color: rgba(255,255,255,.6);">{{liked.user.first_name}}&nbsp{{liked.user.last_name}}</span>
-                  <p class="username"><a href="{% url 'profile' liked.user.username %}" style="color: #45C718;">@{{liked.user.username}}</a>&nbsp{{liked.timestamp}}</p>
-                  {% if liked.like_type == 2 %}
-                  <p>Has <i class="material-icons">thumb_up</i> a review "<a href="{% url 'user-rating' liked.rating.user.username liked.rating.movie.imdbID %}">{{liked.rating.opinion}}</a>"under&nbsp{{liked.rating.movie.Title}}&nbsp{{liked.rating.movie.Type}}&nbsp&nbsp{{liked.rating.rate}}<i class="material-icons">star</i></p>
-                  {% else %}
-                  <p>Has <i class="material-icons">thumb_down</i> a review "<a href="{% url 'user-rating' liked.rating.user.username liked.rating.movie.imdbID %}">{{liked.rating.opinion}}</a>"under&nbsp{{liked.rating.movie.Title}}&nbsp{{liked.rating.movie.Type}}&nbsp&nbsp{{liked.rating.rate}}<i class="material-icons">star</i></p>
-                  {% endif %}
-                  <p>{{rated.opinion}}</p>
-              </li>
               {% endfor %}
               {% endif %}
             </ul>
@@ -75,11 +74,9 @@
         </div>
       </div>
 
-
     </section>
   </main>
   {% else %}
-  {% endif %}
   <main>
     <section id="movie-container" style="height: 100%; width: 80vw; justify-content: center; align-items: center;">
 
@@ -87,4 +84,5 @@
 
     </section>
   </main>
+  {% endif %}
   {% endblock %}

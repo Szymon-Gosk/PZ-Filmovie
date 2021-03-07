@@ -75,11 +75,15 @@ def user_activities_view(request):
     for x in has_liked:
         last_activities.append(x)
         
-    last_activities = sorted(last_activities, key=lambda x: x.timestamp, reverse=True)
+    last_activities = sorted(last_activities, key=lambda x: x.timestamp, reverse=True)[:10]
     
-    print(last_activities)
+    context = {
+        "has_rated": has_rated, 
+        "has_liked": has_liked, 
+        "activities": last_activities
+    }
 
-    return render(request, 'users/user_activities.html', {"has_rated": has_rated,"has_liked": has_liked, "last_activities": last_activities})
+    return render(request, 'users/user_activities.html', context)
 
 def pagination(request, query, page_number):
     """Returns movies at the specified page from the API"""

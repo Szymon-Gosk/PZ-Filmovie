@@ -166,17 +166,6 @@ footer {
       top: 60px;
   }
 
-  #photo-content {
-      width: 100%;
-      height: 45vh;
-      background-image: url("../img/top-profile.png");
-      background-repeat: no-repeat;
-      background-size: cover;
-      display: flex;
-      justify-content:center;
-      align-items: flex-end;
-  }
-
   #profile-pic {
       width: 30vh;
       height: 30vh;

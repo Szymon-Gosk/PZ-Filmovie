@@ -51,8 +51,8 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        PICTURE_SIZE = 250, 250
-        BACKGROUND_SIZE = 250, 250
+        PICTURE_SIZE = 400, 400
+        BACKGROUND_SIZE = 1600, 1000
 
         if self.picture:
             pic = Image.open(self.picture.path)

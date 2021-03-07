@@ -10,16 +10,29 @@
 
 
   <main id="container">
-    <section id="photo-content">
-        <div id="profile-pic">
+    {% if profile.background %}
+    <section id="photo-content" style="background-image: url('{{profile.background.url}}'); width: 100%; height: 45vh; background-repeat: no-repeat; background-size: cover; display: flex; justify-content:center; align-items: flex-end;">
+      <div id="profile-pic">
 
-          {% if profile.picture %}
-          <img src="{{profile.picture.url}}">
-          {% else %}
-          <img src="{% static 'img/woman.png' %}">
-          {% endif %}
-        </div>
+        {% if profile.picture %}
+        <img src="{{profile.picture.url}}">
+        {% else %}
+        <img src="{% static 'img/woman.png' %}">
+        {% endif %}
+      </div>
     </section>
+    {% else %}
+    <section id="photo-content" style="background-image: url('../../static/img/top-profile.png'); width: 100%; height: 45vh; background-repeat: no-repeat; background-size: cover; display: flex; justify-content:center; align-items: flex-end;">
+      <div id="profile-pic">
+
+        {% if profile.picture %}
+        <img src="{{profile.picture.url}}">
+        {% else %}
+        <img src="{% static 'img/woman.png' %}">
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
     <section class="text-content">
       <span class="profile-text name s-border">{{profile.first_name}}&nbsp{{profile.last_name}}</span>
       <span class="profile-text s-border">
