@@ -255,7 +255,7 @@ def movie_detail_view(request, imdb_id):
             'movie_data': data,
             'our_db': our_db
         }
-
+        
     return HttpResponse(loader.get_template('movies/movie_detail.html').render(context, request))
 
 def genres_view(request, genre_slug):

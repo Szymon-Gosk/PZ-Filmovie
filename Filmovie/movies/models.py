@@ -84,7 +84,7 @@ class Movie(models.Model):
 
     def save(self, *args, **kwargs):
         """Saving the poster in the database (if not already present)"""
-        if self.Poster == '' and self.Poster_url != '':
+        if  str(self.Poster) == '' and str(self.Poster_url) != '':
             resp = requests.get(self.Poster_url)
             poster = BytesIO()
             poster.write(resp.content)
