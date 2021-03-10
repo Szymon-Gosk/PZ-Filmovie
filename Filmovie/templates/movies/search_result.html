@@ -32,14 +32,25 @@
 
 
 
+  {% if movie_data.Error and not page_number > "2" %}
+
+    <section id="result-word">
+      <span>Movie not found!</span>
+      <span id="for-word"> {{query}} </span>
+    </section>
+
+    {% else %}
 
     <section id="result-word">
       <span>Search results for:</span>
       <span id="for-word"> {{query}} </span>
     </section>
 
+    {% endif %}
+
     <article id="content">
       <section id="movie-container">
+
 
       {%for movie in movie_data.Search%}
 
@@ -71,25 +82,36 @@
         {% endif %}
 
         {% endfor %}
-
         
           
       </section>
 
+      <div id="buttons">
 
-
-      <a class="cta-btn" href="{%url 'pagination' query page_number %}">
+      {% if not movie_data.Error %}
+      {% if page_number > "1" %}
+        <a class="cta-btn" href="{%url 'pagination' query previous_page %}">
+          load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
+        </a>
+        {% endif %}
+      <a class="cta-btn" href="{%url 'pagination' query next_page %}">
         load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
       </a>
+      {% else %}
+      {% if page_number > "10" %}
+      <a class="cta-btn row" href="{%url 'pagination' query previous_page %}">
+        load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
+      </a>
+      {% else %}
+      <a class="cta-btn row" href="{% url 'home' %}">
+        go back to movies<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_back</i>
+      </a>
+      {% endif %}
+      {% endif %}
 
+    </div>
 
 
     </article>
-
-
-
-    <footer>
-      Proudly made by Suczki Marnotrawne 2020
-    </footer>
 
 {% endblock %}

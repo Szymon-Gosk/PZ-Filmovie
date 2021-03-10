@@ -18,20 +18,23 @@ def redirect_to_home(request, *args, **kwargs):
     """Redirects to 'index' template (home)"""
     return render(request, 'index.html')
 
-def home(request):
+def home(request, page_number=1):
     """Returns the 'home' view. Renders 'search_result' template if the
     function gets the query from a user (if home template has not been rendered)"""
     query = request.GET.get('q')
 
     if query:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
+        page_number = int(page_number)+1
 
         context = {
             'query': query,
             'movie_data': data,
-            'page_number': 1,
+            'page_number': page_number,
+            'previous_page': page_number,
+            'next_page': page_number,
         }
 
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
@@ -41,20 +44,23 @@ def home(request):
     return render(request, 'home.html', {"movie_data": movies})
 
 @login_required
-def user_activities_view(request):
+def user_activities_view(request, page_number=1):
     """Returns the 'user last activities' view. Renders 'search_result' template if the
     function gets the query from a user (if home template has not been rendered)"""
     query = request.GET.get('q')
 
     if query:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
+        page_number = int(page_number)+1
 
         context = {
             'query': query,
             'movie_data': data,
-            'page_number': 1,
+            'page_number': page_number,
+            'previous_page': page_number,
+            'next_page': page_number,
         }
 
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
@@ -87,16 +93,38 @@ def user_activities_view(request):
 
 def pagination(request, query, page_number):
     """Returns movies at the specified page from the API"""
+    query2 = request.GET.get('q')
+
+    if query2:
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query2 + '&page=1'
+        response = requests.get(url)
+        data = response.json()
+        page_number = int(page_number)
+        next_page = int(page_number) + 1
+        previous_page = int(page_number)
+
+        context = {
+            'query': query2,
+            'movie_data': data,
+            'page_number': 1,
+            'previous_page': 1,
+            'next_page': 2,
+        }
+
+        return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
     url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
     response = requests.get(url)
     data = response.json()
-    page_number = int(page_number)+1
+    next_page = int(page_number) + 1
+    previous_page = int(page_number) - 1
 
     context = {
         'query': query,
         'movie_data': data,
-        'page_number': page_number,
+        'previous_page': previous_page,
+        'next_page': next_page,
+        'page_number': page_number
     }
 
     return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
@@ -109,6 +137,198 @@ def movie_detail_view(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=data)
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
+        response = requests.get(url)
+        api_data = response.json()
+        
+        if data.Type == 'movie':
+            if not (data.Title == api_data['Title'] and
+                data.Year == api_data['Year'] and
+                data.Rated == api_data['Rated'] and
+                data.Released == api_data['Released'] and
+                data.Runtime == api_data['Runtime'] and
+                data.Director == api_data['Director'] and
+                data.Writer == api_data['Writer'] and
+                data.Language == api_data['Language'] and
+                data.Country == api_data['Country'] and
+                data.Plot == api_data['Plot'] and
+                data.Poster_url == api_data['Poster'] and
+                data.Awards == api_data['Awards'] and
+                data.Metascore == api_data['Metascore'] and
+                data.imdbRating == api_data['imdbRating'] and
+                data.imdbVotes == api_data['imdbVotes'] and
+                data.imdbID == api_data['imdbID'] and
+                data.Type == api_data['Type'] and
+                data.DVD == api_data['DVD'] and
+                data.BoxOffice == api_data['BoxOffice'] and
+                data.Production == api_data['Production'] and
+                data.Website == api_data['Website']):
+
+                    data.Title = api_data['Title']
+                    data.Year = api_data['Year']
+                    data.Rated = api_data['Rated']
+                    data.Released = api_data['Released']
+                    data.Runtime = api_data['Runtime']
+                    data.Director = api_data['Director']
+                    data.Writer = api_data['Writer']
+                    data.Plot = api_data['Plot']
+                    data.Language = api_data['Language']
+                    data.Country = api_data['Country']
+                    data.Awards = api_data['Awards']
+                    data.Poster_url = api_data['Poster']
+                    data.Metascore = api_data['Metascore']
+                    data.imdbRating = api_data['imdbRating']
+                    data.imdbVotes = api_data['imdbVotes']
+                    data.imdbID = api_data['imdbID']
+                    data.Type = api_data['Type']
+                    data.DVD = api_data['DVD']
+                    data.BoxOffice = api_data['BoxOffice']
+                    data.Production = api_data['Production']
+                    data.Website = api_data['Website']
+                    
+                    data.save()
+                    
+            rating_objs = []
+            genre_objs = []
+            actors_obj = []
+
+            actor_list = [x.strip() for x in api_data['Actors'].split(',')]
+
+            for actor in actor_list:
+                a, updated = Actor.objects.update_or_create(name=actor)
+                actors_obj.append(a)
+                
+            genre_list = list(api_data['Genre'].replace(" ", "").split(','))
+
+            for genre in genre_list:
+                genre_slug = slugify(genre)
+                g, updated = Genre.objects.update_or_create(title=genre, slug=genre_slug)
+                genre_objs.append(g)
+
+            for rate in api_data['Ratings']:
+                r, updated = Rating.objects.update_or_create(source=rate['Source'], rating=rate['Value'])
+                rating_objs.append(r)
+                
+            isDiffs = False
+            for genre in genre:
+                if genre not in data.Genre.all():
+                    isDiffs = True
+                
+            if isDiffs:
+                data.Genre.set(genre_objs)
+                
+            isDiffs = False
+            for actor in actors_obj:
+                if actor not in data.Actors.all():
+                    isDiffs = True
+            
+            if isDiffs:
+                data.Actors.set(actors_obj)
+                for actor in actors_obj:
+                    actor.movies.add(data)
+                    actor.save()
+                
+            isDiffs = False
+            for rating in rating_objs:
+                if rating not in data.Ratings.all():
+                    isDiffs = True
+            
+            if isDiffs:
+                data.Ratings.set(rating_objs)
+                        
+            data.save()
+            
+        else:
+            
+            if not (data.Title == api_data['Title'] and
+                data.Year == api_data['Year'] and
+                data.Rated == api_data['Rated'] and
+                data.Released == api_data['Released'] and
+                data.Runtime == api_data['Runtime'] and
+                data.Director == api_data['Director'] and
+                data.Writer == api_data['Writer'] and
+                data.Plot == api_data['Plot'] and
+                data.Language == api_data['Language'] and
+                data.Country == api_data['Country'] and
+                data.Awards == api_data['Awards'] and
+                data.Poster_url == api_data['Poster'] and
+                data.Metascore == api_data['Metascore'] and
+                data.imdbRating == api_data['imdbRating'] and
+                data.imdbVotes == api_data['imdbVotes'] and
+                data.imdbID == api_data['imdbID'] and
+                data.Type == api_data['Type'] and
+                data.totalSeasons == api_data['totalSeasons']):
+
+                data.Title = api_data['Title']
+                data.Year = api_data['Year']
+                data.Rated = api_data['Rated']
+                data.Released = api_data['Released']
+                data.Runtime = api_data['Runtime']
+                data.Director = api_data['Director']
+                data.Writer = api_data['Writer']
+                data.Plot = api_data['Plot']
+                data.Language = api_data['Language']
+                data.Country = api_data['Country']
+                data.Awards = api_data['Awards']
+                data.Poster_url = api_data['Poster']
+                data.Metascore = api_data['Metascore']
+                data.imdbRating = api_data['imdbRating']
+                data.imdbVotes = api_data['imdbVotes']
+                data.imdbID = api_data['imdbID']
+                data.Type = api_data['Type']
+                data.totalSeasons = api_data['totalSeasons']
+
+                data.save()
+                
+            rating_objs = []
+            genre_objs = []
+            actors_obj = []
+
+            actor_list = [x.strip() for x in api_data['Actors'].split(',')]
+
+            for actor in actor_list:
+                a, updated = Actor.objects.update_or_create(name=actor)
+                actors_obj.append(a)
+                
+            genre_list = list(api_data['Genre'].replace(" ", "").split(','))
+
+            for genre in genre_list:
+                genre_slug = slugify(genre)
+                g, updated = Genre.objects.update_or_create(title=genre, slug=genre_slug)
+                genre_objs.append(g)
+
+            for rate in api_data['Ratings']:
+                r, updated = Rating.objects.update_or_create(source=rate['Source'], rating=rate['Value'])
+                rating_objs.append(r)
+                
+            isDiffs = False
+            for genre in genre:
+                if genre not in data.Genre.all():
+                    isDiffs = True
+                
+            if isDiffs:
+                data.Genre.set(genre_objs)
+                
+            isDiffs = False
+            for actor in actors_obj:
+                if actor not in data.Actors.all():
+                    isDiffs = True
+            
+            if isDiffs:
+                data.Actors.set(actors_obj)
+                for actor in actors_obj:
+                    actor.movies.add(data)
+                    actor.save()
+                
+            isDiffs = False
+            for rating in rating_objs:
+                if rating not in data.Ratings.all():
+                    isDiffs = True
+            
+            if isDiffs:
+                data.Ratings.set(rating_objs)
+                        
+            data.save()
         
         if not request.user.is_authenticated:
             if not opinions:
@@ -118,6 +338,7 @@ def movie_detail_view(request, imdb_id):
                 rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'], 2)
                 rating_count = opinions.count()
 
+            data = Movie.objects.get(imdbID=imdb_id)
             our_db = True
 
             context = {
@@ -129,6 +350,7 @@ def movie_detail_view(request, imdb_id):
             }
             
         else:
+            data = Movie.objects.get(imdbID=imdb_id)
             user = request.user
             if data in user.profile.watchedlist.all():
                 watchedlist = True
@@ -258,20 +480,23 @@ def movie_detail_view(request, imdb_id):
         
     return HttpResponse(loader.get_template('movies/movie_detail.html').render(context, request))
 
-def genres_view(request, genre_slug):
+def genres_view(request, genre_slug, page_number=1):
     """Returns the 'genres_view' which renders the 'genre' template.
     Uses paginator for data from the database"""
     query = request.GET.get('q')
 
     if query:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
+        page_number = int(page_number)+1
 
         context = {
             'query': query,
             'movie_data': data,
-            'page_number': 1,
+            'page_number': page_number,
+            'previous_page': page_number,
+            'next_page': page_number,
         }
 
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
@@ -282,20 +507,23 @@ def genres_view(request, genre_slug):
 
     return HttpResponse(loader.get_template('movies/genre.html').render({'movie_data': movie_data,'genre': genre}, request))
 
-def type_view(request, type):
+def type_view(request, type, page_number=1):
     """Returns the 'genres_view' which renders the 'genre' template.
     Uses paginator for data from the database"""
     query = request.GET.get('q')
 
     if query:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query
+        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
+        page_number = int(page_number)+1
 
         context = {
             'query': query,
             'movie_data': data,
-            'page_number': 1,
+            'page_number': page_number,
+            'previous_page': page_number,
+            'next_page': page_number,
         }
 
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
