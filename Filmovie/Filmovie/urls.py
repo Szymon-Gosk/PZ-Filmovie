@@ -26,6 +26,7 @@ urlpatterns = [
                   path('movie/', include('movies.urls')),
                   path('actors/', include('actors.urls')),
                   path('accounts/', include('users.urls')),
+                  path('notifications/', include('notifications.urls')),
                   path('user/search', search_users_view, name='search-users'),
                   path('user/activities', user_activities_view, name='user-activities'),
                   path('user/<username>/', user_profile_view, name='profile'),

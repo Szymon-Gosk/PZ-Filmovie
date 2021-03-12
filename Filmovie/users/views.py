@@ -362,7 +362,9 @@ def opinion_detail_view(request, username, imdb_id):
                 Notification.objects.create(
                     executor=user_comment,
                     receiver=user,
-                    text=text
+                    text=text,
+                    url_name='user-rating',
+                    imdb_id=imdb_id
                     )
             return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
     else:
@@ -406,13 +408,15 @@ def like_view(request, username, imdb_id):
             current_likes = current_likes + 1
             
         if not user_like == user_rating:
-            text = "{0} has liked your review: {1}".format(user_like.username, rating.opinion)
+            text = "{0} has liked your {1} review".format(user_like.username, rating.movie.Title)
             if Notification.objects.filter(executor=user_like, receiver=user_rating, text=text).count() == 1:
                 Notification.objects.get(executor=user_like, receiver=user_rating, text=text).delete()
             Notification.objects.create(
                 executor=user_like,
                 receiver=user_rating,
-                text=text
+                text=text,
+                url_name='user-rating',
+                imdb_id=imdb_id
                 )
     else:
         Likes.objects.filter(user=user_like, rating=rating, like_type=2).delete()
@@ -448,13 +452,15 @@ def dislike_view(request, username, imdb_id):
             current_dislikes = current_dislikes + 1
         
         if not user_dislike == user_rating:
-            text = "{0} has disliked your review: {1}".format(user_dislike.username, rating.opinion)
+            text = "{0} has disliked your {1} review".format(user_dislike.username, rating.movie.Title)
             if Notification.objects.filter(executor=user_dislike, receiver=user_rating, text=text).count() == 1:
                 Notification.objects.get(executor=user_dislike, receiver=user_rating, text=text).delete()
             Notification.objects.create(
                 executor=user_dislike,
                 receiver=user_rating,
-                text=text
+                text=text,
+                url_name='user-rating',
+                imdb_id=imdb_id
                 )
             
     else:
@@ -488,7 +494,8 @@ def follow_profile_view(request, username):
         Notification.objects.create(
             executor=me,
             receiver=other,
-            text=text
+            text=text,
+            url_name='profile'
             )
         profile.followers.remove(me)
     else:
@@ -498,7 +505,8 @@ def follow_profile_view(request, username):
         Notification.objects.create(
             executor=me,
             receiver=other,
-            text=text
+            text=text,
+            url_name='profile'
             )
         profile.followers.add(me)
 

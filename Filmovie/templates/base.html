@@ -34,8 +34,23 @@
         <li><a href="{% url 'type' 'movie' %}">Movies</a></li>
         <li><a href="{% url 'type' 'series' %}">Series</a></li>
         {% if user.is_authenticated %}
-        
 
+        <!-- define dropdown how it should be displaied -->
+        <ul id="dropdown2" class="dropdown-content">
+          {% for notification in notifications %}
+          <li style="width: 150px;">
+            <a href="{% url 'notifications' notification.id notification.executor notification.imdb_id %}">{{notification.text}} <br><br> {{notification.get_date}}</a>
+          </li>
+          {% endfor %}
+        </ul>
+
+        {% if notifications.count > 0 %}
+        <li style="margin-left: 20px; width: 150px;"><a class="dropdown-trigger" data-target="dropdown2"><i class="material-icons center">notifications_active</i></a></li>
+        {% else %}
+        <li style="margin-left: 20px; width: 150px;"><a class="dropdown-trigger" data-target="dropdown2"><i class="material-icons center">notifications</i></a></li>
+        {% endif %}
+
+        <!-- define dropdown how it should be displaied -->
         <ul id="dropdown1" class="dropdown-content">
         <li><a href="{% url 'profile' user.username %}">Profile</a></li>
         <li><a href="{% url 'profile-settings' %}">Settings</a></li>
@@ -45,9 +60,9 @@
 
         
         {% if user.profile.picture %}
-        <li style="margin-left: 30px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{{ user.profile.picture.url }}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
+        <li style="margin-left: 10px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{{ user.profile.picture.url }}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
         {% else %}
-        <li style="margin-left: 30px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{% static 'img/woman.png' %}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
+        <li style="margin-left: 10px;"><a class="dropdown-trigger" data-target="dropdown1">{{user.username}}<img src="{% static 'img/woman.png' %}" alt="" class="circle" width="50" height="50" style="margin-left: 10px;"></a></li>
         {% endif %}
 
         {% else %}
