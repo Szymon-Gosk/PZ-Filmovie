@@ -12,6 +12,7 @@ from users.forms import SignupForm, ChangePasswordForm, EditProfileForm
 from movies.models import Movie, MovieRating, Likes
 from comments.models import Comment
 from comments.forms import CommentForm
+from notifications.models import Notification
 
 
 def signup_view(request):
@@ -356,6 +357,13 @@ def opinion_detail_view(request, username, imdb_id):
             comment.rating = rating
             comment.user = user_comment
             comment.save()
+            if not user_comment == user:
+                text = "{0} has commented your {1} review".format(user_comment.username, rating.movie.Title)
+                Notification.objects.create(
+                    executor=user_comment,
+                    receiver=user,
+                    text=text
+                    )
             return HttpResponseRedirect(reverse('user-rating', args=[username, imdb_id]))
     else:
         form = CommentForm()
@@ -396,6 +404,16 @@ def like_view(request, username, imdb_id):
         else:
             Likes.objects.create(user=user_like, rating=rating, like_type=2)
             current_likes = current_likes + 1
+            
+        if not user_like == user_rating:
+            text = "{0} has liked your review: {1}".format(user_like.username, rating.opinion)
+            if Notification.objects.filter(executor=user_like, receiver=user_rating, text=text).count() == 1:
+                Notification.objects.get(executor=user_like, receiver=user_rating, text=text).delete()
+            Notification.objects.create(
+                executor=user_like,
+                receiver=user_rating,
+                text=text
+                )
     else:
         Likes.objects.filter(user=user_like, rating=rating, like_type=2).delete()
         current_likes = current_likes - 1
@@ -428,6 +446,17 @@ def dislike_view(request, username, imdb_id):
         else:
             Likes.objects.create(user=user_dislike, rating=rating, like_type=1)
             current_dislikes = current_dislikes + 1
+        
+        if not user_dislike == user_rating:
+            text = "{0} has disliked your review: {1}".format(user_dislike.username, rating.opinion)
+            if Notification.objects.filter(executor=user_dislike, receiver=user_rating, text=text).count() == 1:
+                Notification.objects.get(executor=user_dislike, receiver=user_rating, text=text).delete()
+            Notification.objects.create(
+                executor=user_dislike,
+                receiver=user_rating,
+                text=text
+                )
+            
     else:
         Likes.objects.filter(user=user_dislike, rating=rating, like_type=1).delete()
         current_dislikes = current_dislikes - 1
@@ -453,8 +482,24 @@ def follow_profile_view(request, username):
     other = other_user_qs.first()
     profile = other.profile
     if me in profile.followers.all():
+        text = "{0} has unfollowed you".format(me.username)
+        if Notification.objects.filter(executor=me, receiver=other, text=text).count() == 1:
+            Notification.objects.get(executor=me, receiver=other, text=text).delete()
+        Notification.objects.create(
+            executor=me,
+            receiver=other,
+            text=text
+            )
         profile.followers.remove(me)
     else:
+        text = "{0} has followed you".format(me.username)
+        if Notification.objects.filter(executor=me, receiver=other, text=text).count() == 1:
+            Notification.objects.get(executor=me, receiver=other, text=text).delete()
+        Notification.objects.create(
+            executor=me,
+            receiver=other,
+            text=text
+            )
         profile.followers.add(me)
 
     return HttpResponseRedirect(reverse('profile', args=[username]))
