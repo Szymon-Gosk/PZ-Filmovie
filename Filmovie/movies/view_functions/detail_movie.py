@@ -6,8 +6,10 @@ from django.db.models import Avg
 import requests
 
 def movie_detail(request, imdb_id):
-    """Returns 'movieDetail' view which renders 'movie_detail' template.
-    If a movie exists in the database it renders it using the database.
+    """Returns detail information about the requested movie.
+    If a movie exists in the database it checks if the content 
+    from API is same as in database, if not, updating it 
+    and then renders it using the database.
     Otherwise it is rendered from the API"""
 
     if Movie.objects.filter(imdbID=imdb_id).exists():

@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 def rate(request, imdb_id):
-    """Returns the the 'rate' view"""
+    """Saves the rating in database"""
     movie = Movie.objects.get(imdbID=imdb_id)
     user = request.user
 

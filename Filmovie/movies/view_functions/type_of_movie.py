@@ -3,7 +3,7 @@ from movies.models import Movie
 import requests
 
 def type_of_movie(request, movie_type, page_number):
-    """Returns the 'genres_view' which renders the 'genre' template.
+    """Returns the movies based on thier type.
     Uses paginator for data from the database"""
     query = request.GET.get('q')
 

@@ -2,8 +2,7 @@ from movies.models import Movie
 import requests
 
 def main(request, page_number):
-    """Returns the 'home' view. Renders 'search_result' template if the
-    function gets the query from a user (if home template has not been rendered)"""
+    """Returns the home or movies if there was query"""
     query = request.GET.get('q')
 
     if query:

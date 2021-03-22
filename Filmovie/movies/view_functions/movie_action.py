@@ -2,8 +2,8 @@ from movies.models import Movie
 from users.models import Profile
 
 def star_a_movie(request, imdb_id):
-    """Returns the reverse template 'movie-details' to refresh the page and save
-    a movie user has added to favourites"""
+    """Adding a movie to star movies list, if movie 
+    already exists in list it removes it"""
     movie = Movie.objects.get(imdbID=imdb_id)
     profile = Profile.objects.get(user=request.user)
 
@@ -13,8 +13,8 @@ def star_a_movie(request, imdb_id):
         profile.star.add(movie)
         
 def add_movie_to_watchlist(request, imdb_id):
-    """Returns the reverse template 'movie-details' to refresh the page and save
-    a movie user has added to watchlist"""
+    """Adding a movie to watchlist, if movie 
+    already exists in list it removes it"""
     movie = Movie.objects.get(imdbID=imdb_id)
     profile = Profile.objects.get(user=request.user)
 
@@ -24,8 +24,8 @@ def add_movie_to_watchlist(request, imdb_id):
         profile.watchlist.add(movie)
         
 def add_movie_to_watchedlist(request, imdb_id):
-    """Returns the reverse template 'movie-details' to refresh the page and save
-    a movie user has added to watched movies"""
+    """Adding a movie to watchedlist, if movie 
+    already exists in list it removes it"""
     movie = Movie.objects.get(imdbID=imdb_id)
     profile = Profile.objects.get(user=request.user)
 

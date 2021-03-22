@@ -49,8 +49,7 @@ def movie_detail_view(request, imdb_id):
     return HttpResponse(loader.get_template('movies/movie_detail.html').render(context, request))
 
 def genres_view(request, genre_slug, page_number=1):
-    """Returns the 'genres_view' which renders the 'genre' template.
-    Uses paginator for data from the database"""
+    """Returns the 'genres_view' which renders the 'genre' template."""
     context = movie_genre.genre(request, genre_slug, page_number)
     
     if context.get('query') is not None:
@@ -59,8 +58,7 @@ def genres_view(request, genre_slug, page_number=1):
     return HttpResponse(loader.get_template('movies/genre.html').render(context, request))
 
 def type_view(request, movie_type, page_number=1):
-    """Returns the 'genres_view' which renders the 'genre' template.
-    Uses paginator for data from the database"""
+    """Returns the 'genres_view' which renders the 'genre' template."""
     context = type_of_movie.type_of_movie(request, movie_type, page_number)
     
     if context.get('query') is not None:
