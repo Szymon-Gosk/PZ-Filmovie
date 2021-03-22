@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-login.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+
+{% block content %}
+
+<main id="container">
+    <h1>Log in to Filmovie!</h1>
+    <h2>And fill your movie list!</h2>
+    <div class="login-field">
+        
+        <form method="POST" role="form" action="">
+            {%csrf_token%}
+        
+            <span>LOG IN now</span>
+        
+            <div class="row">
+                <div class="input-field col s12">
+                    {{form.username}}
+                    <label for="username">Username</label>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="input-field col s12">
+                    {{form.password}}
+                    <label for="password">Password</label>
+                </div>
+            </div>
+        
+            {% if form.errors %}
+            <div class="row">
+                <div class="col s12">
+                    <span class="error" style="color: red; font-weight: bold;">Username or password is not valid</span>
+                </div>
+            </div>
+            {% endif %}
+            <button type="submit" value="login" class="waves-effect waves-light cta-btn cta-btn-color">Login</button>
+            <a href="{%url 'password_reset' %}" class="waves-effect waves-light cta-btn cta-btn-color">I don't remember my password</a>
+        
+            </form>
+        
+    </div>
+    <div id="register-field">
+        <span>Have no account yet?</span>
+        <span style="font-size: 1rem;">click below and make one!</span>
+        <a class="cta-btn" href="{% url 'signup' %}">
+            REGISTER NOW
+          </a>
+    </div>
+</main>
+
+{% endblock %}

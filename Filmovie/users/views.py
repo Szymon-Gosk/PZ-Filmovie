@@ -52,7 +52,7 @@ def password_change_view(request):
     else:
         password_change_form = ChangePasswordForm(instance=user)
 
-    return render(request, 'registration/change_password.html', {'form': password_change_form})
+    return render(request, 'auth/change_password.html', {'form': password_change_form})
 
 def password_change_done_view(request):
     """Returns the 'password change done' view"""

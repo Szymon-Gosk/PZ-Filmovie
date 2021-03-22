@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'css/styles-login.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+
+{% block content %}
+<main id="container">
+    <h1>Sign-up now!</h1>
+    <h2>and never re-sign!</h2>
+    <div class="singup-field">
+        <form method="POST" class=" s12" role="form" action="">
+            {%csrf_token%}
+            <div id="column-container">
+                <div class="column">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{form.first_name}}
+                            <label for="first_name">First name</label>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{form.last_name}}
+                            <label for="last_name">Last name</label>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{form.email}}
+                            <label for="email">E-mail</label>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                
+                <div class="column">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{form.username}}
+                            <label for="username">Username</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12">
+                            {{form.password}}
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+        
+                        <div class="row">
+                        <div class="input-field col s12">
+                            {{form.confirm_password}}
+                            <label for="confirm_password">Confirm password</label>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                {% if form.errors %}
+                <div class="row">
+                    <div class="col s12">
+                        <span class="error" style="color: red; font-weight: bold;">{{form.errors}}</span>
+                    </div>
+                </div>
+                {% endif %}
+            
+               
+                <button type="submit" name="action" class="waves-effect waves-light cta-btn cta-btn-color">Create</button>
+            </div>
+        </form>
+    </div>
+    <div id="register-field">
+        <span>Have an account?</span>
+        <span style="font-size: 1rem;">click below and simply log in!</span>
+        <a class="cta-btn" href="{% url 'login' %}">
+            LOGIN NOW
+          </a>
+    </div>
+</main>
+
+
+{% endblock %}
+
+
+<main id=""></main>
