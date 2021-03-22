@@ -1,6 +1,7 @@
 from django.template import loader
 from django.http import HttpResponse
 from movies.models import MovieRating, Likes
+from django.conf import settings
 import requests
 
 def user_last_activities(request, page_number):
@@ -8,7 +9,7 @@ def user_last_activities(request, page_number):
     query = request.GET.get('q')
 
     if query:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&s=" + query + '&page=' + str(page_number)
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + query + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
         page_number = int(page_number)+1

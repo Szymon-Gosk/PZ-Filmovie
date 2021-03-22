@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from movies.models import Movie, Genre, Rating, MovieRating
 from actors.models import Actor
 from django.db.models import Avg
+from django.conf import settings
 import requests
 
 def movie_detail(request, imdb_id):
@@ -15,7 +16,7 @@ def movie_detail(request, imdb_id):
     if Movie.objects.filter(imdbID=imdb_id).exists():
         data = Movie.objects.get(imdbID=imdb_id)
         opinions = MovieRating.objects.filter(movie=data)
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&i=" + imdb_id
         response = requests.get(url)
         api_data = response.json()
         
@@ -266,7 +267,7 @@ def movie_detail(request, imdb_id):
             }
 
     else:
-        url = "http://www.omdbapi.com/?apikey=7d7fa8d6&i=" + imdb_id
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&i=" + imdb_id
         response = requests.get(url)
         data = response.json()
 

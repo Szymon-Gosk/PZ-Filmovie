@@ -1,18 +1,18 @@
 """Views definitions for movies app"""
-from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.utils.text import slugify
 from django.template import loader
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from movies.models import Movie, Genre, Rating, MovieRating, Likes
-from actors.models import Actor
-from users.models import Profile, FollowerRelation
-from movies.forms import MovieRateForm
-from django.db.models import Avg
-from movies.view_functions import detail_movie, home_page, user_activity, paginate, movie_genre, type_of_movie, movie_action, rate_a_movie
-import requests
+from movies.view_functions import (
+    detail_movie, 
+    home_page, 
+    user_activity, 
+    paginate, 
+    movie_genre, 
+    type_of_movie, 
+    movie_action, 
+    rate_a_movie)
 
 
 def redirect_to_home(request, *args, **kwargs):

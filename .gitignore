@@ -10,6 +10,7 @@ share
 pyvenv.cfg
 Filmovie/*/__pycache__
 Filmovie/*/*/__pycache__
+Filmovie/.env
 venv
 .idea
 *.iml
