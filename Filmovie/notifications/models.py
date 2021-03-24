@@ -10,10 +10,9 @@ class Notification(models.Model):
     url_name = models.TextField(max_length=50, null=True, blank=True)
     imdb_id = models.TextField(max_length=50, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, null=True)
-    date = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.receiver.username
     
     def get_date(self):
-        return humanize.naturaltime(self.date)
+        return humanize.naturaltime(self.timestamp)

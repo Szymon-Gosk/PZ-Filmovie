@@ -27,13 +27,6 @@ def user_directory_path_background(instance, filename):
     return background_pictures
 
 
-class FollowerRelation(models.Model):
-    """Model for follower relation"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    profile = models.ForeignKey("Profile", on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
 class Profile(models.Model):
     """Model for profile"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
