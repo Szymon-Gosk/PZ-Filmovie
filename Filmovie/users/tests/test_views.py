@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.urls import reverse
-from .models import Profile
+from users.models import Profile
 from django.test import Client
 
 User = get_user_model()

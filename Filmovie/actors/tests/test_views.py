@@ -1,13 +1,13 @@
 """Test cases for actors app"""
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from .models import Actor
+from actors.models import Actor
 from django.urls import reverse
 from django.test import Client
 
 User = get_user_model()
 
-class EndpointTestCase(TestCase):
+class ActorViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user('test_user', password='test_user')
