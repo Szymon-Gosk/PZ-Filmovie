@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.urls import reverse
 from movies.models import Movie, MovieRating, Genre
+from users.models import Profile
 from django.test import Client
 
 User = get_user_model()
@@ -54,24 +55,31 @@ class EndpointsTestCase(TestCase):
     def test_star_movie_url(self):
         self.client.login(username='test_user', password='test_user')
         res = self.client.get(reverse('star', args=[self.imdb_id]), follow=True)
+        star = Profile.objects.get(user=self.user).star.all().count()
+        self.assertTrue(star == 1)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, template_name="movies/movie_detail.html")
         
     def test_watchlist_movie_url(self):
         self.client.login(username='test_user', password='test_user')
         res = self.client.get(reverse('watchlist', args=[self.imdb_id]), follow=True)
+        watchlist = Profile.objects.get(user=self.user).watchlist.all().count()
+        self.assertTrue(watchlist == 1)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, template_name="movies/movie_detail.html")
         
     def test_watchedlist_movie_url(self):
         self.client.login(username='test_user', password='test_user')
         res = self.client.get(reverse('watchedlist', args=[self.imdb_id]), follow=True)
+        watchedlist = Profile.objects.get(user=self.user).watchedlist.all().count()
+        self.assertTrue(watchedlist == 1)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, template_name="movies/movie_detail.html")
         
     def test_genres_url(self):
         self.client.login(username='test_user', password='test_user')
         res = self.client.get(reverse('genres', args=[self.genre_slug]), follow=True)
+        self.assertTrue(res.context['genre'] == self.genre)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, template_name="movies/genre.html")
         
@@ -79,6 +87,7 @@ class EndpointsTestCase(TestCase):
         movie_type = 'movie'
         self.client.login(username='test_user', password='test_user')
         res = self.client.get(reverse('type', args=[movie_type]), follow=True)
+        self.assertTrue(res.context['genre'] == movie_type)
         self.assertEqual(res.status_code, 200)
         self.assertTemplateUsed(res, template_name="movies/genre.html")
         
