@@ -19,7 +19,7 @@ def user_directory_path(instance, filename):
 
 def user_directory_path_background(instance, filename):
     """Specifieing the path for profile picture and returning it"""
-    background_pictures = 'users/userid_{0}/background_image/profile_image.jpg'.format(instance.user.id)
+    background_pictures = 'users/userid_{0}/background_image/background_image.jpg'.format(instance.user.id)
     path = os.path.join(settings.MEDIA_ROOT, background_pictures)
 
     if os.path.exists(path):
