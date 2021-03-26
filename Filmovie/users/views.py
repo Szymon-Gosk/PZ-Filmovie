@@ -16,7 +16,8 @@ from users.view_functions import (
     profile_movies, 
     opinion, 
     like, 
-    follow)
+    follow
+)
 
 
 def signup_view(request):

@@ -54,14 +54,12 @@ def unique_email(mail):
 
 class SignupForm(forms.ModelForm):
     """Defining the registration form"""
-    username = forms.CharField(widget=forms.TextInput(), max_length=25, required=True)
-    first_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=True)
-    last_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=True)
+    username = forms.CharField(max_length=25, required=True)
+    first_name = forms.CharField(max_length=25, required=True)
+    last_name = forms.CharField(max_length=25, required=True)
     email = forms.CharField(widget=forms.EmailInput(), max_length=50, required=True)
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
-    confirm_password = forms.CharField(
-        widget=forms.PasswordInput(), required=True, label='Confirm your password'
-    )
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, label='Confirm your password')
 
     class Meta:
         model = User
@@ -85,15 +83,9 @@ class SignupForm(forms.ModelForm):
 class ChangePasswordForm(forms.ModelForm):
     """Defines the change password form"""
     id = forms.CharField(widget=forms.HiddenInput())
-    old_password = forms.CharField(
-        widget=forms.PasswordInput(), label='Old password', required=True
-    )
-    new_password = forms.CharField(
-        widget=forms.PasswordInput(), label='New password', required=True
-    )
-    confirm_new_password = forms.CharField(
-        widget=forms.PasswordInput(), label='Confirm new password', required=True
-    )
+    old_password = forms.CharField(widget=forms.PasswordInput(), label='Old password', required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput(), label='New password', required=True)
+    confirm_new_password = forms.CharField(widget=forms.PasswordInput(), label='Confirm new password', required=True)
 
     class Meta:
         model = User
@@ -120,9 +112,9 @@ class EditProfileForm(forms.ModelForm):
     """Defines the edit profile form"""
     picture = forms.ImageField(required=False)
     background = forms.ImageField(required=False)
-    first_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=False)
-    last_name = forms.CharField(widget=forms.TextInput(), max_length=25, required=False)
-    bio = forms.CharField(widget=forms.TextInput(), max_length=200, required=False)
+    first_name = forms.CharField(max_length=25, required=False)
+    last_name = forms.CharField(max_length=25, required=False)
+    bio = forms.CharField(max_length=200, required=False)
 
     class Meta:
         model = Profile
