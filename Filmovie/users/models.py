@@ -4,6 +4,7 @@ from django.db import models
 from movies.models import Movie
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.dispatch import receiver
 from django.conf import settings
 from PIL import Image
 
@@ -63,17 +64,13 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        """Creating profile for new user"""
+        if created:
+            Profile.objects.create(user=instance)
 
-def create_user_profile(sender, instance, created, **kwargs):
-    """Signal for creating a profile picture"""
-    if created:
-        Profile.objects.create(user=instance)
-
-
-def save_user_profile(sender, instance, **kwargs):
-    """Signal for saving user profile"""
-    instance.profile.save()
-
-
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(save_user_profile, sender=User)
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        """Saving new profile"""
+        instance.profile.save()
