@@ -1,5 +1,6 @@
-"""Url patterns for actors app"""
+"""Url patterns for users app"""
 from django.urls import path
+from django.contrib.auth import views as authViews
 from users.views import (
     signup_view,
     password_change_view,
@@ -7,8 +8,6 @@ from users.views import (
     edit_profile_view,
     user_settings_view
 )
-
-from django.contrib.auth import views as authViews
 
 urlpatterns = [
     path('login/', authViews.LoginView.as_view(template_name='auth/login.html'), name='login'),
