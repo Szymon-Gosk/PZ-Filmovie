@@ -4,6 +4,7 @@ from movies.models import MovieRating, Likes
 from django.conf import settings
 import requests
 
+
 def user_last_activities(request, page_number):
     """Returns the context of user last activities."""
     query = request.GET.get('q')

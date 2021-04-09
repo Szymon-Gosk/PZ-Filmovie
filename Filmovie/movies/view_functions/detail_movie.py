@@ -6,6 +6,7 @@ from django.db.models import Avg
 from django.conf import settings
 import requests
 
+
 def movie_detail(request, imdb_id):
     """Returns detail information about the requested movie.
     If a movie exists in the database it checks if the content 

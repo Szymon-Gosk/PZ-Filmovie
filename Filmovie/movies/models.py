@@ -6,8 +6,8 @@ from django.core import files
 from django.urls import reverse
 from actors.models import Actor
 from django.contrib.auth.models import User
-
 import requests
+
 
 RATE = [
     (1, '1'),

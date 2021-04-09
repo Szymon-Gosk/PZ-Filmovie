@@ -4,6 +4,7 @@ from movies.models import Movie, Genre
 from django.conf import settings
 import requests
 
+
 def genre(request, genre_slug, page_number):
     """Returns the movies based on their genre.
     Uses paginator for data from the database"""

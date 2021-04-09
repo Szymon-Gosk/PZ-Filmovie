@@ -3,6 +3,7 @@ from movies.forms import MovieRateForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
+
 def rate(request, imdb_id):
     """Saves the rating in database"""
     movie = Movie.objects.get(imdbID=imdb_id)

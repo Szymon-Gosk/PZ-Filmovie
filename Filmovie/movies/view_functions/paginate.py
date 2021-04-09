@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.conf import settings
 import requests
 
+
 def paginate(request, query, page_number):
     """Returns movies at the specified page from the API"""
     query2 = request.GET.get('q')

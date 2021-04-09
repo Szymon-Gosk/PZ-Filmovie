@@ -1,6 +1,7 @@
 from movies.models import Movie
 from users.models import Profile
 
+
 def star_a_movie(request, imdb_id):
     """Adding a movie to star movies list, if movie 
     already exists in list it removes it"""

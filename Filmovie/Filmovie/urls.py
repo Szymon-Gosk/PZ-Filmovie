@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from movies.views import redirect_to_home
 
+
 urlpatterns = [
     path('', redirect_to_home, name='home-page'),
     path('admin/', admin.site.urls),

@@ -2,6 +2,7 @@
 from django.contrib import admin
 from movies.models import Movie, MovieRating, Likes, Genre, Rating
 
+
 admin.site.register(Movie)
 admin.site.register(MovieRating)
 admin.site.register(Likes)

@@ -3,6 +3,7 @@ from movies.models import Movie
 from django.conf import settings
 import requests
 
+
 def type_of_movie(request, movie_type, page_number):
     """Returns the movies based on thier type.
     Uses paginator for data from the database"""

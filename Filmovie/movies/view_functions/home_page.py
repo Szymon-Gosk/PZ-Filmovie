@@ -2,6 +2,7 @@ from movies.models import Movie
 from django.conf import settings
 import requests
 
+
 def main(request, page_number):
     """Returns the home or movies if there was query"""
     query = request.GET.get('q')
