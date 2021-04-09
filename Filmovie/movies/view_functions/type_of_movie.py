@@ -24,7 +24,7 @@ def type_of_movie(request, movie_type, page_number):
 
         return context
 
-    movies_for_pagination = Movie.objects.filter(Type=movie_type)
+    movies_for_pagination = Movie.objects.filter(Type=movie_type).order_by("-imdbRating")
     data = Paginator(movies_for_pagination, 9).get_page(request.GET.get('page'))
     
     context = {'movie_data': data,'genre': movie_type}

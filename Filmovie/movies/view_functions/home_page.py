@@ -22,7 +22,7 @@ def main(request, page_number):
 
         return context
     
-    movies = Movie.objects.all().order_by("-timestamp")[:9]
+    movies = Movie.objects.all().order_by("-Year")[:9]
     
     context = {'movie_data': movies}
     

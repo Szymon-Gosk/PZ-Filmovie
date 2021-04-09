@@ -2,14 +2,40 @@
 {% load static %}
 
 {% block css %}
-<link href="{% static 'css/styles-profile.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="{% static 'css/styles.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 {% endblock %}
 
-{% block content %}
-<div class="container-actor">
-    <section class="text-content">
-      <span class="profile-text name s-border">{{actor}}</span>
-      
+{% block search %}
+
+  <aside>
+    <form class="form-inline mr-auto">
+      <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search a movie" aria-label="Search">
+      <button class="btn btn-outline-success btn-rounded btn-sm my-0" type="submit">Search</button>
+    </form>
+    <ul id="category-list">
+      <li><a href="{% url 'genres' 'adventure' %}">Adventure</a></li>
+      <li><a href="{% url 'genres' 'sci-fi' %}">Sci-fi</a></li>
+      <li><a href="{% url 'genres' 'drama' %}">Drama</a></li>
+      <li><a href="{% url 'genres' 'thriller' %}">Thriller</a></li>
+      <li><a href="{% url 'genres' 'action' %}">Action</a></li>
+      <li><a href="{% url 'genres' 'comedy' %}">Comedy</a></li>
+      <li><a href="{% url 'genres' 'documentary' %}">Documentary</a></li>
+      <li><a href="{% url 'genres' 'crime' %}">Crime</a></li>
+      <li><a href="{% url 'genres' 'romance' %}">Romance</a></li>
+      <li><a href="{% url 'genres' 'history' %}">History</a></li>
+      <li><a href="{% url 'genres' 'war' %}">War</a></li>
+      <li><a href="{% url 'genres' 'horror' %}">Horror</a></li>
+    </ul>
+    
+  </aside>
+
+  {% endblock %}
+
+
+  {% block content %}
+
+    <section id="result-word">
+      <span>{{actor}}</span>
     </section>
 
     <article id="content">
@@ -44,7 +70,7 @@
       </section>
 
 
-      <div class="load-more-container">
+      <div id="buttons">
 
       {% if movie_data.has_previous %}
 
@@ -61,6 +87,9 @@
       {% endif %}
       </div>
 
+
+
     </article>
-</div>
+
+
 {% endblock %}

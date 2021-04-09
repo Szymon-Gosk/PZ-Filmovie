@@ -19,7 +19,7 @@ def get_movies(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    movies = profile.star.filter(Type='movie')
+    movies = profile.star.filter(Type='movie').order_by("-Year")
 
     data = Paginator(movies, 9).get_page(request.GET.get('page'))
 
@@ -53,7 +53,7 @@ def get_series(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    series = profile.star.filter(Type='series')
+    series = profile.star.filter(Type='series').order_by("-Year")
 
     data = Paginator(series, 9).get_page(request.GET.get('page'))
 
@@ -86,7 +86,7 @@ def get_watchlist(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    watchlist = profile.watchlist.all()
+    watchlist = profile.watchlist.all().order_by("-Year")
 
     data = Paginator(watchlist, 9).get_page(request.GET.get('page'))
 
@@ -119,7 +119,7 @@ def get_watchedlist(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    watchedlist = profile.watchedlist.all()
+    watchedlist = profile.watchedlist.all().order_by("-Year")
 
     data = Paginator(watchedlist, 9).get_page(request.GET.get('page'))
 
@@ -152,7 +152,7 @@ def get_reviews(request, username):
         if user in p.followers.all():
             following.append(p.user)
 
-    opinions = MovieRating.objects.filter(user=user)
+    opinions = MovieRating.objects.filter(user=user).order_by("-timestamp")
 
     data = Paginator(opinions, 9).get_page(request.GET.get('page'))
 

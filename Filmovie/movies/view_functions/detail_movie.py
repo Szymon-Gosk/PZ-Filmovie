@@ -223,7 +223,7 @@ def movie_detail(request, imdb_id):
             context = {
                 'movie_data': data,
                 'our_db': our_db,
-                'opinions': opinions,
+                'opinions': opinions.order_by("-timestamp"),
                 'rating_avg': rating_avg,
                 'rating_count': rating_count,
             }
@@ -258,7 +258,7 @@ def movie_detail(request, imdb_id):
             context = {
             'movie_data': data,
             'our_db': our_db,
-            'opinions': opinions,
+            'opinions': opinions.order_by("-timestamp"),
             'rating_avg': rating_avg,
             'rating_count': rating_count,
             "star": star,

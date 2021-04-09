@@ -110,11 +110,23 @@
       <section id="movie-container">
     {% else %}
     {% if list_title == 'Watchlist' or list_title == 'Watchedlist' %}
+    {% if user.is_authenticated and user == profile.user %}
     <h4>There is no movies or series in your {{list_title.lower}}</h4>
+    {% else %}
+    <h4>There is no movies or series in {{profile.user.username}}'s {{list_title.lower}}</h4>
+    {% endif %}
     {% elif list_title == 'Reviewed' %}
+    {% if user.is_authenticated and user == profile.user %}
     <h4>You have not {{list_title.lower}} any movie or series!</h4>
+    {% else %}
+    <h4>{{profile.user.username}} has not {{list_title.lower}} any movie or series!</h4>
+    {% endif %}
     {% elif list_title == 'Favourite movies' or list_title == 'Favourite series' %}
+    {% if user.is_authenticated and user == profile.user %}
     <h4>You have no {{list_title.lower}} </h4>
+    {% else %}
+    <h4>{{profile.user.username}} has no {{list_title.lower}} </h4>
+    {% endif %}
     {% endif %}
 
     <article id="content">
@@ -176,9 +188,17 @@
           </div>
         {% else %}
           {% if list_title == 'Followers' %}
-          <h4>You have no {{list_title.lower}} :(</h4>
+          {% if user.is_authenticated and user == profile.user %}
+          <h4>You have no {{list_title.lower}}</h4>
           {% else %}
+          <h4>{{profile.user.username}} has no {{list_title.lower}}</h4>
+          {% endif %}
+          {% else %}
+          {% if user.is_authenticated and user == profile.user %}
           <h4>You are not {{list_title.lower}} anybody! Search for our users <a href="{% url 'search-users' %}" style="color: blue">here</a></h4>
+          {% else %}
+          <h4>{{profile.user.username}} is not {{list_title.lower}} anybody!</h4>
+          {% endif %}
           {% endif %}
         {% endif %}
 
