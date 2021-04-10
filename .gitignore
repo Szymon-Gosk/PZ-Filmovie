@@ -14,3 +14,4 @@ Filmovie/.env
 venv
 .idea
 *.iml
+docker-compose.yml

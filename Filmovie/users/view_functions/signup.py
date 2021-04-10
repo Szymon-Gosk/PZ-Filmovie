@@ -1,5 +1,9 @@
 from django.contrib.auth.models import User
 from users.forms import SignupForm
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from Filmovie import settings
 
 def signup(request):
     """Returns the registration form"""
@@ -18,6 +22,16 @@ def signup(request):
                 email=email,
                 password=password
             )
+            mail = render_to_string("mails/signup_email.html")
+            text_content = strip_tags(mail)
+            mail_object = EmailMultiAlternatives(
+                "Welcome to Filmovie!",
+                text_content,
+                settings.EMAIL_HOST_USER,
+                [email]
+            )
+            mail_object.attach_alternative(mail, "text/html")
+            mail_object.send()
             context = {
                 'redirect': 'redirect'
             }
