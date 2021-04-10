@@ -11,12 +11,15 @@ class Actor(models.Model):
     movies = models.ManyToManyField('movies.Movie')
 
     def get_absolute_url(self):
+        """Returning actors view"""
         return reverse("actors", args=[self.slug])
 
     def __str__(self):
+        """Returning object's name"""
         return self.name
 
     def save(self, *args, **kwargs):
+        """Returning slug (lower_case name of the field) used in urls"""
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)

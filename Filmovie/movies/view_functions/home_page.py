@@ -5,17 +5,17 @@ import requests
 
 def main(request, page_number):
     """Returns the home or movies if there was query"""
-    query = request.GET.get('q')
+    q = request.GET.get('q')
 
-    if query:
-        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + query + '&page=' + str(page_number)
+    if q:
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + q + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
         page_number = int(page_number)+1
 
         context = {
-            'query': query,
-            'movie_data': data,
+            'q': q,
+            'data': data,
             'page_number': page_number,
             'previous_page': page_number,
             'next_page': page_number,
@@ -25,6 +25,6 @@ def main(request, page_number):
     
     movies = Movie.objects.all().order_by("-Year")[:9]
     
-    context = {'movie_data': movies}
+    context = {'data': movies}
     
     return context

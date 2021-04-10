@@ -43,22 +43,22 @@
             <div class="card">
                 <div class="card-content">
                     <ul class="collection">
-                      {% for comment in comments %}
+                      {% for c in comments %}
                         <li class="collection-item avatar">
-                            {% if comment.user.profile.picture %}
-                            <img src="{{comment.user.profile.picture.url}}" alt="" class="circle">
+                            {% if c.user.profile.picture %}
+                            <img src="{{c.user.profile.picture.url}}" alt="" class="circle">
                             {% else %}
                             <img src="{% static 'img/woman.png'%}" alt="" class="circle">
                             {% endif %}
 
 
-                            <span class="title"><a href="{% url 'profile' comment.user.username %}">@{{comment.user.username}}</a></span>
-                            <p>{{comment.user.first_name}} {{comment.user.last_name}}</p>
-                            <p>{{comment.date}}</p>
+                            <span class="title"><a href="{% url 'profile' c.user.username %}">@{{c.user.username}}</a></span>
+                            <p>{{c.user.first_name}} {{c.user.last_name}}</p>
+                            <p>{{c.timestamp}}</p>
                             <br>
-                            <span>{{comment.text}}</span>
-                            {% if user.is_authenticated and user.username == comment.user.username %}
-                            <a class="secondary-content" href="{% url 'comment-delete' rating.user.username movie.imdbID comment.id %}"><i class="material-icons red-text">delete</i></a>
+                            <span>{{c.text}}</span>
+                            {% if user.is_authenticated and user.username == c.user.username %}
+                            <a class="secondary-content" href="{% url 'comment-delete' rating.user.username movie.imdbID c.id %}"><i class="material-icons red-text">delete</i></a>
                             {% endif %}
                         </li>
                       {% endfor %}

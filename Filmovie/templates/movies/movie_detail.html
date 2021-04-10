@@ -11,37 +11,37 @@
 
     <section class="card-image">
 
-      {%if our_db is True%}
-      <img src="{{movie_data.Poster.url}}">
-      {%else%}
-      <img src="{{movie_data.Poster}}">
-      {%endif%}
+      {% if db %}
+      <img src="{{data.Poster.url}}">
+      {% else %}
+      <img src="{{data.Poster}}">
+      {% endif %}
     </section>
 
     <section id="card-details">
 
       <div id="card-full-title">
-        <h1 class="text bolder card-title">{{movie_data.Title}}</h1>
+        <h1 class="text bolder card-title">{{data.Title}}</h1>
         <br>
-        <span class="text card-description">{{movie_data.Plot}}</span>
+        <span class="text card-description">{{data.Plot}}</span>
         <br>
       </div>
 
 
         <div id="favor-line">
           <div class="description-pair">
-            <span class="bold-text">{{movie_data.Director}}</span>
+            <span class="bold-text">{{data.Director}}</span>
             <span class="title">director</span>
           </div>
 
           <div class="description-pair">
-            <span class="bold-text">{{movie_data.Runtime}}</span>
+            <span class="bold-text">{{data.Runtime}}</span>
             <span class="title">duration</span>
           </div>
 
           <div class="description-pair">
             {% if user.is_authenticated %}
-              <a href="{%url 'star' movie_data.imdbID%}">
+              <a href="{% url 'star' data.imdbID %}">
               {% if star %}
               <span class="bold-text"><i id="star_icon" class="material-icons icon-yellow">star_border</i></span>
               <span class="title">remove</span>
@@ -51,7 +51,7 @@
               {% endif %}
               </a>
             {% else %}
-            <a href="{%url 'login' %}">
+            <a href="{% url 'login' %}">
             <span class="bold-text"><i id="star_icon" class="material-icons">star_border</i></span>
             <span class="title">add</span>
             </a>
@@ -60,7 +60,7 @@
 
           <div class="description-pair">
             {% if user.is_authenticated %}
-              <a href="{%url 'watchlist' movie_data.imdbID%}">
+              <a href="{% url 'watchlist' data.imdbID %}">
               {% if watchlist %}
               <span class="bold-text"><i id="playlist_add_icon" class="material-icons icon-yellow">playlist_add</i></span>
               <span class="title">remove from watchlist</span>
@@ -70,7 +70,7 @@
               {% endif %}
               </a>
             {% else %}
-            <a href="{%url 'login' %}">
+            <a href="{% url 'login' %}">
             <span class="bold-text"><i id="playlist_add_icon" class="material-icons">playlist_add</i></span>
             <span class="title">add to watchlist</span>
             </a>
@@ -79,7 +79,7 @@
 
           <div class="description-pair">
             {% if user.is_authenticated %}
-              <a href="{%url 'watchedlist' movie_data.imdbID%}">
+              <a href="{% url 'watchedlist' data.imdbID%}">
               {% if watchedlist %}
               <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons icon-yellow">playlist_add_check</i></span>
               <span class="title">remove from watched</span>
@@ -89,7 +89,7 @@
               {% endif %}
               </a>
             {% else %}
-            <a href="{%url 'login' %}">
+            <a href="{% url 'login' %}">
             <span class="bold-text"><i id="playlist_add_check_icon" class="material-icons">playlist_add_check</i></span>
             <span class="title">add to watched</span>
             </a>
@@ -105,77 +105,77 @@
     <div class="pair-list">
 
       <span class="title">Year</span>
-      <span class="bolder">{{movie_data.Year}}</span>
+      <span class="bolder">{{data.Year}}</span>
     </div>
 
-    {% if movie_data.Type == 'series' %}
+    {% if data.Type == 'series' %}
     <div class="pair-list">
 
       <span class="title">Seasons</span>
-      <span class="bolder">{{movie_data.totalSeasons}}</span>
+      <span class="bolder">{{data.totalSeasons}}</span>
     </div>
     {% endif %}
 
     <div class="pair-list">
 
       <span class="title">Rated</span>
-      <span class="bolder">{{movie_data.Rated}}</span>
+      <span class="bolder">{{data.Rated}}</span>
     </div>
 
     <div class="pair-list">
 
       <span class="title">Released</span>
-      <span class="bolder">{{movie_data.Released}}</span>
+      <span class="bolder">{{data.Released}}</span>
     </div>
 
     <div class="pair-list">
 
       <span class="title">Genre</span>
-      {%if our_db is True%}
+      {% if db %}
       <span class="bolder bolder-list">
-        {%for genre in movie_data.Genre.all%}
+        {% for genre in data.Genre.all %}
         <a href="{{genre.get_absolute_url}}">{{genre}}</a>
-        {%endfor%}</span>
-        {%else%}
-      <span class="bolder">{{movie_data.Genre}}</span>
-      {%endif%}
+        {% endfor %}</span>
+        {% else %}
+      <span class="bolder">{{data.Genre}}</span>
+      {% endif %}
     </div>
 
     <div class="pair-list">
 
       <span class="title">Writer</span>
-      <span class="bolder">{{movie_data.Writer}}</span>
+      <span class="bolder">{{data.Writer}}</span>
     </div>
 
     <div class="pair-list">
 
       <span class="title">Actors</span>
-      {%if our_db is True%}
-      <span class="bolder bolder-list">{%for actor in movie_data.Actors.all%}
+      {% if db is True %}
+      <span class="bolder bolder-list">{% for actor in data.Actors.all %}
         <a href="{{actor.get_absolute_url}}">{{actor}}</a>
-        {%endfor%}</span>
-      {%else%}
-      <span class="bolder">{{movie_data.Actors}}</span>
-      {%endif%}
+        {% endfor %}</span>
+      {% else %}
+      <span class="bolder">{{data.Actors}}</span>
+      {% endif %}
 
     </div>
 
     <div class="pair-list">
 
       <span class="title">Language</span>
-      <span class="bolder">{{movie_data.Language}}</span>
+      <span class="bolder">{{data.Language}}</span>
     </div>
 
     <div class="pair-list">
 
       <span class="title">Country</span>
-      <span class="bolder">{{movie_data.Country}}</span>
+      <span class="bolder">{{data.Country}}</span>
     </div>
 
     <div class="pair-list">
 
       <span class="title">Awards</span>
-      <span class="bolder">{{movie_data.Awards}}</span>
+      <span class="bolder">{{data.Awards}}</span>
     </div>
   </div>
 
@@ -187,9 +187,9 @@
     <div id="buttons">
       <button class="cta-btn">
         {% if user.is_authenticated %}
-          <a href="{% url 'rate-movie' movie_data.imdbID%}"><i class="material-icons ">star</i>Rate</a>
+          <a href="{% url 'rate-movie' data.imdbID %}"><i class="material-icons ">star</i>Rate</a>
         {% else %}
-        <a href="{%url 'login' %}"><i class="material-icons">star</i>Rate</a>
+        <a href="{% url 'login' %}"><i class="material-icons">star</i>Rate</a>
         {% endif %}
       </button>
     </div>
@@ -208,60 +208,60 @@
             <p><b>{{rating_avg}} / 10</b> rated by <b>{{rating_count}}</b> users</p>
           </li>
 
-          {%if our_db is True%}
+          {% if db %}
 
-          {%for movie in movie_data.Ratings.all%}
+          {% for m in data.Ratings.all %}
 
-          {%if movie.source == 'Internet Movie Database'%}
-
-          <li class="collection-item avatar">
-            <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie.source}}</span>
-            <p><b>{{movie.rating}}</b></p>
-          </li>
-
-          {%elif movie.source == 'Rotten Tomatoes'%}
-
-          <li class="collection-item avatar">
-            <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie.source}}</span>
-            <p><b>{{movie.rating}}</b></p>
-          </li>
-
-          {%else%}
-
-          <li class="collection-item avatar">
-            <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie.source}}</span>
-            <p><b>{{movie.rating}}</b></p>
-          </li>
-
-          {%endif%}
-
-
-          {%endfor%}
-
-          {%else%}
+          {% if m.source == 'Internet Movie Database' %}
 
           <li class="collection-item avatar">
             <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie_data.Ratings.0.Source}}</span>
-            <p><b>{{movie_data.Ratings.0.Value}}</b></p>
+            <span class="title">{{m.source}}</span>
+            <p><b>{{m.rating}}</b></p>
+          </li>
+
+          {% elif m.source == 'Rotten Tomatoes' %}
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
+            <span class="title">{{m.source}}</span>
+            <p><b>{{m.rating}}</b></p>
+          </li>
+
+          {% else %}
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
+            <span class="title">{{m.source}}</span>
+            <p><b>{{m.rating}}</b></p>
+          </li>
+
+          {% endif %}
+
+
+          {% endfor %}
+
+          {% else %}
+
+          <li class="collection-item avatar">
+            <img src="{% static 'img/icons/imdb_icon.png' %}" alt="" class="circle">
+            <span class="title">{{data.Ratings.0.Source}}</span>
+            <p><b>{{data.Ratings.0.Value}}</b></p>
           </li>
 
           <li class="collection-item avatar">
             <img src="{% static 'img/icons/rotten-tomatoes-icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie_data.Ratings.1.Source}}</span>
-            <p><b>{{movie_data.Ratings.1.Value}}</b></p>
+            <span class="title">{{data.Ratings.1.Source}}</span>
+            <p><b>{{data.Ratings.1.Value}}</b></p>
           </li>
 
           <li class="collection-item avatar">
             <img src="{% static 'img/icons/metacritic-icon.png' %}" alt="" class="circle">
-            <span class="title">{{movie_data.Ratings.2.Source}}</span>
-            <p><b>{{movie_data.Ratings.2.Value}}</b></p>
+            <span class="title">{{data.Ratings.2.Source}}</span>
+            <p><b>{{data.Ratings.2.Value}}</b></p>
           </li>
 
-          {%endif%}
+          {% endif %}
         </ul>
 
       </div>
@@ -274,18 +274,18 @@
                 <div class="card-content">
                   <ul class="collection">
 
-                    {% for opinion in opinions %}
+                    {% for o in opinions %}
                     <li class="collection-item avatar">
-                      <a href="{% url 'user-rating' opinion.user.username movie_data.imdbID %}">
-                        {% if opinion.user.profile.picture %}
-                        <img src="{{ opinion.user.profile.picture.url }}" alt="" class="circle">
+                      <a href="{% url 'user-rating' o.user.username data.imdbID %}">
+                        {% if o.user.profile.picture %}
+                        <img src="{{ o.user.profile.picture.url }}" alt="" class="circle">
                         {% else %}
                         <img src="{% static 'img/woman.png' %}" alt="" class="circle">
                         {% endif %}
-                        <h4>{{opinion.user.first_name}} {{opinion.user.last_name}} @{{opinion.user.username}}</h4>
-                        <span style="color: rgba(255,255,255,0.6);">{{opinion.date}}</span>
-                        <p>{{opinion.opinion}}</p>
-                        <p class="secondary-content"><i class="material-icons">grade</i>{{opinion.rate}} / 10</p>
+                        <h4>{{o.user.first_name}} {{o.user.last_name}} @{{o.user.username}}</h4>
+                        <span style="color: rgba(255,255,255,0.6);">{{o.date}}</span>
+                        <p>{{o.opinion}}</p>
+                        <p class="secondary-content"><i class="material-icons">grade</i>{{o.rate}} / 10</p>
                       </a>
                       </li>
                     {% endfor %}

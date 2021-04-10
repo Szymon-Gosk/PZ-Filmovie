@@ -30,7 +30,7 @@ def get_movies(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': data,
+        'data': data,
         'list_title': 'Favourite movies',
         'following': len(following),
     }
@@ -64,7 +64,7 @@ def get_series(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': data,
+        'data': data,
         'list_title': 'Favourite series',
         'following': len(following),
     }
@@ -97,7 +97,7 @@ def get_watchlist(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': data,
+        'data': data,
         'list_title': 'Watchlist',
         'following': len(following),
     }
@@ -130,7 +130,7 @@ def get_watchedlist(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': data,
+        'data': data,
         'list_title': 'Watchedlist',
         'following': len(following),
     }
@@ -163,7 +163,7 @@ def get_reviews(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': data,
+        'data': data,
         'list_title': 'Reviewed',
         'following': len(following),
     }

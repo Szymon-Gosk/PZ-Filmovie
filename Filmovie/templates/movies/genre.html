@@ -37,28 +37,30 @@
     <section id="result-word">
       {% if genre == 'movie' %}
       <span>Highest rated movies based on IMDB rating</span>
-      {% else %}
+      {% elif genre == 'series' %}
       <span>Highest rated series based on IMDB rating</span>
+      {% else %}
+      <span>Search results for: {{genre}}</span>
       {% endif %}
     </section>
 
     <article id="content">
       <section id="movie-container">
 
-      {%for movie in movie_data %}
+      {%for m in data %}
 
         <div class="one-card">
-          <a href="{% url 'movie-details' movie.imdbID%}">
+          <a href="{% url 'movie-details' m.imdbID%}">
             <div class="card">
               <div class="card-image">
-                <img src="{{movie.Poster.url}}">
+                <img src="{{m.Poster.url}}">
               </div>
               <div class="card-content">
-                <span class="card-title">{{movie.Title}}</span>
-                <p>{{movie.Year}}</p>
-                <p>{{movie.Type}}</p>
+                <span class="card-title">{{m.Title}}</span>
+                <p>{{m.Year}}</p>
+                <p>{{m.Type}}</p>
               </div>
-              <a href="{% url 'movie-details' movie.imdbID%}">
+              <a href="{% url 'movie-details' m.imdbID%}">
                 <div class="card-action">
                     Details
                 </div>
@@ -76,16 +78,16 @@
 
       <div id="buttons">
 
-      {% if movie_data.has_previous %}
+      {% if m.has_previous %}
 
-        <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
+        <a class="cta-btn" href="?page={{ m.previous_page_number }}">
           load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
       {% endif %}
 
-      {% if movie_data.has_next %}
+      {% if m.has_next %}
 
-        <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
+        <a class="cta-btn" href="?page={{ m.next_page_number }}">
           load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
         </a>
       {% endif %}

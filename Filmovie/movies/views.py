@@ -22,7 +22,7 @@ def redirect_to_home(request, *args, **kwargs):
 def home(request, page_number=1):
     context = home_page.main(request, page_number)
     
-    if context.get('query') is not None:
+    if context.get('q') is not None:
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
     
     return render(request, 'home.html', context)
@@ -33,7 +33,7 @@ def user_activities_view(request, page_number=1):
     function gets the query from a user"""
     context = user_activity.user_last_activities(request, page_number)
 
-    if context.get('query') is not None:
+    if context.get('q') is not None:
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
     return render(request, 'users/user_activities.html', context)
@@ -52,7 +52,7 @@ def genres_view(request, genre_slug, page_number=1):
     """Returns the 'genres_view' which renders the 'genre' template."""
     context = movie_genre.genre(request, genre_slug, page_number)
     
-    if context.get('query') is not None:
+    if context.get('q') is not None:
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
     
     return HttpResponse(loader.get_template('movies/genre.html').render(context, request))
@@ -61,7 +61,7 @@ def type_view(request, movie_type, page_number=1):
     """Returns the 'genres_view' which renders the 'genre' template."""
     context = type_of_movie.type_of_movie(request, movie_type, page_number)
     
-    if context.get('query') is not None:
+    if context.get('q') is not None:
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
     return HttpResponse(loader.get_template('movies/genre.html').render(context, request))

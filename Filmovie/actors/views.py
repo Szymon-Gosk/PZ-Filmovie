@@ -15,21 +15,21 @@ def actor_view(request, actor_slug, page_number=1):
     movie = Movie.objects.filter(Actors=actor)
     data = Paginator(movie, 6).get_page(request.GET.get('page'))
     
-    query = request.GET.get('q')
+    q = request.GET.get('q')
 
-    if query:
-        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + query + '&page=' + str(page_number)
+    if q:
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + q + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
         page_number = int(page_number)+1
 
         context = {
-            'query': query,
-            'movie_data': data,
+            'q': q,
+            'data': data,
             'page_number': page_number,
             'previous_page': page_number,
             'next_page': page_number,
         }
         return HttpResponse(loader.get_template('movies/search_result.html').render(context, request))
 
-    return HttpResponse(loader.get_template('profiles/actor.html').render({'movie_data': data,'actor': actor}, request))
+    return HttpResponse(loader.get_template('profiles/actor.html').render({'data': data, 'actor': actor}, request))

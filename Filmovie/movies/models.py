@@ -45,10 +45,6 @@ class Rating(models.Model):
     source = models.CharField(max_length=25)
     rating = models.CharField(max_length=20)
 
-    def __str__(self):
-        """Returning the name of the source instead of whole object"""
-        return self.source
-
 class Movie(models.Model):
     """Movie model"""
     Title = models.CharField(max_length=150, null=True)
@@ -85,13 +81,12 @@ class Movie(models.Model):
     def save(self, *args, **kwargs):
         """Saving the poster in the database (if not already present)"""
         if  str(self.Poster) == '' and str(self.Poster_url) != '':
-            resp = requests.get(self.Poster_url)
+            response = requests.get(self.Poster_url)
             poster = BytesIO()
-            poster.write(resp.content)
+            poster.write(response.content)
             poster.flush()
-            file_name = self.Poster_url.split("/")[-1]
-            self.Poster.save(file_name, files.File(poster), save=False)
-
+            name = self.Poster_url.split("/")[-1]
+            self.Poster.save(name, files.File(poster), save=False)
         return super().save(*args, **kwargs)
 
 class MovieRating(models.Model):
@@ -100,17 +95,14 @@ class MovieRating(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     opinion = models.TextField(max_length=300, blank=True)
-    rate = models.PositiveSmallIntegerField(choices=RATE)
+    rate = models.PositiveIntegerField(choices=RATE)
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.user.username
-
 class Likes(models.Model):
     """Model for likes"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_like')
-    like_type = models.PositiveSmallIntegerField()
     rating = models.ForeignKey(MovieRating, on_delete=models.CASCADE, related_name='rating_like')
+    like_type = models.PositiveSmallIntegerField()
     timestamp = models.DateTimeField(auto_now_add=True)

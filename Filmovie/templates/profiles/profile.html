@@ -102,7 +102,7 @@
 
 
     {% if list_title %}
-    {% if movie_data %}
+    {% if data %}
     <h4>{{list_title}}: </h4>
     <div class="divider"></div>
 
@@ -137,20 +137,20 @@
 
       {% if list_title == 'Reviewed' %}
 
-      {%for opinion in movie_data %}
+      {%for o in data %}
 
         <div class="one-card">
-          <a href="{% url 'user-rating' opinion.user.username opinion.movie.imdbID %}">
+          <a href="{% url 'user-rating' o.user.username o.movie.imdbID %}">
             <div class="card">
               <div class="card-image">
-                <img src="{{opinion.movie.Poster.url}}">
+                <img src="{{o.movie.Poster.url}}">
               </div>
               <div class="card-content">
-                <span class="card-title">{{opinion.movie.Title}}</span>
-                <p>{{opinion.movie.Year}}</p>
-                <p>{{opinion.movie.Type}}</p>
+                <span class="card-title">{{o.movie.Title}}</span>
+                <p>{{o.movie.Year}}</p>
+                <p>{{o.movie.Type}}</p>
               </div>
-              <a href="{% url 'movie-details' opinion.movie.imdbID%}">
+              <a href="{% url 'movie-details' o.movie.imdbID%}">
                 <div class="card-action">
                     Details
                 </div>
@@ -163,13 +163,13 @@
 
         {% elif list_title == 'Followers' or list_title == 'Following' %}
 
-        {% if movie_data %}
+        {% if data %}
           <div class="main-result" style="top: 100px;width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <div class="card" style="width: 80%;">
                   <div class="card-content">
                     <ul class="collection">
 
-                      {% for u in movie_data %}
+                      {% for u in data %}
                       <li class="collection-item avatar" style="margin: 50px 0;">
                           {% if u.profile.picture %}
                           <img src="{{ u.profile.picture.url }}" alt="" class="circle">
@@ -204,20 +204,20 @@
 
         {% else %}
 
-        {%for movie in movie_data %}
+        {%for m in data %}
 
         <div class="one-card">
-          <a href="{% url 'movie-details' movie.imdbID%}">
+          <a href="{% url 'movie-details' m.imdbID%}">
             <div class="card">
               <div class="card-image">
-                <img src="{{movie.Poster.url}}">
+                <img src="{{m.Poster.url}}">
               </div>
               <div class="card-content">
-                <span class="card-title">{{movie.Title}}</span>
-                <p>{{movie.Year}}</p>
-                <p>{{movie.Type}}</p>
+                <span class="card-title">{{m.Title}}</span>
+                <p>{{m.Year}}</p>
+                <p>{{m.Type}}</p>
               </div>
-              <a href="{% url 'movie-details' movie.imdbID%}">
+              <a href="{% url 'movie-details' m.imdbID%}">
                 <div class="card-action">
                     Details
                 </div>
@@ -234,16 +234,16 @@
 
       <div class="load-more-container">
 
-      {% if movie_data.has_previous %}
+      {% if data.has_previous %}
 
-        <a class="cta-btn" href="?page={{ movie_data.previous_page_number }}">
+        <a class="cta-btn" href="?page={{ data.previous_page_number }}">
           load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
       {% endif %}
 
-      {% if movie_data.has_next %}
+      {% if data.has_next %}
 
-        <a class="cta-btn" href="?page={{ movie_data.next_page_number }}">
+        <a class="cta-btn" href="?page={{ data.next_page_number }}">
           load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
         </a>
       {% endif %}
@@ -255,4 +255,4 @@
     {% endif %}
   </main>
 
-{%endblock%}
+{% endblock %}

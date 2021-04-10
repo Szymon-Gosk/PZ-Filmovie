@@ -34,22 +34,18 @@
 
   {% block content %}
 
-
-
-
-
-  {% if movie_data.Error and not page_number > "2" %}
+  {% if data.Error and not page_number > "2" %}
 
     <section id="result-word">
       <span>Movie not found!</span>
-      <span id="for-word"> {{query}} </span>
+      <span id="for-word"> {{q}} </span>
     </section>
 
     {% else %}
 
     <section id="result-word">
       <span>Search results for:</span>
-      <span id="for-word"> {{query}} </span>
+      <span id="for-word"> {{q}} </span>
     </section>
 
     {% endif %}
@@ -58,24 +54,24 @@
       <section id="movie-container">
 
 
-      {%for movie in movie_data.Search%}
+      {%for m in data.Search%}
 
-      {% if movie.Poster != "N/A" %}
+      {% if m.Poster != "N/A" %}
 
-      {% if movie.Type != "game" %}
+      {% if m.Type != "game" %}
 
         <div class="one-card">
-          <a href="{% url 'movie-details' movie.imdbID%}">
+          <a href="{% url 'movie-details' m.imdbID %}">
             <div class="card">
               <div class="card-image">
-                <img src="{{movie.Poster}}">
+                <img src="{{m.Poster}}">
               </div>
               <div class="card-content">
-                <span class="card-title">{{movie.Title}}</span>
-                <p>{{movie.Year}}</p>
-                <p>{{movie.Type}}</p>
+                <span class="card-title">{{m.Title}}</span>
+                <p>{{m.Year}}</p>
+                <p>{{m.Type}}</p>
               </div>
-              <a href="{% url 'movie-details' movie.imdbID%}">
+              <a href="{% url 'movie-details' m.imdbID %}">
                 <div class="card-action">
                     Details
                 </div>
@@ -94,18 +90,18 @@
 
       <div id="buttons">
 
-      {% if not movie_data.Error %}
+      {% if not data.Error %}
       {% if page_number > "1" %}
-        <a class="cta-btn" href="{%url 'pagination' query previous_page %}">
+        <a class="cta-btn" href="{%url 'pagination' q previous_page %}">
           load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
         </a>
         {% endif %}
-      <a class="cta-btn" href="{%url 'pagination' query next_page %}">
+      <a class="cta-btn" href="{%url 'pagination' q next_page %}">
         load more<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_down</i>
       </a>
       {% else %}
       {% if page_number > "10" %}
-      <a class="cta-btn row" href="{%url 'pagination' query previous_page %}">
+      <a class="cta-btn row" href="{%url 'pagination' q previous_page %}">
         load less<i class="material-icons" aria-hidden="true" style="margin-left: 10px;">arrow_drop_up</i>
       </a>
       {% else %}

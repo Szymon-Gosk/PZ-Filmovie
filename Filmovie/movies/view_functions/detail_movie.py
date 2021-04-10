@@ -219,12 +219,12 @@ def movie_detail(request, imdb_id):
                 rating_count = opinions.count()
 
             data = Movie.objects.get(imdbID=imdb_id)
-            our_db = True
+            db = True
 
             context = {
-                'movie_data': data,
-                'our_db': our_db,
-                'opinions': opinions.order_by("-timestamp"),
+                'data': data,
+                'db': db,
+                'opinions': opinions.order_by("-likes"),
                 'rating_avg': rating_avg,
                 'rating_count': rating_count,
             }
@@ -254,17 +254,17 @@ def movie_detail(request, imdb_id):
                 rating_avg = round(opinions.aggregate(Avg('rate'))['rate__avg'], 2)
                 rating_count = opinions.count()
 
-            our_db = True
+            db = True
 
             context = {
-            'movie_data': data,
-            'our_db': our_db,
-            'opinions': opinions.order_by("-timestamp"),
+            'data': data,
+            'db': db,
+            'opinions': opinions.order_by("-likes"),
             'rating_avg': rating_avg,
             'rating_count': rating_count,
-            "star": star,
-            "watchlist": watchlist,
-            "watchedlist": watchedlist,
+            'star': star,
+            'watchlist': watchlist,
+            'watchedlist': watchedlist,
             }
 
     else:
@@ -351,11 +351,11 @@ def movie_detail(request, imdb_id):
             actor.save()
 
         m.save()
-        our_db = False
+        db = False
         
         context = {
-            'movie_data': data,
-            'our_db': our_db
+            'data': data,
+            'db': db
         }
         
     return context

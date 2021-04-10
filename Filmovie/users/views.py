@@ -137,8 +137,8 @@ def follow_profile_view(request, username):
 
 @login_required
 def search_users_view(request):
-    query = request.GET.get('q')
-    if query:
-        users = User.objects.filter(username__contains=query)
-        return HttpResponse(loader.get_template('users/user_search_result.html').render({'users': users,'query': query}, request))
+    q = request.GET.get('q')
+    if q:
+        users = User.objects.filter(username__contains=q)
+        return HttpResponse(loader.get_template('users/user_search_result.html').render({'users': users,'q': q}, request))
     return render(request, 'users/search_users.html')

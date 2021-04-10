@@ -11,7 +11,7 @@ def get_opinion(request, username, imdb_id):
     movie = Movie.objects.get(imdbID=imdb_id)
     rating = MovieRating.objects.get(user=user, movie=movie)
 
-    comments = Comment.objects.filter(rating=rating).order_by('date')
+    comments = Comment.objects.filter(rating=rating).order_by('-timestamp')
 
     if request.method == 'POST':
         form = CommentForm(request.POST)

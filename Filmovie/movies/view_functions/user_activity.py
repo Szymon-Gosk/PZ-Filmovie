@@ -7,17 +7,17 @@ import requests
 
 def user_last_activities(request, page_number):
     """Returns the context of user last activities."""
-    query = request.GET.get('q')
+    q = request.GET.get('q')
 
-    if query:
-        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + query + '&page=' + str(page_number)
+    if q:
+        url = "http://www.omdbapi.com/?apikey=" + settings.OMDB_API_KEY + "&s=" + q + '&page=' + str(page_number)
         response = requests.get(url)
         data = response.json()
         page_number = int(page_number)+1
 
         context = {
-            'query': query,
-            'movie_data': data,
+            'q': q,
+            'data': data,
             'page_number': page_number,
             'previous_page': page_number,
             'next_page': page_number,

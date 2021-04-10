@@ -29,7 +29,7 @@ def get_followers(request, username):
         'watchlist_count': watchlist_count,
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
-        'movie_data': followers,
+        'data': followers,
         'following': len(following),
         'list_title': 'Followers',
     }
@@ -59,7 +59,7 @@ def get_following(request, username):
         'watchedlist_count': watchedlist_count,
         'opinions_count': opinions_count,
         'following': len(following),
-        'movie_data': following,
+        'data': following,
         'list_title': 'Following',
     }
 

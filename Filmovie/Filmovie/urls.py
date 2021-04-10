@@ -9,9 +9,9 @@ from movies.views import redirect_to_home
 urlpatterns = [
     path('', redirect_to_home, name='home-page'),
     path('admin/', admin.site.urls),
-    path('movie/', include('movies.urls')),
-    path('actors/', include('actors.urls')),
     path('accounts/', include('users.urls')),
     path('users/', include('users.urls2')),
+    path('movies/', include('movies.urls')),
+    path('actors/', include('actors.urls')),
     path('notifications/', include('notifications.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
