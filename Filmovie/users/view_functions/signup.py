@@ -3,6 +3,7 @@ from users.forms import SignupForm
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.contrib.sites.models import Site
 from Filmovie import settings
 
 def signup(request):
@@ -22,7 +23,9 @@ def signup(request):
                 email=email,
                 password=password
             )
-            mail = render_to_string("mails/signup_email.html")
+            domain = Site.objects.get_current().domain
+            button_href = "http://" + domain
+            mail = render_to_string("mails/signup_email.html", {"button_href": button_href})
             text_content = strip_tags(mail)
             mail_object = EmailMultiAlternatives(
                 "Welcome to Filmovie!",
